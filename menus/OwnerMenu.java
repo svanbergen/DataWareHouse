@@ -2,8 +2,10 @@ package menus;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import ownerFunctionality.AddBusiness;
 import utility.TableFromResultSet;
@@ -13,6 +15,7 @@ public class OwnerMenu {
 	String username;
 
 	JFrame menuFrame;
+	JTable businesses;
 	
 
 	public OwnerMenu(Connection con, String username){
@@ -23,6 +26,7 @@ public class OwnerMenu {
 
 		JLabel menuPage = new JLabel("Owner Menu Page");
 		JLabel sn = new JLabel("Current User : " + username);
+		JButton refreshButton = new JButton("Refresh Businesses");
 		JButton addBusinessButton = new JButton("Add Business");
 		JButton updateBusinessButton = new JButton("Update Business");
 
@@ -59,17 +63,21 @@ public class OwnerMenu {
 		contentPane.add(sn);
 		
 		buttonC.gridy = 3;
+		gb.setConstraints(refreshButton, buttonC);
+		contentPane.add(refreshButton);
+		
+		buttonC.gridy = 4;
 		gb.setConstraints(addBusinessButton, buttonC);
 		contentPane.add(addBusinessButton);
 
-		buttonC.gridy = 4;
+		buttonC.gridy = 5;
 		gb.setConstraints(updateBusinessButton, buttonC);
 		contentPane.add(updateBusinessButton);
 		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
 
-		JTable businesses = new JTable();
+		businesses = new JTable();
 		try{
 		PreparedStatement stmt = con.prepareStatement("select * from business where ownerUsername = ?");
 		stmt.setString(1, username);
@@ -88,6 +96,25 @@ public class OwnerMenu {
 		contentPane.add(scrollPane);
 		
 		// Create and register button listeners
+		
+		ActionListener refreshButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				try{
+					PreparedStatement stmt = con.prepareStatement("select * from business where ownerUsername = ?");
+					stmt.setString(1, username);
+					ResultSet rs = stmt.executeQuery();
+					ResultSetMetaData rsmd = rs.getMetaData();
+					TableFromResultSet.replaceTable(businesses, rs, rsmd);
+					}
+					catch(SQLException ex){
+						System.out.println("Message: " + ex.getMessage());
+					}
+			}
+		};
+		refreshButton.addActionListener(refreshButtonListener);
+		
 				ActionListener addBusinessButtonListener = new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e) 
