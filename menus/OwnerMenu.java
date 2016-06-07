@@ -5,6 +5,7 @@ import java.sql.*;
 
 import javax.swing.*;
 
+import ownerFunctionality.AddBusiness;
 import utility.TableFromResultSet;
 
 public class OwnerMenu {
@@ -91,6 +92,7 @@ public class OwnerMenu {
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
+						AddBusiness ab = new AddBusiness(con,username);
 					}
 				};
 				addBusinessButton.addActionListener(addBusinessButtonListener);
