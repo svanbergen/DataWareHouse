@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.sql.*;
 
 import javax.swing.*;
+import CustomerFunctionalities.ReservationMakingDialog;
 
 public class CustomerMenu {
 	Connection con;
@@ -22,6 +23,8 @@ public class CustomerMenu {
 		JLabel sn = new JLabel("Current User : " + username);
 		JButton orderViewbutton = new JButton("View Orders");
 		JButton businessSearchButton = new JButton("Search for Businesses");
+		
+		JButton makeReservationButton = new JButton("Make a Reservation");
 
 
 		JPanel contentPane = new JPanel();
@@ -55,6 +58,11 @@ public class CustomerMenu {
 		gb.setConstraints(businessSearchButton, buttonC);
 		contentPane.add(businessSearchButton);
 		
+		
+		buttonC.gridy = 5;
+		gb.setConstraints(makeReservationButton, buttonC);
+		contentPane.add(makeReservationButton);
+		
 		// Create and register button listeners
 		ActionListener orderViewbuttonListener = new ActionListener()
 		{
@@ -72,6 +80,22 @@ public class CustomerMenu {
 		};
 		businessSearchButton.addActionListener(businessSearchButtonListener);
 
+		
+		
+		ActionListener makeReservationButtonListener = new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				System.out.println("reserve button pressed!");
+
+				try {
+					ReservationMakingDialog rmw = new ReservationMakingDialog(username);
+					rmw.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					rmw.setVisible(true);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+		makeReservationButton.addActionListener(makeReservationButtonListener);
 
 		// On window close
 		menuFrame.addWindowListener(new WindowAdapter() 
