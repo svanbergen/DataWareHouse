@@ -207,7 +207,7 @@ public class ReservationMakingDialog extends JDialog {
 		ActionListener makeReservationButtonListener = new ActionListener(){
 			
 			public void actionPerformed(ActionEvent e){
-				System.out.println("make reservation button pressed");
+				System.out.println("makee reservation button pressed");
 				
 				Timestamp ts;
 				int businessId;
