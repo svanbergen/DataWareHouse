@@ -87,7 +87,7 @@ public class CustomerMenu {
 				System.out.println("reserve button pressed!");
 
 				try {
-					ReservationMakingDialog rmw = new ReservationMakingDialog(username);
+					ReservationMakingDialog rmw = new ReservationMakingDialog( username , con);
 					rmw.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					rmw.setVisible(true);
 				} catch (Exception ex) {
