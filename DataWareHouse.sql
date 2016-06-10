@@ -71,7 +71,7 @@ CREATE TABLE Review (
 	ReviewID integer Primary Key,
 	Rating int not null,
 	Comments varchar(200),
-	Dates date not null,
+	ReviewDate date not null,
 	BusinessID integer not null,
 	CustomerUsername varchar(25) not null,
 	Foreign Key(BusinessID) references Business
@@ -230,7 +230,7 @@ grant select on reservation to public;
 CREATE TABLE Reply (
 	ReviewID int,
 	OwnerUsername varchar(25),
-	Dates date,
+	ReplyDate date,
 	replyContent varchar(200) not null,
 	Primary Key (reviewID, OwnerUsername),
 	Foreign Key(reviewID) references Review,
