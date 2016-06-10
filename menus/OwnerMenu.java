@@ -7,7 +7,7 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import ownerFunctionality.AddBusiness;
+import ownerFunctionality.*;
 import utility.TableFromResultSet;
 
 public class OwnerMenu {
@@ -29,8 +29,9 @@ public class OwnerMenu {
 		JButton refreshButton = new JButton("Refresh Businesses");
 		JButton addBusinessButton = new JButton("Add Business");
 		JButton updateBusinessButton = new JButton("Update Business");
-
-
+		JButton viewReviewbutton = new JButton("View Reviews");
+		JButton writeReplyButton = new JButton("Reply to Review");
+		
 		JPanel contentPane = new JPanel();
 		menuFrame.setContentPane(contentPane);
 		GridBagLayout gb = new GridBagLayout();
@@ -73,6 +74,14 @@ public class OwnerMenu {
 		buttonC.gridy = 5;
 		gb.setConstraints(updateBusinessButton, buttonC);
 		contentPane.add(updateBusinessButton);
+		
+		buttonC.gridy = 6;
+		gb.setConstraints(viewReviewbutton, buttonC);
+		contentPane.add(viewReviewbutton);
+		
+		buttonC.gridy = 7;
+		gb.setConstraints(writeReplyButton, buttonC);
+		contentPane.add(writeReplyButton);
 		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
@@ -131,6 +140,26 @@ public class OwnerMenu {
 					}
 				};
 				updateBusinessButton.addActionListener(updateBusinessButtonListener);
+				
+				ActionListener viewReviewButtonListener = new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						ViewReviews vr = new ViewReviews(con, username);
+					}
+				};
+				viewReviewbutton.addActionListener(viewReviewButtonListener);
+
+				
+				ActionListener replyReviewButtonListener = new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						WriteReply wr = new WriteReply(con,username);
+					}
+				};
+				writeReplyButton.addActionListener(replyReviewButtonListener);
+
 
 		// On window close
 		menuFrame.addWindowListener(new WindowAdapter() 

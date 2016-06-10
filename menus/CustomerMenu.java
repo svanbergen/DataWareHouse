@@ -4,7 +4,10 @@ import java.awt.event.*;
 import java.sql.*;
 
 import javax.swing.*;
-import CustomerFunctionalities.ReservationMakingDialog;
+
+import customerFunctionality.FindReviews;
+import customerFunctionality.ReservationMakingDialog;
+import customerFunctionality.WriteReview;
 
 public class CustomerMenu {
 	Connection con;
@@ -22,7 +25,9 @@ public class CustomerMenu {
 		JLabel menuPage = new JLabel("Customer Menu Page");
 		JLabel sn = new JLabel("Current User : " + username);
 		JButton orderViewbutton = new JButton("View Orders");
-		JButton businessSearchButton = new JButton("Search for Businesses");
+		JButton findReviewsButton = new JButton("Find Reviews");
+		JButton writeReviewButton = new JButton("Write a Review");
+		JButton searchForBusinessesButton = new JButton("Search for Businesses");
 		
 		JButton makeReservationButton = new JButton("Make a Reservation");
 
@@ -53,24 +58,52 @@ public class CustomerMenu {
 		buttonC.gridy = 3;
 		gb.setConstraints(orderViewbutton, buttonC);
 		contentPane.add(orderViewbutton);
-
+		
 		buttonC.gridy = 4;
-		gb.setConstraints(businessSearchButton, buttonC);
-		contentPane.add(businessSearchButton);
-		
-		
-		buttonC.gridy = 5;
 		gb.setConstraints(makeReservationButton, buttonC);
 		contentPane.add(makeReservationButton);
+		
+		buttonC.gridy = 5;
+		gb.setConstraints(findReviewsButton, buttonC);
+		contentPane.add(findReviewsButton);
+		
+		buttonC.gridy = 6;
+		gb.setConstraints(writeReviewButton, buttonC);
+		contentPane.add(writeReviewButton);
+		
+		buttonC.gridy = 7;
+		gb.setConstraints(searchForBusinessesButton, buttonC);
+		contentPane.add(searchForBusinessesButton);
+		
 		
 		// Create and register button listeners
 		ActionListener orderViewbuttonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				
 			}
 		};
 		orderViewbutton.addActionListener(orderViewbuttonListener);
+		
+		ActionListener findReviewsButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				FindReviews fr = new FindReviews(con);
+			}
+		};
+		findReviewsButton.addActionListener(findReviewsButtonListener);
+		
+		ActionListener writeReviewButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				WriteReview wr = new WriteReview(con, username);
+			}
+		};
+		writeReviewButton.addActionListener(writeReviewButtonListener);
+		
 		
 		ActionListener businessSearchButtonListener = new ActionListener()
 		{
@@ -78,7 +111,7 @@ public class CustomerMenu {
 			{
 			}
 		};
-		businessSearchButton.addActionListener(businessSearchButtonListener);
+		searchForBusinessesButton.addActionListener(businessSearchButtonListener);
 
 		
 		
