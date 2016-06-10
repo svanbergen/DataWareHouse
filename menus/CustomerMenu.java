@@ -5,6 +5,7 @@ import java.sql.*;
 
 import javax.swing.*;
 
+import customerFunctionality.BusinessSearch;
 import customerFunctionality.FindReviews;
 import customerFunctionality.ReservationMakingDialog;
 import customerFunctionality.WriteReview;
@@ -109,6 +110,7 @@ public class CustomerMenu {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				BusinessSearch bs = new BusinessSearch(con);
 			}
 		};
 		searchForBusinessesButton.addActionListener(businessSearchButtonListener);
