@@ -30,7 +30,7 @@ public class CustomerMenu {
 		JButton writeReviewButton = new JButton("Write a Review");
 		JButton searchForBusinessesButton = new JButton("Search for Businesses");
 		
-		JButton makeReservationButton = new JButton("Make a Reservation");
+		JButton makeReservationButton = new JButton("Make or Cancel a Reservation");
 
 
 		JPanel contentPane = new JPanel();
@@ -75,6 +75,9 @@ public class CustomerMenu {
 		buttonC.gridy = 7;
 		gb.setConstraints(searchForBusinessesButton, buttonC);
 		contentPane.add(searchForBusinessesButton);
+		
+		
+		
 		
 		
 		// Create and register button listeners
@@ -131,6 +134,9 @@ public class CustomerMenu {
 			}
 		};
 		makeReservationButton.addActionListener(makeReservationButtonListener);
+		
+		
+
 
 		// On window close
 		menuFrame.addWindowListener(new WindowAdapter() 
