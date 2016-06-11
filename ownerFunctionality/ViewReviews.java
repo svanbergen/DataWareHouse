@@ -76,7 +76,7 @@ public class ViewReviews {
 		contentPane.add(scrollPane);
 		try{
 
-			PreparedStatement stmt = con.prepareStatement("select ReviewID, Rating, Comments, Dates, business.BusinessID, CustomerUsername from review, business where review.BusinessID = business.BusinessID and business.ownerUsername = ?");
+			PreparedStatement stmt = con.prepareStatement("select ReviewID, Rating, Comments, ReviewDate, business.BusinessID, CustomerUsername from review, business where review.BusinessID = business.BusinessID and business.ownerUsername = ?");
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();

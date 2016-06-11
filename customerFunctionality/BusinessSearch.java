@@ -77,6 +77,14 @@ public class BusinessSearch {
 				JLabel provinceLabel = new JLabel("Province: ");
 				JLabel postalCodeLabel = new JLabel("Postal code: ");
 				
+				JPanel selectPanel = new JPanel();
+				m = new JCheckBox();
+				t = new JCheckBox();
+				w = new JCheckBox();
+				r = new JCheckBox();
+				f = new JCheckBox();
+				s = new JCheckBox();
+				u = new JCheckBox();
 				
 				// Text fields
 				// Note: setMinimumSize prevents the fields from resizing on update
