@@ -42,6 +42,7 @@ public class BusinessSearch {
 	private JCheckBox resBox;
 
 	private JCheckBox m,t,w,r,f,s,u;
+	private JCheckBox ownerbox, typebox, nbhbox, resbox, opbox, startbox, finbox, addbox, citybox, provbox, postbox;
 
 	private JTextField startHourField;
 	private JTextField startMinField;
@@ -76,15 +77,22 @@ public class BusinessSearch {
 				JLabel cityLabel = new JLabel("City: ");
 				JLabel provinceLabel = new JLabel("Province: ");
 				JLabel postalCodeLabel = new JLabel("Postal code: ");
-				
+				JLabel searchLabel = new JLabel("Enter values to search by:");
+				JLabel selectLabel = new JLabel("Select attributes to display:");
 				JPanel selectPanel = new JPanel();
-				m = new JCheckBox();
-				t = new JCheckBox();
-				w = new JCheckBox();
-				r = new JCheckBox();
-				f = new JCheckBox();
-				s = new JCheckBox();
-				u = new JCheckBox();
+				
+				
+				ownerbox = new JCheckBox();
+				typebox = new JCheckBox();
+				nbhbox = new JCheckBox();
+				resbox = new JCheckBox();
+				opbox = new JCheckBox();
+				startbox = new JCheckBox();
+				finbox = new JCheckBox();
+				addbox = new JCheckBox();
+				citybox = new JCheckBox();
+				provbox = new JCheckBox();
+				postbox = new JCheckBox();
 				
 				// Text fields
 				// Note: setMinimumSize prevents the fields from resizing on update
@@ -130,7 +138,8 @@ public class BusinessSearch {
 
 				// Create and populate the panel using GridBag for layout
 				JPanel contentPane = new JPanel();
-				searchFrame.setContentPane(contentPane);
+				JScrollPane scrollContentPane = new JScrollPane(contentPane);
+				searchFrame.setContentPane(scrollContentPane);
 				GridBagLayout gb = new GridBagLayout();
 
 				// Preset constraint sets
@@ -173,14 +182,35 @@ public class BusinessSearch {
 				gb.setConstraints(titleLabel, titleC);
 				contentPane.add(titleLabel);
 				
-				// owner label
+				// Selection label
 				labelC.gridy = 2;
+				labelC.gridx = 1;
+				gb.setConstraints(selectLabel, labelC);
+				contentPane.add(selectLabel);
+				
+				GridBagConstraints sc = new GridBagConstraints();
+				sc.anchor = GridBagConstraints.WEST;
+				sc.gridy = 3;
+				sc.gridx = 1;
+				sc.insets = new Insets(5, 10, 10, 10);
+				selectPanel = createSelectPanel();
+				gb.setConstraints(selectPanel, sc);
+				contentPane.add(selectPanel);
+				
+				// Search label
+				labelC.gridy = 4;
+				labelC.gridx = 1;
+				gb.setConstraints(searchLabel, labelC);
+				contentPane.add(searchLabel);
+				
+				// owner label
+				labelC.gridy = 5;
 				labelC.gridx = 1;
 				gb.setConstraints(ownerLabel, labelC);
 				contentPane.add(ownerLabel);
 				
 				// owner username field
-				fieldC.gridy = 3;
+				fieldC.gridy = 6;
 				fieldC.gridx = 1;
 				fieldC.insets = new Insets(5, 10, 10, 10);
 				gb.setConstraints(usernameField, fieldC);
@@ -188,7 +218,7 @@ public class BusinessSearch {
 
 				// nbh label
 				GridBagConstraints nbhC = new GridBagConstraints();
-				nbhC.gridy = 4;
+				nbhC.gridy = 7;
 				nbhC.gridx = 1;
 				nbhC.insets = new Insets(10, 10, 5, 0);
 				nbhC.anchor = GridBagConstraints.WEST;
@@ -196,25 +226,25 @@ public class BusinessSearch {
 				contentPane.add(nbhLabel);
 
 				// Neighbourhood field
-				fieldC.gridy = 5;
+				fieldC.gridy = 8;
 				fieldC.gridx = 1;
 				gb.setConstraints(nbhField, fieldC);
 				contentPane.add(nbhField);
 				
 				// Type label 
-				labelC.gridy = 6;
+				labelC.gridy = 9;
 				labelC.gridx = 1;
 				gb.setConstraints(typeLabel, labelC);
 				contentPane.add(typeLabel);
 
 				// Type field
-				fieldC.gridy = 7;
+				fieldC.gridy = 10;
 				fieldC.gridx = 1;
 				gb.setConstraints(typeField, fieldC);
 				contentPane.add(typeField);
 
 				// Reservation label
-				labelC.gridy = 8;
+				labelC.gridy = 11;
 				labelC.gridx = 1;
 				gb.setConstraints(resLabel, labelC);
 				contentPane.add(resLabel);
@@ -222,7 +252,7 @@ public class BusinessSearch {
 				// Reservation box
 				GridBagConstraints resBoxC = new GridBagConstraints();
 				resBoxC.anchor = GridBagConstraints.WEST;
-				resBoxC.gridy = 9;
+				resBoxC.gridy = 12;
 				resBoxC.gridx = 1;
 				resBoxC.gridwidth = GridBagConstraints.REMAINDER;
 				resBoxC.insets = new Insets(10, 10, 5, 0);
@@ -230,7 +260,7 @@ public class BusinessSearch {
 				contentPane.add(resBox);
 
 				// Days of operation label 
-				titleC.gridy = 10;
+				titleC.gridy = 13;
 				titleC.gridx = 1;
 				gb.setConstraints(opLabel, titleC);
 				contentPane.add(opLabel);
@@ -238,7 +268,7 @@ public class BusinessSearch {
 				// Day boxes
 				GridBagConstraints l = new GridBagConstraints();
 				l.anchor = GridBagConstraints.WEST;
-				l.gridy = 11;
+				l.gridy = 14;
 				l.gridx = 1;
 				l.insets = new Insets(5, 10, 10, 10);
 				JPanel dayBoxPanel = createDayPanel();
@@ -246,14 +276,14 @@ public class BusinessSearch {
 				contentPane.add(dayBoxPanel);
 
 				// Opening time label 
-				titleC.gridy = 12;
+				titleC.gridy = 15;
 				gb.setConstraints(startLabel, titleC);
 				contentPane.add(startLabel);
 
 				// Opening time fields
 				GridBagConstraints of = new GridBagConstraints();
 				of.anchor = GridBagConstraints.WEST;
-				of.gridy = 13;
+				of.gridy = 16;
 				of.gridx = 1;
 				of.insets = new Insets(5, 10, 10, 10);
 				JPanel openPanel = createOpeningPanel();
@@ -261,7 +291,7 @@ public class BusinessSearch {
 				contentPane.add(openPanel);
 
 				// Closing time label 
-				titleC.gridy = 14;
+				titleC.gridy = 17;
 				gb.setConstraints(finiLabel, titleC);
 				contentPane.add(finiLabel);
 
@@ -269,7 +299,7 @@ public class BusinessSearch {
 				GridBagConstraints cf = new GridBagConstraints();
 				cf.anchor = GridBagConstraints.WEST;
 				cf.gridx = 1;
-				cf.gridy = 15;
+				cf.gridy = 18;
 				cf.insets = new Insets(5, 10, 10, 10);
 				JPanel closePanel = createClosingPanel();
 				gb.setConstraints(closePanel, cf);
@@ -277,63 +307,63 @@ public class BusinessSearch {
 				
 				
 				// Location title
-				titleC.gridy = 16;
+				titleC.gridy = 19;
 				gb.setConstraints(locationLabel, titleC);
 				contentPane.add(locationLabel);
 				
 				// Address label
-				titleC.gridy = 17;
+				titleC.gridy = 20;
 				gb.setConstraints(addressLabel, titleC);
 				contentPane.add(addressLabel);
 				
 				// Address field
-				fieldC.gridy = 18;
+				fieldC.gridy = 21;
 				fieldC.gridx = 1;
 				gb.setConstraints(addressField, fieldC);
 				contentPane.add(addressField);
 				
 				// City label
-				titleC.gridy = 19;
+				titleC.gridy = 22;
 				gb.setConstraints(cityLabel, titleC);
 				contentPane.add(cityLabel);
 				
 				// City field
-				fieldC.gridy = 20;
+				fieldC.gridy = 23;
 				fieldC.gridx = 1;
 				gb.setConstraints(cityField, fieldC);
 				contentPane.add(cityField);
 				
 				// Province title
-				titleC.gridy = 21;
+				titleC.gridy = 24;
 				gb.setConstraints(provinceLabel, titleC);
 				contentPane.add(provinceLabel);
 				
 				// Province field
-				fieldC.gridy = 22;
+				fieldC.gridy = 25;
 				fieldC.gridx = 1;
 				gb.setConstraints(provinceField, fieldC);
 				contentPane.add(provinceField);
 				
 				// Location title
-				titleC.gridy = 23;
+				titleC.gridy = 26;
 				gb.setConstraints(postalCodeLabel, titleC);
 				contentPane.add(postalCodeLabel);
 				
 				// Province field
-				fieldC.gridy = 24;
+				fieldC.gridy = 27;
 				fieldC.gridx = 1;
 				gb.setConstraints(postalCodeField, fieldC);
 				contentPane.add(postalCodeField);
 
 				// Add button label 
-				buttonC.gridy = 25;
+				buttonC.gridy = 28;
 				buttonC.gridx = 1;
 				gb.setConstraints(searchButton, buttonC);
 				contentPane.add(searchButton);
 
 				// Error message
 				JLabel errorMessage = new JLabel(" ");
-				titleC.gridy = 26;
+				titleC.gridy = 29;
 				titleC.gridx = 1;
 				errorMessage.setForeground (Color.red);
 				gb.setConstraints(errorMessage, titleC);
@@ -352,9 +382,45 @@ public class BusinessSearch {
 					public void actionPerformed(ActionEvent e) 
 					{
 						try{
+							//private JCheckBox ownerbox, typebox, nbhbox, resbox, opbox, startbox, finbox, addbox, citybox, provbox, postbox;
+							String statement = "select BusinessID";
+							if(ownerbox.isSelected()){
+								statement = statement.concat(", ownerUsername");
+							}
+							if(typebox.isSelected()){
+								statement = statement.concat(", type");
+							}
+							if(nbhbox.isSelected()){
+								statement = statement.concat(", neighborhood");
+							}
+							if(resbox.isSelected()){
+								statement = statement.concat(", reservationflag");
+							}
+							if(opbox.isSelected()){
+								statement = statement.concat(", daysofoperation");
+							}
+							if(startbox.isSelected()){
+								statement = statement.concat(", starttime");
+							}
+							if(finbox.isSelected()){
+								statement = statement.concat(", finishtime");
+							}
+							if(addbox.isSelected()){
+								statement = statement.concat(", streetadd");
+							}
+							if(citybox.isSelected()){
+								statement = statement.concat(", city");
+							}
+							if(provbox.isSelected()){
+								statement = statement.concat(", province");
+							}
+							if(postbox.isSelected()){
+								statement = statement.concat(", postalcode");
+							}
+							
+							
 							boolean first = true;
-							Vector<PreparedStatement> statements = new Vector<PreparedStatement>();
-							String statement = "select * from business natural left outer join located natural left outer join location natural left outer join postalcode where";
+							statement = statement.concat(" from business natural left outer join located natural left outer join location natural left outer join postalcode where");
 							
 							// Check type;
 							String type = typeField.getText();
@@ -668,6 +734,110 @@ public class BusinessSearch {
 		dayPanel.add(u);
 
 		return dayPanel;
+	}
+	
+	
+	// Method to create attribute selection panel
+	JPanel createSelectPanel(){
+		JPanel selectPanel = new JPanel();
+
+		GridBagLayout gb = new GridBagLayout();
+		selectPanel.setLayout(gb);
+		selectPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		// Attribute boxes
+		GridBagConstraints l = new GridBagConstraints();
+		l.anchor = GridBagConstraints.WEST;
+		l.gridx = 1;
+		l.gridy = 1;
+		JLabel ml = new JLabel("Owner: ");
+		gb.setConstraints(ml, l);
+		selectPanel.add(ml);
+		l.gridx = 2;
+		gb.setConstraints(ownerbox, l);
+		selectPanel.add(ownerbox);
+		l.gridx = 1;
+		l.gridy = 2;
+		JLabel tl = new JLabel("Type: ");
+		gb.setConstraints(tl, l);
+		selectPanel.add(tl);
+		l.gridx = 2;
+		gb.setConstraints(typebox, l);
+		selectPanel.add(typebox);
+		l.gridx = 1;
+		l.gridy = 3;
+		JLabel wl = new JLabel("Neighborhood: ");
+		gb.setConstraints(wl, l);
+		selectPanel.add(wl);
+		l.gridx = 2;
+		gb.setConstraints(nbhbox, l);
+		selectPanel.add(nbhbox);
+		l.gridx = 1;
+		l.gridy = 4;
+		JLabel rl = new JLabel("Reservations: ");
+		gb.setConstraints(rl, l);
+		selectPanel.add(rl);
+		l.gridx = 2;
+		gb.setConstraints(resbox, l);
+		selectPanel.add(resbox);
+		l.gridx = 1;
+		l.gridy = 5;
+		JLabel fl = new JLabel("Days of Operation: ");
+		gb.setConstraints(fl, l);
+		selectPanel.add(fl);
+		l.gridx = 2;
+		gb.setConstraints(opbox, l);
+		selectPanel.add(opbox);
+		l.gridx = 1;
+		l.gridy = 6;
+		JLabel sl = new JLabel("Opening Time: ");
+		gb.setConstraints(sl, l);
+		selectPanel.add(sl);
+		l.gridx = 2;
+		gb.setConstraints(startbox, l);
+		selectPanel.add(startbox);
+		l.gridx = 1;
+		l.gridy = 7;
+		JLabel ul = new JLabel("Closing Time: ");
+		gb.setConstraints(ul, l);
+		selectPanel.add(ul);
+		l.gridx = 2;
+		gb.setConstraints(finbox, l);
+		selectPanel.add(finbox);
+		l.gridx = 1;
+		l.gridy = 8;
+		JLabel al = new JLabel("Address: ");
+		gb.setConstraints(al, l);
+		selectPanel.add(al);
+		l.gridx = 2;
+		gb.setConstraints(addbox, l);
+		selectPanel.add(addbox);
+		l.gridx = 1;
+		l.gridy = 9;
+		JLabel cl = new JLabel("City: ");
+		gb.setConstraints(cl, l);
+		selectPanel.add(cl);
+		l.gridx = 2;
+		gb.setConstraints(citybox, l);
+		selectPanel.add(citybox);
+		l.gridx = 1;
+		l.gridy = 10;
+		JLabel pl = new JLabel("Province: ");
+		gb.setConstraints(pl, l);
+		selectPanel.add(pl);
+		l.gridx = 2;
+		gb.setConstraints(provbox, l);
+		selectPanel.add(provbox);
+		l.gridx = 1;
+		l.gridy = 11;
+		JLabel pol = new JLabel("Postal Code: ");
+		gb.setConstraints(pol, l);
+		selectPanel.add(pol);
+		l.gridx = 2;
+		gb.setConstraints(postbox, l);
+		selectPanel.add(postbox);
+
+		return selectPanel;
 	}
 
 	// Method to create opening time panel
