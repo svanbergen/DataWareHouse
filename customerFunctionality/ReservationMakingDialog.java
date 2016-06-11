@@ -20,6 +20,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import utility.*;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 
 public class ReservationMakingDialog extends JDialog {
@@ -71,6 +73,7 @@ public class ReservationMakingDialog extends JDialog {
 		{
 			JLabel businessIdLabel = new JLabel("Business ID: ");
 			GridBagConstraints gbc_businessIdLabel = new GridBagConstraints();
+			gbc_businessIdLabel.anchor = GridBagConstraints.WEST;
 			gbc_businessIdLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_businessIdLabel.gridx = 2;
 			gbc_businessIdLabel.gridy = 2;
@@ -87,8 +90,9 @@ public class ReservationMakingDialog extends JDialog {
 			businessIdTextField.setColumns(10);
 		}
 		{
-			JLabel yearLabel = new JLabel("year: ");
+			JLabel yearLabel = new JLabel("Year: ");
 			GridBagConstraints gbc_yearLabel = new GridBagConstraints();
+			gbc_yearLabel.anchor = GridBagConstraints.WEST;
 			gbc_yearLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_yearLabel.gridx = 2;
 			gbc_yearLabel.gridy = 3;
@@ -96,6 +100,8 @@ public class ReservationMakingDialog extends JDialog {
 		}
 		{
 			statusLabel = new JLabel("");
+			statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			statusLabel.setForeground(Color.RED);
 			
 			
 			{
@@ -109,8 +115,9 @@ public class ReservationMakingDialog extends JDialog {
 				yearTextField.setColumns(10);
 			}
 			{
-				JLabel lblMonth = new JLabel("month: ");
+				JLabel lblMonth = new JLabel("Month: ");
 				GridBagConstraints gbc_lblMonth = new GridBagConstraints();
+				gbc_lblMonth.anchor = GridBagConstraints.WEST;
 				gbc_lblMonth.insets = new Insets(0, 0, 5, 5);
 				gbc_lblMonth.gridx = 2;
 				gbc_lblMonth.gridy = 4;
@@ -129,6 +136,7 @@ public class ReservationMakingDialog extends JDialog {
 			{
 				JLabel lblDay = new JLabel("Day: ");
 				GridBagConstraints gbc_lblDay = new GridBagConstraints();
+				gbc_lblDay.anchor = GridBagConstraints.WEST;
 				gbc_lblDay.insets = new Insets(0, 0, 5, 5);
 				gbc_lblDay.gridx = 2;
 				gbc_lblDay.gridy = 5;
@@ -147,6 +155,7 @@ public class ReservationMakingDialog extends JDialog {
 			{
 				JLabel timeLabel = new JLabel("Hour: ");
 				GridBagConstraints gbc_timeLabel = new GridBagConstraints();
+				gbc_timeLabel.anchor = GridBagConstraints.WEST;
 				gbc_timeLabel.insets = new Insets(0, 0, 5, 5);
 				gbc_timeLabel.gridx = 2;
 				gbc_timeLabel.gridy = 6;
@@ -165,6 +174,7 @@ public class ReservationMakingDialog extends JDialog {
 			{
 				JLabel lblMinute = new JLabel("Minute:");
 				GridBagConstraints gbc_lblMinute = new GridBagConstraints();
+				gbc_lblMinute.anchor = GridBagConstraints.WEST;
 				gbc_lblMinute.insets = new Insets(0, 0, 5, 5);
 				gbc_lblMinute.gridx = 2;
 				gbc_lblMinute.gridy = 7;
@@ -184,6 +194,7 @@ public class ReservationMakingDialog extends JDialog {
 			gbc_statusLabel.insets = new Insets(0, 0, 0, 5);
 			gbc_statusLabel.gridx = 2;
 			gbc_statusLabel.gridy = 10;
+			gbc_statusLabel.gridwidth = 7;
 			contentPanel.add(statusLabel, gbc_statusLabel);
 		}
 		{
@@ -198,6 +209,11 @@ public class ReservationMakingDialog extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						closeDialog();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
