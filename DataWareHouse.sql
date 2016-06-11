@@ -101,7 +101,7 @@ grant select on review to public;
 CREATE TABLE MenuItem (
 	menuItemID int Primary Key,
 	Price float not null,
-	Type varchar(15),
+	ItemType varchar(15),
 	Name varchar(20) not null,
 	BusinessID int not null,
 	Foreign Key(BusinessID) references Business
@@ -306,6 +306,12 @@ values(120, 5, 'I cannot get enough of their fried chicken!', TO_DATE('2013/01/1
 
 insert into MenuItem
 	values(1, 16.00, 'Entree', 'Beef Souvlaki', 1);
+	
+insert into MenuItem
+	values(1, 16.00, 'Drink', 'Coffee', 1);
+	
+insert into MenuItem
+	values(6, 16.00, 'Entree', 'Beef Souvlaki', 3);
 
 insert into MenuItem
 	values(5, 8.99, 'Appetizer', 'Seared Scallops', 2);
