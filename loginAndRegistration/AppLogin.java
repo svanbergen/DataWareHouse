@@ -158,7 +158,6 @@ public class AppLogin {
 						String dBPassword = rs.getString("password");
 						// If details are valid remove database login window and go to customer menu window
 						if(dBPassword.equals(password)){
-							loginFrame.dispose();
 							CustomerMenu cm = new CustomerMenu(con,userName);
 						}
 						else{
@@ -209,7 +208,6 @@ public class AppLogin {
 						String dBPassword = rs.getString("password");
 						// If details are valid remove database login window and go to customer menu window
 						if(dBPassword.equals(password)){
-							loginFrame.dispose();
 							OwnerMenu om = new OwnerMenu(con, userName);
 						}
 						else{
