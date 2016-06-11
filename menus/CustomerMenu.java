@@ -80,7 +80,7 @@ public class CustomerMenu {
 		contentPane.add(searchForBusinessesByItemButton);
 		
 		
-		buttonC.gridy = 8;
+		buttonC.gridy = 9;
 		gb.setConstraints(getTheMenuForABusinessButton, buttonC);
 		contentPane.add(getTheMenuForABusinessButton);
 		
