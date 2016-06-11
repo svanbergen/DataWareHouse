@@ -1,4 +1,5 @@
 
+drop table bigspenders;
 drop table reply;
 drop table reservation;
 drop table review;
@@ -101,7 +102,7 @@ grant select on review to public;
 CREATE TABLE MenuItem (
 	menuItemID int Primary Key,
 	Price float not null,
-	Type varchar(15),
+	ItemType varchar(15),
 	Name varchar(20) not null,
 	BusinessID int not null,
 	Foreign Key(BusinessID) references Business
@@ -127,14 +128,13 @@ CREATE TABLE Orders (
 	OrderID int Primary Key,
 	timeMade timestamp,
 	Price float not null,
-	estimatedDeliveryTime timestamp,
 	BusinessID int not null,
 	customerUserName varchar(25) not null,
 	Foreign Key(BusinessID) references Business
 		On delete Cascade,
 	Foreign Key(customerUsername) references Customer
 		On delete Cascade,
-    check (Price > 0));
+    check (Price >= 0));
 	
 drop sequence OrderID_seq;
 CREATE SEQUENCE OrderID_seq;
@@ -149,6 +149,30 @@ CREATE TRIGGER OrderID_trig
 		END LOOP;
 /
 
+CREATE TABLE BigSpenders (
+	CustomerUsername varchar(25),
+	orderid int,
+	price float,
+	Foreign Key(customerUsername) references Customer,
+	Foreign Key(OrderID) references Orders,
+	Primary Key(customerUsername,OrderID),
+	check (Price > 100)
+);
+
+CREATE OR REPLACE TRIGGER spender_trig
+ AFTER UPDATE ON Orders
+ FOR EACH ROW
+ 		WHEN (new.price > 100)
+		BEGIN
+			INSERT INTO BigSpenders values(:new.customerUsername, :new.orderid, :new.price);
+		EXCEPTION
+  			WHEN DUP_VAL_ON_INDEX
+ 			THEN ROLLBACK;
+		END;
+/
+
+
+
 grant select on orders to public;
 
 
@@ -160,6 +184,24 @@ CREATE TABLE Includes (
 	Foreign Key(menuItemID) references MenuItem );
 
 grant select on includes to public;
+
+
+CREATE OR REPLACE TRIGGER includes_trig
+ AFTER INSERT ON Includes
+ FOR EACH ROW
+ 		DECLARE
+		    newcost int;
+		BEGIN
+			SELECT price
+			INTO newcost
+			FROM MenuItem
+			WHERE menuitem.menuItemID = :new.menuitemid;
+			
+			UPDATE Orders
+    		SET    price = price + newcost
+   			WHERE  orderid = :new.orderid;
+		END;
+/
 
 CREATE TABLE PostalCode (
 	postalCode varchar(7) Primary Key,
@@ -306,6 +348,12 @@ values(120, 5, 'I cannot get enough of their fried chicken!', TO_DATE('2013/01/1
 
 insert into MenuItem
 	values(1, 16.00, 'Entree', 'Beef Souvlaki', 1);
+	
+insert into MenuItem
+	values(1, 16.00, 'Drink', 'Coffee', 1);
+	
+insert into MenuItem
+	values(6, 16.00, 'Entree', 'Beef Souvlaki', 3);
 
 insert into MenuItem
 	values(5, 8.99, 'Appetizer', 'Seared Scallops', 2);
@@ -320,19 +368,19 @@ insert into MenuItem
 	values(3, 6.99, 'Entree', 'Fried Chicken', 5);
 
 insert into Orders
-	values(13, TO_TIMESTAMP('2010/02/13 09:15:30', 'YYYY/MM/DD HH24:MI:SS'), 35.24, TO_TIMESTAMP('2010/02/13 09:32:00', 'YYYY/MM/DD HH24:MI:SS'), 1, 'henry00123');
+	values(13, TO_TIMESTAMP('2010/02/13 09:15:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 1, 'henry00123');
 
 insert into Orders
-	values(3, TO_TIMESTAMP('2011/01/23 11:15:33', 'YYYY/MM/DD HH24:MI:SS'), 44.24, TO_TIMESTAMP('2011/01/23 11:32:00', 'YYYY/MM/DD HH24:MI:SS'), 2, 'angrytim');
+	values(3, TO_TIMESTAMP('2011/01/23 11:15:33', 'YYYY/MM/DD HH24:MI:SS'), 0, 2, 'angrytim');
 
 insert into Orders
-	values(25, TO_TIMESTAMP('2014/12/10 14:30:30', 'YYYY/MM/DD HH24:MI:SS'), 60.11, TO_TIMESTAMP('2014/12/10 14:50:00', 'YYYY/MM/DD HH24:MI:SS'), 3, 'sarahgibson92');
+	values(25, TO_TIMESTAMP('2014/12/10 14:30:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 3, 'sarahgibson92');
 
 insert into Orders
-	values(19, TO_TIMESTAMP('2010/01/22 18:00:01', 'YYYY/MM/DD HH24:MI:SS'), 15.75, TO_TIMESTAMP('2010/01/22 18:32:00', 'YYYY/MM/DD HH24:MI:SS'), 4, 'joeiscool');
+	values(19, TO_TIMESTAMP('2010/01/22 18:00:01', 'YYYY/MM/DD HH24:MI:SS'), 0, 4, 'joeiscool');
 
 insert into Orders
-	values(1, TO_TIMESTAMP('2014/02/13 09:30:30', 'YYYY/MM/DD HH24:MI:SS'), 22.24, TO_TIMESTAMP('2014/02/13 09:52:00', 'YYYY/MM/DD HH24:MI:SS'), 5, 'foodiefoodie');
+	values(1, TO_TIMESTAMP('2014/02/13 09:30:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 5, 'foodiefoodie');
 
 insert into Includes 
 	values(1, 1);
