@@ -20,6 +20,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import utility.*;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 
 public class ReservationMakingDialog extends JDialog {
@@ -35,21 +37,17 @@ public class ReservationMakingDialog extends JDialog {
 	private JTextField yearTextField;
 	private JTextField minuteTextField;
 	
+	
+	int businessId;
+	Timestamp ts;
+	
 	private Connection con;
 	private JButton makeReservationButton;
 
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		try {
-//			ReservationMakingDialog dialog = new ReservationMakingDialog();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+
 
 	/**
 	 * Create the dialog.
@@ -71,6 +69,7 @@ public class ReservationMakingDialog extends JDialog {
 		{
 			JLabel businessIdLabel = new JLabel("Business ID: ");
 			GridBagConstraints gbc_businessIdLabel = new GridBagConstraints();
+			gbc_businessIdLabel.anchor = GridBagConstraints.WEST;
 			gbc_businessIdLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_businessIdLabel.gridx = 2;
 			gbc_businessIdLabel.gridy = 2;
@@ -87,8 +86,9 @@ public class ReservationMakingDialog extends JDialog {
 			businessIdTextField.setColumns(10);
 		}
 		{
-			JLabel yearLabel = new JLabel("year: ");
+			JLabel yearLabel = new JLabel("Year: ");
 			GridBagConstraints gbc_yearLabel = new GridBagConstraints();
+			gbc_yearLabel.anchor = GridBagConstraints.WEST;
 			gbc_yearLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_yearLabel.gridx = 2;
 			gbc_yearLabel.gridy = 3;
@@ -96,6 +96,8 @@ public class ReservationMakingDialog extends JDialog {
 		}
 		{
 			statusLabel = new JLabel("");
+			statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			statusLabel.setForeground(Color.RED);
 			
 			
 			{
@@ -109,8 +111,9 @@ public class ReservationMakingDialog extends JDialog {
 				yearTextField.setColumns(10);
 			}
 			{
-				JLabel lblMonth = new JLabel("month: ");
+				JLabel lblMonth = new JLabel("Month: ");
 				GridBagConstraints gbc_lblMonth = new GridBagConstraints();
+				gbc_lblMonth.anchor = GridBagConstraints.WEST;
 				gbc_lblMonth.insets = new Insets(0, 0, 5, 5);
 				gbc_lblMonth.gridx = 2;
 				gbc_lblMonth.gridy = 4;
@@ -129,6 +132,7 @@ public class ReservationMakingDialog extends JDialog {
 			{
 				JLabel lblDay = new JLabel("Day: ");
 				GridBagConstraints gbc_lblDay = new GridBagConstraints();
+				gbc_lblDay.anchor = GridBagConstraints.WEST;
 				gbc_lblDay.insets = new Insets(0, 0, 5, 5);
 				gbc_lblDay.gridx = 2;
 				gbc_lblDay.gridy = 5;
@@ -147,6 +151,7 @@ public class ReservationMakingDialog extends JDialog {
 			{
 				JLabel timeLabel = new JLabel("Hour: ");
 				GridBagConstraints gbc_timeLabel = new GridBagConstraints();
+				gbc_timeLabel.anchor = GridBagConstraints.WEST;
 				gbc_timeLabel.insets = new Insets(0, 0, 5, 5);
 				gbc_timeLabel.gridx = 2;
 				gbc_timeLabel.gridy = 6;
@@ -165,6 +170,7 @@ public class ReservationMakingDialog extends JDialog {
 			{
 				JLabel lblMinute = new JLabel("Minute:");
 				GridBagConstraints gbc_lblMinute = new GridBagConstraints();
+				gbc_lblMinute.anchor = GridBagConstraints.WEST;
 				gbc_lblMinute.insets = new Insets(0, 0, 5, 5);
 				gbc_lblMinute.gridx = 2;
 				gbc_lblMinute.gridy = 7;
@@ -184,12 +190,68 @@ public class ReservationMakingDialog extends JDialog {
 			gbc_statusLabel.insets = new Insets(0, 0, 0, 5);
 			gbc_statusLabel.gridx = 2;
 			gbc_statusLabel.gridy = 10;
+			gbc_statusLabel.gridwidth = 7;
 			contentPanel.add(statusLabel, gbc_statusLabel);
 		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			{
+				JButton btnCancelReservation = new JButton("Cancel Reservation");
+				btnCancelReservation.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("cancel btn pressed");
+						try{
+							parseInput();
+						}catch(Exception ex){
+							return;
+						}
+						
+						
+						String makeSureReservationExists = "select businessID from Reservation where dates =? AND customerUsername = ? AND businessID=?";
+						try{
+							PreparedStatement stmt = con.prepareStatement(makeSureReservationExists);
+							stmt.setTimestamp(1, ts);
+							stmt.setString(2, username);
+							stmt.setString(3, ""+ businessId);
+							
+							ResultSet rs = stmt.executeQuery();
+							
+							if(rs.next())
+							{
+								System.out.println("the reservation entered exists in the database");
+							}
+							else
+							{
+								statusLabel.setText("the specified reservation does not exist");
+								return;
+							}     
+						}catch(SQLException ex){
+							System.out.println(ex.getMessage());
+						}
+						
+						String removeReservationQuery = "delete from Reservation where dates =? AND customerUsername = ? AND businessID=?";
+						try{
+							PreparedStatement stmt = con.prepareStatement(removeReservationQuery);
+							
+							stmt.setTimestamp(1, ts);
+							stmt.setString(2, username);
+							stmt.setString(3, ""+ businessId);
+							stmt.executeUpdate();
+							
+							
+							PopUp p = new PopUp("Reservation Cancelled successfully");
+							closeDialog();
+					}catch (SQLException ex) {
+
+						System.out.println(ex.getMessage());
+
+					}
+						}
+				});
+				buttonPane.add(btnCancelReservation);
+			}
 			{
 				makeReservationButton = new JButton("make Reservation");
 				makeReservationButton.setActionCommand("OK");
@@ -198,6 +260,11 @@ public class ReservationMakingDialog extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						closeDialog();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -209,25 +276,12 @@ public class ReservationMakingDialog extends JDialog {
 			public void actionPerformed(ActionEvent e){
 				System.out.println("makee reservation button pressed");
 				
-				Timestamp ts;
-				int businessId;
-
 				try{
-					int year = Integer.parseInt(yearTextField.getText());
-					int month = Integer.parseInt(monthTextField.getText());
-					int day = Integer.parseInt(dayTextField.getText());
-					int hour = Integer.parseInt(HourTextField.getText());
-					int minute = Integer.parseInt(minuteTextField.getText());
-					ts = timeAndDate.makeTimestamp(year,month,day,hour,minute);
-					System.out.println(ts.toString());
-					
-					businessId = Integer.parseInt(businessIdTextField.getText());
+					parseInput();
 				}catch(Exception ex){
-					statusLabel.setVisible(true);
-					statusLabel.setText("make sure the date and business id are valid");
 					return;
 				}
-				
+
 				String businessFlagQuery = "select reservationFlag from Business where BusinessID = ?";
 				try{
 					PreparedStatement stmt = con.prepareStatement(businessFlagQuery);
@@ -272,6 +326,10 @@ public class ReservationMakingDialog extends JDialog {
 					
 					stmt.executeUpdate();
 					
+					
+					PopUp p = new PopUp("Reservation Made successfully. Hope you have a great Experience!");
+
+					
 					closeDialog();
 					
 				}
@@ -300,6 +358,26 @@ public class ReservationMakingDialog extends JDialog {
 		
 		
 		
+	}
+	
+	
+	public void parseInput() throws Exception{
+		
+		try{
+			int year = Integer.parseInt(yearTextField.getText());
+			int month = Integer.parseInt(monthTextField.getText());
+			int day = Integer.parseInt(dayTextField.getText());
+			int hour = Integer.parseInt(HourTextField.getText());
+			int minute = Integer.parseInt(minuteTextField.getText());
+			ts = timeAndDate.makeTimestamp(year,month,day,hour,minute);
+			System.out.println(ts.toString());
+			
+			businessId = Integer.parseInt(businessIdTextField.getText());
+		}catch(Exception ex){
+			statusLabel.setVisible(true);
+			statusLabel.setText("make sure the date and business id are valid");
+			throw new Exception();
+		}
 	}
 	
 	
