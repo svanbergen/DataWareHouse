@@ -5,10 +5,7 @@ import java.sql.*;
 
 import javax.swing.*;
 
-import customerFunctionality.BusinessSearch;
-import customerFunctionality.FindReviews;
-import customerFunctionality.ReservationMakingDialog;
-import customerFunctionality.WriteReview;
+import customerFunctionality.*;
 
 public class CustomerMenu {
 	Connection con;
@@ -31,6 +28,7 @@ public class CustomerMenu {
 		JButton searchForBusinessesButton = new JButton("Search for Businesses");
 		
 		JButton makeReservationButton = new JButton("Make or Cancel a Reservation");
+		JButton getTheMenuForABusinessButton = new JButton("Get the Menu for a business");
 
 
 		JPanel contentPane = new JPanel();
@@ -76,6 +74,10 @@ public class CustomerMenu {
 		gb.setConstraints(searchForBusinessesButton, buttonC);
 		contentPane.add(searchForBusinessesButton);
 		
+		
+		buttonC.gridy = 8;
+		gb.setConstraints(getTheMenuForABusinessButton, buttonC);
+		contentPane.add(getTheMenuForABusinessButton);
 		
 		
 		
@@ -134,6 +136,20 @@ public class CustomerMenu {
 			}
 		};
 		makeReservationButton.addActionListener(makeReservationButtonListener);
+		
+		
+		
+		ActionListener getTheMenuForABusinessListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				BusinessMenu bn = new BusinessMenu(con);
+			}
+		};
+		getTheMenuForABusinessButton.addActionListener(getTheMenuForABusinessListener);
+		
+		
+		
 		
 		
 
