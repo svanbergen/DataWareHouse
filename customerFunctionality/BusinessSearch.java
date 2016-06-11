@@ -39,7 +39,7 @@ public class BusinessSearch {
 	private JTextField typeField;
 	private JTextField nbhField;
 
-	private JCheckBox resBox;
+	private JComboBox<String> resBox;
 
 	private JCheckBox m,t,w,r,f,s,u;
 	private JCheckBox ownerbox, typebox, nbhbox, resbox, opbox, startbox, finbox, addbox, citybox, provbox, postbox;
@@ -121,7 +121,7 @@ public class BusinessSearch {
 				usernameField.setMinimumSize(usernameField.getPreferredSize());
 				
 
-				JComboBox<String> resBox = new JComboBox<String>(res);
+				resBox = new JComboBox<String>(res);
 				
 				// Check boxes
 				m = new JCheckBox();
@@ -397,7 +397,7 @@ public class BusinessSearch {
 								statement = statement.concat(", reservationflag");
 							}
 							if(opbox.isSelected()){
-								statement = statement.concat(", daysofoperation");
+								statement = statement.concat(", dayofoperation");
 							}
 							if(startbox.isSelected()){
 								statement = statement.concat(", starttime");
@@ -420,11 +420,12 @@ public class BusinessSearch {
 							
 							
 							boolean first = true;
-							statement = statement.concat(" from business natural left outer join located natural left outer join location natural left outer join postalcode where");
+							statement = statement.concat(" from business natural left outer join located natural left outer join location natural left outer join postalcode");
 							
 							// Check type;
 							String type = typeField.getText();
 							if(!type.equals("")){
+								statement = statement.concat(" where");
 								statement = statement.concat(" type = '");
 								statement = statement.concat(type);
 								statement = statement.concat("'");
@@ -436,7 +437,8 @@ public class BusinessSearch {
 									statement = statement.concat(" and");
 								}
 								else{
-									first = false;
+									statement = statement.concat(" where");
+									first = false; 
 								}
 
 								statement = statement.concat(" ownerUsername = '");
@@ -445,10 +447,11 @@ public class BusinessSearch {
 							}
 							String res = (String) resBox.getSelectedItem();
 							// Determine value of res
-							if(resBox.equals("Yes")){
+							System.out.println("Yes");
+							if(res.equals("Yes")){
 								res = "Y";
 							}
-							else if(resBox.equals("No")){
+							else if(res.equals("No")){
 								res = "N";
 							}
 							
@@ -457,6 +460,7 @@ public class BusinessSearch {
 									statement = statement.concat(" and");
 								}
 								else{
+									statement = statement.concat(" where");
 									first = false;
 								}
 
@@ -490,10 +494,12 @@ public class BusinessSearch {
 							}
 							if(!days.equals("")){
 								if(!first){
+									
 									statement = statement.concat(" and");
 								}
 								else{
 									first = false;
+									statement = statement.concat(" where");
 								}
 
 								statement = statement.concat(" dayofOperation = '");
@@ -508,6 +514,7 @@ public class BusinessSearch {
 								}
 								else{
 									first = false;
+									statement = statement.concat(" where");
 								}
 
 								statement = statement.concat(" Neighborhood = '");
@@ -536,6 +543,7 @@ public class BusinessSearch {
 										}
 										else{
 											first = false;
+											statement = statement.concat(" where");
 										}
 
 										statement = statement.concat(" startTime <= ");
@@ -564,6 +572,7 @@ public class BusinessSearch {
 										}
 										else{
 											first = false;
+											statement = statement.concat(" where");
 										}
 
 										statement = statement.concat(" finishTime > ");
@@ -587,6 +596,7 @@ public class BusinessSearch {
 								}
 								else{
 									first = false;
+									statement = statement.concat(" where");
 								}
 
 								statement = statement.concat(" streetAdd = '");
@@ -599,6 +609,7 @@ public class BusinessSearch {
 								}
 								else{
 									first = false;
+									statement = statement.concat(" where");
 								}
 
 								statement = statement.concat(" city = '");
@@ -611,6 +622,7 @@ public class BusinessSearch {
 								}
 								else{
 									first = false;
+									statement = statement.concat(" where");
 								}
 
 								statement = statement.concat(" province = '");
@@ -623,6 +635,7 @@ public class BusinessSearch {
 								}
 								else{
 									first = false;
+									statement = statement.concat(" where");
 								}
 
 								statement = statement.concat(" postalCode = '");
