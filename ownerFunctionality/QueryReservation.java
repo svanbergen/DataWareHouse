@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import javax.management.Query;
 import javax.swing.*;
 
+import com.oracle.webservices.internal.impl.internalspi.encoding.StreamDecoder;
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
 
@@ -345,6 +346,22 @@ public class QueryReservation {
 				}
 				
 				// Query
+				
+				try {
+					PreparedStatement stmd = connection.prepareStatement("select * from reservation where reservation.businessid = ? AND reservation.dates BETWEEN ? and ?");
+					stmd.setString(1, businessID);
+					stmd.setTimestamp(2, beginTime);
+					stmd.setTimestamp(3, endTime);
+					
+					ResultSet rs = stmd.executeQuery();
+					ResultSetMetaData rsmd = stmd.getMetaData();
+					TableFromResultSet.replaceTable(resultTable, rs, rsmd);
+				} catch (SQLException ex) {
+					System.out.println(ex.getMessage());
+				}
+				
+				
+				
 				
 				// Display
 				
