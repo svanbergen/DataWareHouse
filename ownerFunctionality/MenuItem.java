@@ -10,11 +10,11 @@ public class MenuItem {
 	int businessId;
 
 
-	public MenuItem(BigDecimal price, String itemType, String itemName, int businessId) {
-		this(0, price, itemType, itemName, businessId);
+	public MenuItem(String itemName, String itemType, BigDecimal price, int businessId) {
+		this(0, itemName, itemType, price, businessId);
 	}
 	
-	public MenuItem(int id, BigDecimal price, String itemType, String itemName, int businessId) {
+	public MenuItem(int id, String itemName, String itemType, BigDecimal price, int businessId) {
 		// TODO Auto-generated constructor stub
 		super();
 		this.id = id;

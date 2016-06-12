@@ -1,4 +1,3 @@
-
 drop table bigspenders;
 drop table reply;
 drop table reservation;
