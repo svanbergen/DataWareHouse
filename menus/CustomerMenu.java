@@ -30,6 +30,7 @@ public class CustomerMenu {
 		JButton searchForBusinessesByItemButton = new JButton("Search for Businesses by Item");
 		
 		JButton makeReservationButton = new JButton("Make or Cancel a Reservation");
+		JButton getTheMenuForABusinessButton = new JButton("Get the Menu for a business");
 
 
 		JPanel contentPane = new JPanel();
@@ -79,6 +80,10 @@ public class CustomerMenu {
 		gb.setConstraints(searchForBusinessesByItemButton, buttonC);
 		contentPane.add(searchForBusinessesByItemButton);
 		
+		
+		buttonC.gridy = 9;
+		gb.setConstraints(getTheMenuForABusinessButton, buttonC);
+		contentPane.add(getTheMenuForABusinessButton);
 		
 		
 		
@@ -156,6 +161,20 @@ public class CustomerMenu {
 			}
 		};
 		makeReservationButton.addActionListener(makeReservationButtonListener);
+		
+		
+		
+		ActionListener getTheMenuForABusinessListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				BusinessMenu bn = new BusinessMenu(con);
+			}
+		};
+		getTheMenuForABusinessButton.addActionListener(getTheMenuForABusinessListener);
+		
+		
+		
 		
 		
 
