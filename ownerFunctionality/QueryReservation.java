@@ -73,6 +73,9 @@ public class QueryReservation {
 		minEnd = new JTextField(10);
 		minEnd.setMinimumSize(minEnd.getPreferredSize());
 		
+		businessIDfield = new JTextField(10);
+		businessIDfield.setMinimumSize(businessIDfield.getPreferredSize());
+		
 		
 		// Labels
 		
@@ -88,7 +91,7 @@ public class QueryReservation {
 		JLabel hourEndLabel = new JLabel("End Hour: ");
 		JLabel minEndLabel = new JLabel("End Minute: ");
 		
-		JLabel businessID = new JLabel("BusinessID: ");
+		JLabel businessIDLabel = new JLabel("BusinessID: ");
 		
 		// Button
 		JButton searchButton = new JButton("Search");
@@ -196,8 +199,7 @@ public class QueryReservation {
 		contentpane.add(minStart);
 		
 		// Placeholder
-		JLabel holder = new JLabel(" ");
-		holder.setText("Ending Time");
+		JLabel holder = new JLabel("Ending Date");
 		constraints.gridy = 6;
 		gb.setConstraints(holder, constraints);
 		contentpane.add(holder);
@@ -262,23 +264,36 @@ public class QueryReservation {
 		gb.setConstraints(minEnd, constraints);
 		contentpane.add(minEnd);
 		
-		// BusinesID Label
+		// businessID holder
+		JLabel bHolder = new JLabel("Business ID");
+		constraints.gridy = 12;
+		gb.setConstraints(bHolder, constraints);
+		contentpane.add(bHolder);
 		
-		// BusinessID
+		// Business ID
+		constraints.gridx = 1;
+		constraints.gridy = 13;
+		gb.setConstraints(businessIDLabel, constraints);
+		contentpane.add(businessIDLabel);
 		
-	
+		constraints.gridx = 2;
+		constraints.gridy = 13;
+		gb.setConstraints(businessIDfield, constraints);
+		contentpane.add(businessIDfield);
+		
+		
 		
 		// Error Message
 		JLabel errorMessage = new JLabel(" ");
 		errorMessage.setForeground (Color.red);
 		GridBagConstraints ErrorConstraints = new GridBagConstraints();
 		ErrorConstraints.anchor = GridBagConstraints.CENTER;
-		ErrorConstraints.gridy = 12;
+		ErrorConstraints.gridy = 14;
 		gb.setConstraints(errorMessage, ErrorConstraints);
 		contentpane.add(errorMessage);
 		
 		// Button
-		constraints.gridy = 13;
+		constraints.gridy = 15;
 		gb.setConstraints(searchButton, constraints);
 		contentpane.add(searchButton);
 		
@@ -289,18 +304,11 @@ public class QueryReservation {
 		tableC.fill = GridBagConstraints.NONE;
 		tableC.gridy = 1;
 		tableC.gridx = 3;
-		tableC.ipadx = 250;
-		tableC.gridwidth = 2;
-		tableC.gridheight = 10;
+		tableC.ipadx = 500;
+		tableC.gridwidth = 3;
+		tableC.gridheight = 15;
 		gb.setConstraints(scrollPane, tableC);
 		contentpane.add(scrollPane);
-		
-		
-		// Action Listener
-		
-		
-		
-		
 		
 
 
