@@ -75,80 +75,47 @@ public class OwnerMenu {
 
 		buttonC.gridy = 1;
 		gb.setConstraints(menuPage, buttonC);
-		GridBagConstraints gbc_menuPage = new GridBagConstraints();
-		gbc_menuPage.insets = new Insets(0, 0, 0, 5);
-		gbc_menuPage.gridx = 0;
-		gbc_menuPage.gridy = 0;
-		contentPane.add(menuPage, gbc_menuPage);
+		contentPane.add(menuPage);
 		
 		buttonC.gridy = 2;
 		gb.setConstraints(sn, buttonC);
-		GridBagConstraints gbc_sn = new GridBagConstraints();
-		gbc_sn.insets = new Insets(0, 0, 0, 5);
-		gbc_sn.gridx = 1;
-		gbc_sn.gridy = 0;
-		contentPane.add(sn, gbc_sn);
+		contentPane.add(sn);
 		
 		buttonC.gridy = 3;
 		gb.setConstraints(refreshButton, buttonC);
-		GridBagConstraints gbc_refreshButton = new GridBagConstraints();
-		gbc_refreshButton.insets = new Insets(0, 0, 0, 5);
-		gbc_refreshButton.gridx = 2;
-		gbc_refreshButton.gridy = 0;
-		contentPane.add(refreshButton, gbc_refreshButton);
+		contentPane.add(refreshButton);
 		
 		buttonC.gridy = 4;
 		gb.setConstraints(addBusinessButton, buttonC);
-		GridBagConstraints gbc_addBusinessButton = new GridBagConstraints();
-		gbc_addBusinessButton.insets = new Insets(0, 0, 0, 5);
-		gbc_addBusinessButton.gridx = 3;
-		gbc_addBusinessButton.gridy = 0;
-		contentPane.add(addBusinessButton, gbc_addBusinessButton);
+		contentPane.add(addBusinessButton);
 
 		buttonC.gridy = 5;
 		gb.setConstraints(updateBusinessButton, buttonC);
-		GridBagConstraints gbc_updateBusinessButton = new GridBagConstraints();
-		gbc_updateBusinessButton.insets = new Insets(0, 0, 0, 5);
-		gbc_updateBusinessButton.gridx = 4;
-		gbc_updateBusinessButton.gridy = 0;
-		contentPane.add(updateBusinessButton, gbc_updateBusinessButton);
+		contentPane.add(updateBusinessButton);
 		
 		buttonC.gridy = 6;
 		gb.setConstraints(viewReviewbutton, buttonC);
-		GridBagConstraints gbc_viewReviewbutton = new GridBagConstraints();
-		gbc_viewReviewbutton.insets = new Insets(0, 0, 0, 5);
-		gbc_viewReviewbutton.gridx = 5;
-		gbc_viewReviewbutton.gridy = 0;
-		contentPane.add(viewReviewbutton, gbc_viewReviewbutton);
+		contentPane.add(viewReviewbutton);
 		
 		buttonC.gridy = 7;
 		gb.setConstraints(writeReplyButton, buttonC);
-		GridBagConstraints gbc_writeReplyButton = new GridBagConstraints();
-		gbc_writeReplyButton.insets = new Insets(0, 0, 0, 5);
-		gbc_writeReplyButton.gridx = 6;
-		gbc_writeReplyButton.gridy = 0;
-		contentPane.add(writeReplyButton, gbc_writeReplyButton);
+		contentPane.add(writeReplyButton);
 		
 		buttonC.gridy = 8;
 		gb.setConstraints(QueryReservationButton, buttonC);
-		GridBagConstraints gbc_QueryReservationButton = new GridBagConstraints();
-		gbc_QueryReservationButton.insets = new Insets(0, 0, 0, 5);
-		gbc_QueryReservationButton.gridx = 7;
-		gbc_QueryReservationButton.gridy = 0;
-		contentPane.add(QueryReservationButton, gbc_QueryReservationButton);
+		contentPane.add(QueryReservationButton);
 		
 		buttonC.gridy = 9;
 		gb.setConstraints(businessStatButton, buttonC);
 		contentPane.add(businessStatButton);
 		
-		
-		
+		buttonC.gridy = 9;
 		gb.setConstraints(QueryOrderButton, buttonC);
-		GridBagConstraints gbc_QueryOrderButton = new GridBagConstraints();
-		gbc_QueryOrderButton.insets = new Insets(0, 0, 0, 5);
-		gbc_QueryOrderButton.gridx = 8;
-		gbc_QueryOrderButton.gridy = 0;
-		contentPane.add(QueryOrderButton, gbc_QueryOrderButton);
+		contentPane.add(QueryOrderButton);
+		
+		buttonC.gridy = 10;
+		gb.setConstraints(menuItemsButton, buttonC);
+		contentPane.add(menuItemsButton);
 		
 		
 		// Add all buttons before here
@@ -166,20 +133,11 @@ public class OwnerMenu {
 			System.out.println("Message: " + ex.getMessage());
 		}
 		
-		GridBagConstraints gbc_menuItemsButton = new GridBagConstraints();
-		gbc_menuItemsButton.insets = new Insets(0, 0, 0, 5);
-		gbc_menuItemsButton.gridx = 9;
-		gbc_menuItemsButton.gridy = 0;
-		contentPane.add(menuItemsButton, gbc_menuItemsButton);
-		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(businesses);
 		
 		gb.setConstraints(scrollPane, tableC);
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridx = 10;
-		gbc_scrollPane.gridy = 0;
-		contentPane.add(scrollPane, gbc_scrollPane);
+		contentPane.add(scrollPane);
 		
 		// Create and register button listeners
 		
