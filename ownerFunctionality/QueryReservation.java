@@ -20,6 +20,7 @@ import utility.*;
 public class QueryReservation {
 
 	private Timestamp beginTime = null;
+	private Timestamp endTime = null;
 	private Connection connection;
 	
 	private String businessName;
@@ -336,6 +337,13 @@ public class QueryReservation {
 				
 				// Parse dates into timestamps
 				
+				try {
+					parse();
+				} catch (Exception ex) {
+					errorMessage.setText("Denied: " + ex.getMessage());
+					return;
+				}
+				
 				// Query
 				
 				// Display
@@ -416,7 +424,36 @@ public class QueryReservation {
 		}
 		
 		throw new Exception("BusinessID does not match Owner");
+		
 	
+	}
+
+	
+	private void parse() throws Exception {
+		
+		try {
+			int yearS = Integer.parseInt(yearStart.getText());
+			int monthS = Integer.parseInt(monthStart.getText());
+			int dayS = Integer.parseInt(dayStart.getText());
+			int hourS = Integer.parseInt(hourStart.getText());
+			int minS = Integer.parseInt(minStart.getText());
+			
+			beginTime = timeAndDate.makeTimestamp(yearS, monthS, dayS, hourS, minS);
+			System.out.println(beginTime);
+			
+			int yearE = Integer.parseInt(yearEnd.getText());
+			int monthE = Integer.parseInt(monthEnd.getText());
+			int dayE = Integer.parseInt(dayEnd.getText());
+			int hourE = Integer.parseInt(hourEnd.getText());
+			int minE = Integer.parseInt(minEnd.getText());
+			
+			endTime = timeAndDate.makeTimestamp(yearE, monthE, dayE, hourE, minE);
+			System.out.println(endTime);
+	
+		} catch (Exception ex) {
+			throw new Exception("Incorrect Time format");
+			
+		}
 	}
 	
 	
