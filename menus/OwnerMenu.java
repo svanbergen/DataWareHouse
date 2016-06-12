@@ -32,6 +32,8 @@ public class OwnerMenu {
 		JButton viewReviewbutton = new JButton("View Reviews");
 		JButton writeReplyButton = new JButton("Reply to Review");
 		JButton QueryReservationButton = new JButton("Query Reservation");
+		JButton businessStatButton = new JButton("Business Statistics");
+		
 		
 		JPanel contentPane = new JPanel();
 		menuFrame.setContentPane(contentPane);
@@ -87,6 +89,12 @@ public class OwnerMenu {
 		buttonC.gridy = 8;
 		gb.setConstraints(QueryReservationButton, buttonC);
 		contentPane.add(QueryReservationButton);
+		
+		buttonC.gridy = 9;
+		gb.setConstraints(businessStatButton, buttonC);
+		contentPane.add(businessStatButton);
+		
+		
 		
 		
 		// Add all buttons before here
@@ -170,13 +178,26 @@ public class OwnerMenu {
 					
 					
 					public void actionPerformed(ActionEvent e) {
-						QueryReservation qr = new QueryReservation(username, con);
+						//QueryReservation qr = new QueryReservation(username, con);
 						
 					}
 				};
 				QueryReservationButton.addActionListener(queryReservationButtonListener);
 
 
+				
+				
+				ActionListener businessStatButtonListener = new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						BusinessStatistics bs = new BusinessStatistics(con, username);
+					}
+				};
+				businessStatButton.addActionListener(businessStatButtonListener);
+				
+				
+				
 		// On window close
 		menuFrame.addWindowListener(new WindowAdapter() 
 		{

@@ -101,7 +101,7 @@ public class CustomerMenu {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				UpdateCustomer uc = new UpdateCustomer(con,username);
+				//UpdateCustomer uc = new UpdateCustomer(con,username);
 				
 			}
 		};
