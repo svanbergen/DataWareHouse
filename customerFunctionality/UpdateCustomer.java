@@ -144,17 +144,17 @@ public class UpdateCustomer {
 		titleC.gridy = 4;
 		gb.setConstraints(locationLabel, titleC);
 		contentPane.add(locationLabel);
-		
-		// Unit label
-				titleC.gridy = 5;
-				gb.setConstraints(unitLabel, titleC);
-				contentPane.add(unitLabel);
 
-				// Unit field
-				fieldC.gridy = 6;
-				fieldC.gridx = 1;
-				gb.setConstraints(unitField, fieldC);
-				contentPane.add(unitField);
+		// Unit label
+		titleC.gridy = 5;
+		gb.setConstraints(unitLabel, titleC);
+		contentPane.add(unitLabel);
+
+		// Unit field
+		fieldC.gridy = 6;
+		fieldC.gridx = 1;
+		gb.setConstraints(unitField, fieldC);
+		contentPane.add(unitField);
 
 		// Address label
 		titleC.gridy = 7;
@@ -266,6 +266,9 @@ public class UpdateCustomer {
 							stmt.executeQuery();
 						}
 					}
+
+
+					// START updating location
 					String postalCode = postalCodeField.getText();
 					String city = cityField.getText();
 					String province = (String) provBox.getSelectedItem();
@@ -297,67 +300,68 @@ public class UpdateCustomer {
 								postalAdd.executeQuery();
 							}
 						}
-					
 
-					// Check address errors and add address to database if missing
-					String address = addressField.getText();
-					String unit = unitField.getText();
-					if(address.equals("")){
-						errorMessage.setText("Must enter street address");
-						return;
-					}
-					else{
+
+						// Check address errors and add address to database if missing
+						String address = addressField.getText();
+						String unit = unitField.getText();
+						if(address.equals("")){
+							errorMessage.setText("Must enter street address");
+							return;
+						}
+						else{
+							String statement = "select * from location where postalcode = '";
+							statement = statement.concat(postalCode).concat("' and streetadd = '").concat(address);
+
+							if(unit.equals("")){
+								statement = statement.concat("' and unitnum is null");
+							}
+							else{
+								statement = statement.concat("' and unitnum = '").concat(unit).concat("'");
+							}
+							PreparedStatement check = con.prepareStatement(statement);
+							ResultSet rs = check.executeQuery();
+							System.out.println(statement);
+							if(!rs.next()){
+								PreparedStatement locationAdd = con.prepareStatement("insert into location values(1,?,?,?)");
+								if(unit.equals("")){
+									locationAdd.setNull(1, Types.VARCHAR);
+								}
+								else{
+									locationAdd.setString(1, unit);
+								}
+								locationAdd.setString(2, address);
+								locationAdd.setString(3, postalCode);
+								locationAdd.executeQuery();
+
+							}
+						}
+
+
 						String statement = "select * from location where postalcode = '";
 						statement = statement.concat(postalCode).concat("' and streetadd = '").concat(address);
-						
+
 						if(unit.equals("")){
 							statement = statement.concat("' and unitnum is null");
 						}
 						else{
 							statement = statement.concat("' and unitnum = '").concat(unit).concat("'");
 						}
-						PreparedStatement check = con.prepareStatement(statement);
-						ResultSet rs = check.executeQuery();
-						System.out.println(statement);
-						if(!rs.next()){
-							PreparedStatement locationAdd = con.prepareStatement("insert into location values(1,?,?,?)");
-							if(unit.equals("")){
-								locationAdd.setNull(1, Types.VARCHAR);
-							}
-							else{
-								locationAdd.setString(1, unit);
-							}
-							locationAdd.setString(2, address);
-							locationAdd.setString(3, postalCode);
-							locationAdd.executeQuery();
-
-						}
+						PreparedStatement getidstmt = con.prepareStatement(statement);
+						ResultSet locid = getidstmt.executeQuery();
+						locid.next();
+						int locationid = locid.getInt(1);
+						PreparedStatement deleteStmt = con.prepareStatement("delete from residesin where customerusername = ?");
+						deleteStmt.setString(1, username);
+						deleteStmt.executeQuery();
+						PreparedStatement updateStmt = con.prepareStatement("insert into residesin values(?, ?)");
+						updateStmt.setString(2, username);
+						updateStmt.setInt(1,locationid);
+						updateStmt.executeQuery();
 					}
+					// FINISH updating location
 
-
-					String statement = "select * from location where postalcode = '";
-					statement = statement.concat(postalCode).concat("' and streetadd = '").concat(address);
-					
-					if(unit.equals("")){
-						statement = statement.concat("' and unitnum is null");
-					}
-					else{
-						statement = statement.concat("' and unitnum = '").concat(unit).concat("'");
-					}
-					PreparedStatement getidstmt = con.prepareStatement(statement);
-					ResultSet locid = getidstmt.executeQuery();
-					locid.next();
-					int locationid = locid.getInt(1);
-					PreparedStatement deleteStmt = con.prepareStatement("delete from residesin where customerusername = ?");
-					deleteStmt.setString(1, username);
-					deleteStmt.executeQuery();
-					PreparedStatement updateStmt = con.prepareStatement("insert into residesin values(?, ?)");
-					updateStmt.setString(2, username);
-					updateStmt.setInt(1,locationid);
-					updateStmt.executeQuery();
-					}
-
-
+					// Refresh the table
 					PreparedStatement stmt = con.prepareStatement("select * from customer natural left outer join residesin natural left outer join location natural left outer join postalcode where customerusername = ?");
 					System.out.println(stmt);
 					stmt.setString(1, username);
