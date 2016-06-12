@@ -100,7 +100,7 @@ grant select on review to public;
 
 
 CREATE TABLE MenuItem (
-	menuItemID int Primary Key,
+	menuItemID int Primary Key AUTOINCREMENT,
 	Price float not null,
 	ItemType varchar(15),
 	Name varchar(20) not null,
