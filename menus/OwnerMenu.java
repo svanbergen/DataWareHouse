@@ -48,7 +48,7 @@ public class OwnerMenu {
 
 		JButton QueryOrderButton = new JButton("Query Order");
 		JButton menuItemsButton = new JButton("Menu Items");
-
+		
 		
 		JPanel contentPane = new JPanel();
 		menuFrame.setContentPane(contentPane);
@@ -105,7 +105,7 @@ public class OwnerMenu {
 		gb.setConstraints(QueryReservationButton, buttonC);
 		contentPane.add(QueryReservationButton);
 		
-		buttonC.gridy = 9;
+		buttonC.gridy = 10;
 		gb.setConstraints(businessStatButton, buttonC);
 		contentPane.add(businessStatButton);
 		
@@ -113,10 +113,11 @@ public class OwnerMenu {
 		gb.setConstraints(QueryOrderButton, buttonC);
 		contentPane.add(QueryOrderButton);
 		
-		buttonC.gridy = 10;
+		buttonC.gridy = 11;
 		gb.setConstraints(menuItemsButton, buttonC);
 		contentPane.add(menuItemsButton);
 		
+	
 		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
@@ -174,6 +175,7 @@ public class OwnerMenu {
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
+						new UpdateBusiness(username, con);
 					}
 				};
 				updateBusinessButton.addActionListener(updateBusinessButtonListener);
@@ -240,6 +242,7 @@ public class OwnerMenu {
 					}
 				};
 				businessStatButton.addActionListener(businessStatButtonListener);
+				
 				
 				
 				
