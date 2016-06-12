@@ -224,6 +224,7 @@ public class OwnerMenu {
 					public void actionPerformed(ActionEvent e) {
 						//displays list of all menu items
 		
+						ViewMenuItem vm = new ViewMenuItem(con, username);
 					}
 				});
 				
