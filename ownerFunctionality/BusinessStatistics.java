@@ -42,6 +42,7 @@ public class BusinessStatistics extends JDialog {
 	
 	
 	private JTable customerTable;
+	private JTable menuItemTable;
 	
 	
 
@@ -61,6 +62,7 @@ public class BusinessStatistics extends JDialog {
 		
 		
 		customerTable = new JTable();
+		menuItemTable = new JTable();
 		setBounds(100, 100, 900, 500);
 		getContentPane().setLayout(new BorderLayout());
 		mainPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -94,23 +96,23 @@ public class BusinessStatistics extends JDialog {
 		JLabel lblLeastNumberOf = new JLabel("Least Number Of Orders:");
 		lblLeastNumberOf.setBounds(437, 99, 156, 16);
 		
-		JLabel maxMenuItemResultLabel = new JLabel("m");
-		maxMenuItemResultLabel.setBounds(179, 55, 12, 16);
+		JLabel maxMenuItemResultLabel = new JLabel("");
+		maxMenuItemResultLabel.setBounds(179, 55, 205, 16);
 		
-		JLabel minMenuItemResultLabel = new JLabel("min");
-		minMenuItemResultLabel.setBounds(175, 77, 24, 16);
+		JLabel minMenuItemResultLabel = new JLabel("");
+		minMenuItemResultLabel.setBounds(175, 77, 209, 16);
 		
 		JLabel lblTotalNumberOf = new JLabel("Total Number of Orders:");
 		lblTotalNumberOf.setBounds(437, 121, 153, 16);
 		
-		JLabel AveNumOrdersResultLabel = new JLabel("ave");
-		AveNumOrdersResultLabel.setBounds(751, 55, 21, 16);
+		JLabel aveNumOrdersResultLabel = new JLabel("");
+		aveNumOrdersResultLabel.setBounds(737, 55, 75, 16);
 		
-		JLabel leastNumOfOrdersResult = new JLabel("x");
-		leastNumOfOrdersResult.setBounds(764, 99, 8, 16);
+		JLabel minNumOfOrdersResultLabel = new JLabel("");
+		minNumOfOrdersResultLabel.setBounds(737, 99, 75, 16);
 		
-		JLabel totalNumOrdersResultLabel = new JLabel("t");
-		totalNumOrdersResultLabel.setBounds(764, 121, 5, 16);
+		JLabel totalNumOrdersResultLabel = new JLabel("");
+		totalNumOrdersResultLabel.setBounds(737, 121, 75, 16);
 		mainPane.setLayout(null);
 		mainPane.add(MaxOrderedLabel);
 		mainPane.add(maxMenuItemResultLabel);
@@ -123,22 +125,23 @@ public class BusinessStatistics extends JDialog {
 		mainPane.add(lblTotalNumberOf);
 		mainPane.add(lblMaximumNumberOf);
 		mainPane.add(customersScrollPane);
-		mainPane.add(AveNumOrdersResultLabel);
+		mainPane.add(aveNumOrdersResultLabel);
 		mainPane.add(lblLeastNumberOf);
 		mainPane.add(totalNumOrdersResultLabel);
-		mainPane.add(leastNumOfOrdersResult);
+		mainPane.add(minNumOfOrdersResultLabel);
 		
-		JLabel MaxNumOrdersResult = new JLabel("max");
-		MaxNumOrdersResult.setBounds(751, 77, 61, 16);
-		mainPane.add(MaxNumOrdersResult);
+		JLabel maxNumOrdersResultLabel = new JLabel("");
+		maxNumOrdersResultLabel.setBounds(737, 77, 75, 16);
+		mainPane.add(maxNumOrdersResultLabel);
 		
-		statusLabel = new JLabel("New label");
+		statusLabel = new JLabel("");
 		statusLabel.setForeground(Color.RED);
 		statusLabel.setBounds(11, 417, 878, 16);
 		mainPane.add(statusLabel);
 		
 		
 		customersScrollPane.setViewportView(customerTable);
+		menuItemScrollPane.setViewportView(menuItemTable);
 		
 		{
 			JPanel buttonPane = new JPanel();
@@ -150,6 +153,12 @@ public class BusinessStatistics extends JDialog {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						
 						System.out.println("ok button pressed");
+						
+						
+						minNumOfOrdersResultLabel.setText("");
+						maxNumOrdersResultLabel.setText("");
+						aveNumOrdersResultLabel.setText("");
+						totalNumOrdersResultLabel.setText("");
 						
 						
 						try{
@@ -200,11 +209,125 @@ public class BusinessStatistics extends JDialog {
 							ResultSetMetaData rsmd = rs.getMetaData();
 							TableFromResultSet.replaceTable(customerTable, rs, rsmd);
 							
+							if(customerTable.getRowCount() ==0){
+								statusLabel.setText("No Orders were found for this business. Try posting some ads on Google");
+							}
+							
+							
 						}catch (SQLException ex) {
 							System.out.println(ex.getMessage());
 							statusLabel.setText("Database error");
 							return;
 						}
+						
+						
+						String customerStatsQuery = "select Min(numOrders), Max(numOrders),Avg(numOrders), count(numOrders) from"
+								+ "(select COUNT(*) AS numOrders from orders where businessID=? GROUP BY customerUserName) ";
+						try{
+							PreparedStatement stmt = con.prepareStatement(customerStatsQuery);
+							
+							stmt.setString(1, "" + businessId);;
+							ResultSet rs = stmt.executeQuery();
+							
+							if(rs.next()){
+								minNumOfOrdersResultLabel.setText("" + rs.getInt(1));
+								maxNumOrdersResultLabel.setText("" + rs.getInt(2));
+								aveNumOrdersResultLabel.setText("" + rs.getDouble(3));
+								int x = rs.getInt(4);
+								System.out.println(x);
+								totalNumOrdersResultLabel.setText("" + x);
+							}
+							
+						}catch (SQLException ex) {
+							System.out.println(ex.getMessage());
+							statusLabel.setText("Database error");
+							return;
+						}
+						
+						
+						
+						
+						//populating the menuitem table
+						String totalOrdersForEachMenuItemQuery = "select M.menuItemID, M.Name, M.Price, COUNT(O.orderID) from MenuItem M,Orders O, Includes I where I.orderID=O.orderID AND M.MenuItemID=I.MenuItemID  AND M.BusinessID = ? GROUP BY M.menuItemID, M.Name, M.Price ";
+						try{
+							PreparedStatement stmt = con.prepareStatement(totalOrdersForEachMenuItemQuery);
+							
+							stmt.setString(1, "" + businessId);;
+							ResultSet rs = stmt.executeQuery();
+							
+							ResultSetMetaData rsmd = rs.getMetaData();
+							TableFromResultSet.replaceTable(menuItemTable, rs, rsmd);
+							
+							if(menuItemTable.getRowCount() ==0){
+								statusLabel.setText("No Orders were found for this business. Try posting some ads on Google");
+							}
+							
+							
+						}catch (SQLException ex) {
+							System.out.println(ex.getMessage());
+							statusLabel.setText("Database error");
+							return;
+						}
+						
+						
+						
+						//finding the most popular food
+						
+						String menuItemMaxQuery ="select M.menuItemID, M.Name "
+								+ "from MenuItem M, Orders O, Includes I "
+								+ "Where M.menuItemID=I.menuItemID AND I.orderID=O.orderID AND M.businessID=? "
+								+ "GROUP BY M.menuItemID, M.name Having count(*) IN "
+								+ "(select Max(numOrders) "
+								+ "from (select M.menuItemID, COUNT(O.orderID) AS numOrders "
+								+ "from MenuItem M,Orders O, Includes I "
+								+ "where I.orderID=O.orderID AND M.MenuItemID=I.MenuItemID  AND M.BusinessID = ? "
+								+ "GROUP BY M.menuItemID))";
+						try{
+							PreparedStatement stmt = con.prepareStatement(menuItemMaxQuery);
+							
+							stmt.setString(1, "" + businessId);
+							stmt.setString(2, "" + businessId);
+							ResultSet rs = stmt.executeQuery();
+							
+							if(rs.next()){
+								maxMenuItemResultLabel.setText(rs.getString(1)+ " "+ rs.getString(2));
+							}
+							
+						}catch (SQLException ex) {
+							System.out.println(ex.getMessage());
+							statusLabel.setText("Database error");
+							return;
+						}
+						
+						
+						//finding the least popular food
+						
+						String menuItemMinQuery = "select M.menuItemID, M.Name "
+								+ "from MenuItem M, Orders O, Includes I "
+								+ "Where M.menuItemID=I.menuItemID AND I.orderID=O.orderID AND M.businessID=? "
+								+ "GROUP BY M.menuItemID, M.name Having count(*) IN "
+								+ "(select Min(numOrders) "
+								+ "from (select M.menuItemID, COUNT(O.orderID) AS numOrders "
+								+ "from MenuItem M,Orders O, Includes I "
+								+ "where I.orderID=O.orderID AND M.MenuItemID=I.MenuItemID  AND M.BusinessID = ? "
+								+ "GROUP BY M.menuItemID))";
+						try{
+							PreparedStatement stmt = con.prepareStatement(menuItemMinQuery);
+							
+							stmt.setString(1, "" + businessId);
+							stmt.setString(2, "" + businessId);
+							ResultSet rs = stmt.executeQuery();
+							
+							if(rs.next()){
+								minMenuItemResultLabel.setText(rs.getString(1) + " " + rs.getString(2));
+							}
+							
+						}catch (SQLException ex) {
+							System.out.println(ex.getMessage());
+							statusLabel.setText("Database error");
+							return;
+						}
+						
 						
 						
 						
@@ -234,12 +357,7 @@ public class BusinessStatistics extends JDialog {
 		}
 	}
 	
-	
-	
-	private void parseInput() throws Exception{
-		businessId = Integer.parseInt(businessIdTextField.getText());
-	}
-	
+
 	
 	private void closeDialog(){
 		this.dispose();
