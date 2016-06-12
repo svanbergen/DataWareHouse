@@ -33,6 +33,7 @@ public class OwnerMenu {
 		JButton writeReplyButton = new JButton("Reply to Review");
 		JButton QueryReservationButton = new JButton("Query Reservation");
 		JButton QueryOrderButton = new JButton("Query Order");
+		JButton addMenuItemButton = new JButton("Add Menu Item");
 		
 		JPanel contentPane = new JPanel();
 		menuFrame.setContentPane(contentPane);
