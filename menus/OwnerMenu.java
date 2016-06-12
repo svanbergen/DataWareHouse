@@ -42,6 +42,7 @@ public class OwnerMenu {
 		JButton viewReviewbutton = new JButton("View Reviews");
 		JButton writeReplyButton = new JButton("Reply to Review");
 		JButton QueryReservationButton = new JButton("Query Reservation");
+		JButton QueryOrderButton = new JButton("Query Order: ");
 
 		JButton businessStatButton = new JButton("Business Statistics");
 		
