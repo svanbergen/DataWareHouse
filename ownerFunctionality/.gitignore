@@ -8,6 +8,11 @@
 /TestingFrame$1.class
 /TestingFrame.class
 /QueryReservation$2.class
+<<<<<<< HEAD
+/BusinessStatistics$1.class
+/BusinessStatistics$2.class
+/BusinessStatistics.class
+=======
 /QueryOrder.class
 /QueryOrder$1.class
 /QueryOrder$2.class
@@ -17,3 +22,4 @@
 /ViewMenuItems$1.class
 /ViewMenuItems.class
 /MenuItemTable.class
+>>>>>>> 6f976726e7b885ecc640090569351689a43c3ba8
