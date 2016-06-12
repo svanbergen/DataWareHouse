@@ -114,8 +114,21 @@ public class OwnerRegistration {
 						String regQuery = "insert into BusinessOwner values(?,?)";
 						stmt = con.prepareStatement(regQuery);
 						stmt.setString(1, userName);
-						stmt.setString(2, password);//System.out.println(regQuery);
+						stmt.setString(2, password);
 						rs = stmt.executeQuery();
+						// FOR AWS DATABASE USE
+						/*
+						regQuery = "create user ";
+						regQuery = regQuery.concat(userName).concat("_owner identified by ").concat(password);
+						Statement statement = con.createStatement();
+						statement.executeQuery(regQuery);
+						regQuery = "grant owner_user to ";
+						regQuery = regQuery.concat(userName).concat("_owner");
+						statement.executeQuery(regQuery);
+						regQuery = "grant create session to ";
+						regQuery = regQuery.concat(userName).concat("_owner");
+						statement.executeQuery(regQuery);
+						*/
 						regFrame.dispose();
 					}        
 				}
