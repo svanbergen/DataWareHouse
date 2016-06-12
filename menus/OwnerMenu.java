@@ -10,9 +10,11 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+
+import customerFunctionality.ReservationMakingDialog;
 import org.omg.CORBA.PUBLIC_MEMBER;
 
-import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
+//import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
 
 import ownerFunctionality.*;
 import ownerFunctionality.MenuItem;
@@ -148,6 +150,7 @@ public class OwnerMenu {
 		gbc_QueryOrderButton.gridy = 0;
 		contentPane.add(QueryOrderButton, gbc_QueryOrderButton);
 		
+		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
 
@@ -207,6 +210,8 @@ public class OwnerMenu {
 				};
 				addBusinessButton.addActionListener(addBusinessButtonListener);
 				
+				
+				
 				ActionListener updateBusinessButtonListener = new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e) 
@@ -254,6 +259,9 @@ public class OwnerMenu {
 				};
 				QueryOrderButton.addActionListener(queryOrderButtonListener);
 				
+
+
+
 				menuItemsButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//displays list of all menu items

@@ -60,7 +60,12 @@ public class ViewMenuItems extends JFrame {
 		panel.add(menuItemTable);
 		
 		List<MenuItem> menuItems = null;
-		menuItems = ownerMenu.getAllMenuItems();
+		try{
+			menuItems = ownerMenu.getAllMenuItems();
+
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 		MenuItemTable model = new MenuItemTable(menuItems);
 		
 		menuItemTable.setModel(model);
