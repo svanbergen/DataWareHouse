@@ -113,11 +113,19 @@ public class DatabaseLogin implements ActionListener{
 	// Note: code written to connect from a machine SSHing to the CS servers
 	private boolean connect(String username, String password)
 	{
+		// FOR AWS DATABASE USE
+		/*
+		String connectURL = "jdbc:oracle:thin:@dwh-micro1.clrwdshwtrbl.us-west-1.rds.amazonaws.com:1521:DWH";
+		*/
 		String connectURL = "jdbc:oracle:thin:@localhost:1522:ug";
 		try 
 		{
+			// FOR AWS DATABASE USE
+			/*
+			con = DriverManager.getConnection(connectURL,"reggie","registration");
+			*/
 			con = DriverManager.getConnection(connectURL,username,password);
-
+			
 			System.out.println("\nConnected to Oracle!");
 			return true;
 		}

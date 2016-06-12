@@ -13,15 +13,15 @@ import menus.OwnerMenu;
 public class AppLogin {
 
 	Connection con;
-
+	String connectURL = "jdbc:oracle:thin:@dwh-micro1.clrwdshwtrbl.us-west-1.rds.amazonaws.com:1521:DWH";
 	private JTextField cUsernameField;
 	private JPasswordField cPasswordField;
 	private JTextField oUsernameField;
 	private JPasswordField oPasswordField;
 	private JFrame loginFrame;
 
-	public AppLogin(Connection con){
-		this.con = con;
+	public AppLogin(Connection connection){
+		this.con = connection;
 
 		// Create frame, labels, etc. for login window
 		loginFrame = new JFrame("Login Window");
@@ -158,6 +158,23 @@ public class AppLogin {
 						String dBPassword = rs.getString("password");
 						// If details are valid remove database login window and go to customer menu window
 						if(dBPassword.equals(password)){
+							// FOR AWS DATABASE USE
+							/*
+							Connection con1;
+							try{
+								con1 = DriverManager.getConnection(connectURL,userName+"_customer",password);
+								Statement statement = con1.createStatement();
+								statement.executeQuery("set role customer_user identified by customer");
+							}
+							catch(SQLException ex){
+								System.out.println("Message: " + ex.getMessage());
+								errorMessage.setText("Invalid input");
+								return;
+							}
+							
+							con.close();
+							con = con1;
+							*/
 							CustomerMenu cm = new CustomerMenu(con,userName);
 						}
 						else{
@@ -208,6 +225,23 @@ public class AppLogin {
 						String dBPassword = rs.getString("password");
 						// If details are valid remove database login window and go to customer menu window
 						if(dBPassword.equals(password)){
+							// FOR AWS DATABASE USE
+							/*
+							Connection con1;
+							try{
+								con1 = DriverManager.getConnection(connectURL,userName+"_owner",password);
+								Statement statement = con1.createStatement();
+								statement.executeQuery("set role owner_user identified by owner");
+							}
+							catch(SQLException ex){
+								System.out.println("Message: " + ex.getMessage());
+								errorMessage.setText("Invalid input");
+								return;
+							}
+							
+							con.close();
+							con = con1;
+							*/
 							OwnerMenu om = new OwnerMenu(con, userName);
 						}
 						else{

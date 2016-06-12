@@ -44,8 +44,30 @@ public class AddMenuItemDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AddMenuItemDialog(String username, Connection con) {
-		this.con = con;
+	public AddMenuItemDialog(OwnerMenu theOwnerMenu, MenuItem thePreviousMenuItem, boolean theUpdateMode, int theBusinessId) {	
+		this();
+		ownerMenu = theOwnerMenu;
+		previousMenuItem = thePreviousMenuItem;
+		updateMode = theUpdateMode;
+		businessId = theBusinessId;
+		
+		if(updateMode) {
+			setTitle("Add new menu item");
+			populateGui(previousMenuItem);
+		}
+	}
+	
+	private void populateGui(MenuItem theMenuItem) {
+		menuItemTextField.setText(theMenuItem.getItemName());
+		priceTextField.setText(theMenuItem.getPrice().toString());
+		typeTextField.setText(theMenuItem.getItemType());		
+	}
+	
+	public AddMenuItemDialog(OwnerMenu theOwnerMenu, int theBusinessId) {	
+				this(theOwnerMenu, null, false, theBusinessId);
+			}
+	
+	public AddMenuItemDialog() {
 		setTitle("Add Menu Item");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -134,17 +156,18 @@ public class AddMenuItemDialog extends JDialog {
 		
 		if (updateMode) {
 			tempMenuItem = previousMenuItem;
+			
 			tempMenuItem.setItemName(menuItemName);
 			tempMenuItem.setBusinessId(businessId);
 			tempMenuItem.setItemType(menuItemType);
 			tempMenuItem.setPrice(menuItemPrice);
 		}
 		else {
-			tempMenuItem = new MenuItem(menuItemPrice, menuItemType, menuItemName, businessId);
+			tempMenuItem = new MenuItem(menuItemName, menuItemType, menuItemPrice, businessId);
 		}
 		
 		try {
-			// prepare statement
+			// update price
 			if(updateMode) {
 				PreparedStatement myStmt = null;
 				
@@ -161,6 +184,7 @@ public class AddMenuItemDialog extends JDialog {
 				
 			}
 			else {
+				//add menuItem
 				PreparedStatement myStmt = null;
 				myStmt = con.prepareStatement("insert into MenuItem"
 						+ " (menuItemPrice, menuItemType, menuItemName, businessId)"
@@ -181,13 +205,13 @@ public class AddMenuItemDialog extends JDialog {
 			} else {
 				throw new SQLException("Error generating key for menu item");
 				}
+			
+			myStmt.executeUpdate();
 			}
 		}
 		catch (SQLException exception){
 			System.out.println(ERROR);
 		}
-
-			
 	}
 		
 
@@ -196,9 +220,9 @@ public class AddMenuItemDialog extends JDialog {
 		BigDecimal result = null;
 
 		try {
-			double salaryDouble = Double.parseDouble(priceStr);
+			double priceDouble = Double.parseDouble(priceStr);
 
-			result = BigDecimal.valueOf(salaryDouble);
+			result = BigDecimal.valueOf(priceDouble);
 		} catch (Exception exc) {
 			System.out.println("Invalid value. Defaulting to 0.0");
 			result = BigDecimal.valueOf(0.0);
