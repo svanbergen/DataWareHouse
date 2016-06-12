@@ -1,14 +1,23 @@
 package menus;
 import java.awt.*;
 import java.awt.event.*;
+import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+
 import customerFunctionality.ReservationMakingDialog;
+import org.omg.CORBA.PUBLIC_MEMBER;
+
+//import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
+
 import ownerFunctionality.*;
+import ownerFunctionality.MenuItem;
 import utility.TableFromResultSet;
 
 public class OwnerMenu {
@@ -34,7 +43,7 @@ public class OwnerMenu {
 		JButton writeReplyButton = new JButton("Reply to Review");
 		JButton QueryReservationButton = new JButton("Query Reservation");
 		JButton QueryOrderButton = new JButton("Query Order");
-		JButton addMenuItemButton = new JButton("Add Menu Item");
+		JButton menuItemsButton = new JButton("Menu Items");
 		
 		JPanel contentPane = new JPanel();
 		menuFrame.setContentPane(contentPane);
@@ -61,43 +70,76 @@ public class OwnerMenu {
 
 		buttonC.gridy = 1;
 		gb.setConstraints(menuPage, buttonC);
-		contentPane.add(menuPage);
+		GridBagConstraints gbc_menuPage = new GridBagConstraints();
+		gbc_menuPage.insets = new Insets(0, 0, 0, 5);
+		gbc_menuPage.gridx = 0;
+		gbc_menuPage.gridy = 0;
+		contentPane.add(menuPage, gbc_menuPage);
 		
 		buttonC.gridy = 2;
 		gb.setConstraints(sn, buttonC);
-		contentPane.add(sn);
+		GridBagConstraints gbc_sn = new GridBagConstraints();
+		gbc_sn.insets = new Insets(0, 0, 0, 5);
+		gbc_sn.gridx = 1;
+		gbc_sn.gridy = 0;
+		contentPane.add(sn, gbc_sn);
 		
 		buttonC.gridy = 3;
 		gb.setConstraints(refreshButton, buttonC);
-		contentPane.add(refreshButton);
+		GridBagConstraints gbc_refreshButton = new GridBagConstraints();
+		gbc_refreshButton.insets = new Insets(0, 0, 0, 5);
+		gbc_refreshButton.gridx = 2;
+		gbc_refreshButton.gridy = 0;
+		contentPane.add(refreshButton, gbc_refreshButton);
 		
 		buttonC.gridy = 4;
 		gb.setConstraints(addBusinessButton, buttonC);
-		contentPane.add(addBusinessButton);
+		GridBagConstraints gbc_addBusinessButton = new GridBagConstraints();
+		gbc_addBusinessButton.insets = new Insets(0, 0, 0, 5);
+		gbc_addBusinessButton.gridx = 3;
+		gbc_addBusinessButton.gridy = 0;
+		contentPane.add(addBusinessButton, gbc_addBusinessButton);
 
 		buttonC.gridy = 5;
 		gb.setConstraints(updateBusinessButton, buttonC);
-		contentPane.add(updateBusinessButton);
+		GridBagConstraints gbc_updateBusinessButton = new GridBagConstraints();
+		gbc_updateBusinessButton.insets = new Insets(0, 0, 0, 5);
+		gbc_updateBusinessButton.gridx = 4;
+		gbc_updateBusinessButton.gridy = 0;
+		contentPane.add(updateBusinessButton, gbc_updateBusinessButton);
 		
 		buttonC.gridy = 6;
 		gb.setConstraints(viewReviewbutton, buttonC);
-		contentPane.add(viewReviewbutton);
+		GridBagConstraints gbc_viewReviewbutton = new GridBagConstraints();
+		gbc_viewReviewbutton.insets = new Insets(0, 0, 0, 5);
+		gbc_viewReviewbutton.gridx = 5;
+		gbc_viewReviewbutton.gridy = 0;
+		contentPane.add(viewReviewbutton, gbc_viewReviewbutton);
 		
 		buttonC.gridy = 7;
 		gb.setConstraints(writeReplyButton, buttonC);
-		contentPane.add(writeReplyButton);
+		GridBagConstraints gbc_writeReplyButton = new GridBagConstraints();
+		gbc_writeReplyButton.insets = new Insets(0, 0, 0, 5);
+		gbc_writeReplyButton.gridx = 6;
+		gbc_writeReplyButton.gridy = 0;
+		contentPane.add(writeReplyButton, gbc_writeReplyButton);
 		
 		buttonC.gridy = 8;
 		gb.setConstraints(QueryReservationButton, buttonC);
-		contentPane.add(QueryReservationButton);
+		GridBagConstraints gbc_QueryReservationButton = new GridBagConstraints();
+		gbc_QueryReservationButton.insets = new Insets(0, 0, 0, 5);
+		gbc_QueryReservationButton.gridx = 7;
+		gbc_QueryReservationButton.gridy = 0;
+		contentPane.add(QueryReservationButton, gbc_QueryReservationButton);
 		
 		buttonC.gridy = 9;
 		gb.setConstraints(QueryOrderButton, buttonC);
-		contentPane.add(QueryOrderButton);
+		GridBagConstraints gbc_QueryOrderButton = new GridBagConstraints();
+		gbc_QueryOrderButton.insets = new Insets(0, 0, 0, 5);
+		gbc_QueryOrderButton.gridx = 8;
+		gbc_QueryOrderButton.gridy = 0;
+		contentPane.add(QueryOrderButton, gbc_QueryOrderButton);
 		
-		buttonC.gridy = 10;
-		gb.setConstraints(addMenuItemButton, buttonC);
-		contentPane.add(addMenuItemButton);
 		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
@@ -114,11 +156,20 @@ public class OwnerMenu {
 			System.out.println("Message: " + ex.getMessage());
 		}
 		
+		GridBagConstraints gbc_menuItemsButton = new GridBagConstraints();
+		gbc_menuItemsButton.insets = new Insets(0, 0, 0, 5);
+		gbc_menuItemsButton.gridx = 9;
+		gbc_menuItemsButton.gridy = 0;
+		contentPane.add(menuItemsButton, gbc_menuItemsButton);
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(businesses);
 		
 		gb.setConstraints(scrollPane, tableC);
-		contentPane.add(scrollPane);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.gridx = 10;
+		gbc_scrollPane.gridy = 0;
+		contentPane.add(scrollPane, gbc_scrollPane);
 		
 		// Create and register button listeners
 		
@@ -198,21 +249,17 @@ public class OwnerMenu {
 				};
 				QueryOrderButton.addActionListener(queryOrderButtonListener);
 				
-				ActionListener addMenuItemButtonListener = new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
-						try {
-							AddMenuItemDialog ab = new AddMenuItemDialog(username, con);
-							ab.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-							ab.setVisible(true);
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						
+
+
+
+				menuItemsButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//displays list of all menu items
+		
 					}
-				};
-				addMenuItemButton.addActionListener(addMenuItemButtonListener);
+				});
+				
+	
 
 
 		// On window close
@@ -247,4 +294,42 @@ public class OwnerMenu {
 		}
 
 	}
+
+
+	public List<MenuItem> getAllMenuItems() throws Exception {
+		List<MenuItem> list = new ArrayList<MenuItem>();
+		
+		Statement myStmt = null;
+		ResultSet myRs = null;
+		
+		try {
+			myStmt = con.createStatement();
+			myRs = myStmt.executeQuery("select * from MenuItem order by Name");
+			
+			while (myRs.next()) {
+				MenuItem tempMenuItem = convertRowToMenuItem(myRs);
+				list.add(tempMenuItem);
+			}
+
+			return list;		
+		}
+		catch (Exception e){
+			System.out.println();
+		}
+		return list;
+	}
+
+
+	private MenuItem convertRowToMenuItem(ResultSet myRs) throws SQLException {
+		int id = myRs.getInt("menuItemID");
+		String name = myRs.getString("Name");
+		String type = myRs.getString("ItemType");
+		int businessID = myRs.getInt("BusinessID");
+		BigDecimal price = myRs.getBigDecimal("Price");
+		
+		MenuItem tempMenuItem = new MenuItem(id, name, type, price, businessID);
+		
+		return tempMenuItem;
+	}
+
 }
