@@ -10,7 +10,6 @@ import javax.swing.border.EmptyBorder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.sun.xml.internal.ws.Closeable;
 
 import menus.OwnerMenu;
 

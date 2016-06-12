@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import customerFunctionality.ReservationMakingDialog;
 import ownerFunctionality.*;
 import utility.TableFromResultSet;
 
@@ -94,6 +95,10 @@ public class OwnerMenu {
 		gb.setConstraints(QueryOrderButton, buttonC);
 		contentPane.add(QueryOrderButton);
 		
+		buttonC.gridy = 10;
+		gb.setConstraints(addMenuItemButton, buttonC);
+		contentPane.add(addMenuItemButton);
+		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
 
@@ -144,6 +149,8 @@ public class OwnerMenu {
 				};
 				addBusinessButton.addActionListener(addBusinessButtonListener);
 				
+				
+				
 				ActionListener updateBusinessButtonListener = new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e) 
@@ -190,6 +197,22 @@ public class OwnerMenu {
 					}
 				};
 				QueryOrderButton.addActionListener(queryOrderButtonListener);
+				
+				ActionListener addMenuItemButtonListener = new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						try {
+							AddMenuItemDialog ab = new AddMenuItemDialog(username, con);
+							ab.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+							ab.setVisible(true);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						
+					}
+				};
+				addMenuItemButton.addActionListener(addMenuItemButtonListener);
 
 
 		// On window close
