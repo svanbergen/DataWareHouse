@@ -93,6 +93,7 @@ public class UpdateBusiness {
 		u = new JCheckBox();
 		
 		// Labels
+		JLabel titleLabel = new JLabel("Please enter new Business Information");
 		JLabel businessIDLabel = new JLabel("BusinessID: ");
 		JLabel websiteLabel = new JLabel("Website: ");
 		JLabel typeLabel = new JLabel("Type: ");
@@ -124,11 +125,13 @@ public class UpdateBusiness {
 		
 		// Constraints
 		GridBagLayout gb = new GridBagLayout();
+		GridBagConstraints constraints = new GridBagConstraints();
 		
 		// Set content pane
 		contentpane.setLayout(gb);
 		
 		// Placing Components
+		
 		
 		
 		
