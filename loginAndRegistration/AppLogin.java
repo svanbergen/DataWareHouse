@@ -262,6 +262,11 @@ public class AppLogin {
 		{
 			public void windowClosing(WindowEvent e) 
 			{ 
+				try {
+					con.close();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 				System.exit(0); 
 			}
 		});

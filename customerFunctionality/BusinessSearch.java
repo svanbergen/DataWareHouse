@@ -344,12 +344,12 @@ public class BusinessSearch {
 				gb.setConstraints(provinceField, fieldC);
 				contentPane.add(provinceField);
 				
-				// Location title
+				// Postalcode title
 				titleC.gridy = 26;
 				gb.setConstraints(postalCodeLabel, titleC);
 				contentPane.add(postalCodeLabel);
 				
-				// Province field
+				// Postalcode field
 				fieldC.gridy = 27;
 				fieldC.gridx = 1;
 				gb.setConstraints(postalCodeField, fieldC);

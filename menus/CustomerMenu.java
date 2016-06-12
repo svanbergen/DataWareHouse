@@ -22,6 +22,7 @@ public class CustomerMenu {
 
 		JLabel menuPage = new JLabel("Customer Menu Page");
 		JLabel sn = new JLabel("Current User : " + username);
+		JButton updateButton = new JButton("Update Your Information");
 		JButton orderViewbutton = new JButton("View Orders");
 		JButton findReviewsButton = new JButton("Find Reviews");
 		JButton writeReviewButton = new JButton("Write a Review");
@@ -55,8 +56,8 @@ public class CustomerMenu {
 		contentPane.add(sn);
 		
 		buttonC.gridy = 3;
-		gb.setConstraints(orderViewbutton, buttonC);
-		contentPane.add(orderViewbutton);
+		gb.setConstraints(updateButton, buttonC);
+		contentPane.add(updateButton);
 		
 		buttonC.gridy = 4;
 		gb.setConstraints(makeReservationButton, buttonC);
@@ -90,7 +91,16 @@ public class CustomerMenu {
 				
 			}
 		};
-		orderViewbutton.addActionListener(orderViewbuttonListener);
+		// Create and register button listeners
+		ActionListener updateButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				UpdateCustomer uc = new UpdateCustomer(con,username);
+				
+			}
+		};
+		updateButton.addActionListener(updateButtonListener);
 		
 		ActionListener findReviewsButtonListener = new ActionListener()
 		{

@@ -216,7 +216,7 @@ grant select on postalcode to public;
 
 CREATE TABLE Location (
 	locationID int Primary Key,
-	unitNum int,
+	unitNum varchar(6),
 	streetAdd varchar(30) not null,
 	postalCode varchar(7) not null,
 	Foreign Key(PostalCode) references PostalCode );
@@ -416,13 +416,13 @@ insert into Location
 	values(42, NULL, '123 Ash St', 'V6R 0X2');
 
 insert into Location
-	values(13, 87, '145 Willow St', 'V6T 1X2');
+	values(13, '87', '145 Willow St', 'V6T 1X2');
 
 insert into Location
 	values(3, NULL, '123 Peaches St', 'V3R 0X2');
 
 insert into Location
-	values(50, 22, '333 Oak St', 'V6R 1T2');
+	values(50, '22', '333 Oak St', 'V6R 1T2');
 
 insert into Location
 	values(40, NULL, '123 Wood St', 'V3J 0R2');
