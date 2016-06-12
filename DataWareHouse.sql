@@ -17,7 +17,8 @@ drop table businessowner;
 
 CREATE TABLE BusinessOwner (
 	ownerUserName varchar(25) Primary Key,
-	password varchar(25));
+	password varchar(25),
+	check (REGEXP_LIKE(ownerUserName,'^[a-zA-Z][a-zA-Z0-9.,$;]*$')));
 
 grant select on BusinessOwner to public;
 
@@ -61,7 +62,8 @@ CREATE TABLE Customer (
 	customerUsername varchar(25) Primary Key,
 	password varchar(25),
 	phoneNum varchar(20),
-    check (REGEXP_LIKE(PhoneNum,'[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'))
+    check (REGEXP_LIKE(PhoneNum,'[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')),
+	check (REGEXP_LIKE(customerUsername,'^[A-Za-z][A-Za-z0-9]*$'))
     );
 
 
@@ -266,8 +268,6 @@ CREATE TABLE Reservation (
 
 grant select on reservation to public;
 
-
-
 CREATE TABLE Reply (
 	ReviewID int,
 	OwnerUsername varchar(25),
@@ -284,7 +284,7 @@ insert into BusinessOwner
 	values('billsmith1025', '12345');
 
 insert into BusinessOwner
-	values('123amycampbell', '12345');
+	values('a123amycampbell', '12345');
 
 insert into BusinessOwner
 	values('samsonthegreat', '12345');
@@ -300,7 +300,7 @@ values(102, 'Marpole', '604-903-0293', 'www.billsrestaurant.com', 'Greek restaur
 1000, 2300);
 
 insert into Business 
-values(83, 'Dunbar', '604-113-7599', 'www.bestseafood.com', 'Seafood restaurant', '123amycampbell', 'N', 'MTWRF',
+values(83, 'Dunbar', '604-113-7599', 'www.bestseafood.com', 'Seafood restaurant', 'a123amycampbell', 'N', 'MTWRF',
 1000, 2200);
 
 insert into Business 
@@ -475,7 +475,7 @@ insert into Reply
 	values(1, 'billsmith1025', TO_DATE('2013/08/01','yyyy/mm/dd'), 'Thank you for the kind words!');
 
 insert into Reply
-	values(2, '123amycampbell', TO_DATE('2015/07/29','yyyy/mm/dd'), 'Sorry your experience was not ideal. We are working hard to improve our service.');
+	values(2, 'a123amycampbell', TO_DATE('2015/07/29','yyyy/mm/dd'), 'Sorry your experience was not ideal. We are working hard to improve our service.');
 
 insert into Reply 
 	values(3, 'samsonthegreat', TO_DATE('2014/12/17','yyyy/mm/dd'), 'We are so pleased that you enjoy our food!');

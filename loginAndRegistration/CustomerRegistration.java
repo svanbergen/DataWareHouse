@@ -117,6 +117,20 @@ public class CustomerRegistration {
 						stmt.setString(2, password);//System.out.println(regQuery);
 						stmt.setNull(3, Types.VARCHAR);
 						rs = stmt.executeQuery();
+						
+						// FOR AWS DATABASE USE
+						/*
+						regQuery = "create user ";
+						regQuery = regQuery.concat(userName).concat("_customer identified by ").concat(password);
+						Statement statement = con.createStatement();
+						statement.executeQuery(regQuery);
+						regQuery = "grant customer_user to ";
+						regQuery = regQuery.concat(userName).concat("_customer");
+						statement.executeQuery(regQuery);
+						regQuery = "grant create session to ";
+						regQuery = regQuery.concat(userName).concat("_customer");
+						statement.executeQuery(regQuery);
+						*/
 						regFrame.dispose();
 					}        
 				}
