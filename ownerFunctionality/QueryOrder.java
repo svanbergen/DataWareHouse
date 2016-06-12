@@ -360,9 +360,11 @@ public class QueryOrder {
 					
 					TableFromResultSet.replaceTable(resultTable, rs, rsmd);
 					
+					/*
 					if(!rs.next()) {
 						errorMessage.setText("There are no Reservations");
-					}
+						
+					} */
 					
 				} catch (SQLException ex) {
 					System.out.println(ex.getMessage());
