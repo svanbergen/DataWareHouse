@@ -18,7 +18,7 @@ import customerFunctionality.ReservationMakingDialog;
 import sun.security.pkcs.ParsingException;
 import utility.*;
 
-public class QueryReservation {
+public class QueryOrder {
 
 	private Timestamp beginTime = null;
 	private Timestamp endTime = null;
@@ -48,7 +48,7 @@ public class QueryReservation {
 	private JTextField businessIDfield;
 	
 	
-	public QueryReservation(String username, Connection con) {
+	public QueryOrder(String username, Connection con) {
 		
 		// Initialize global variables
 		this.connection = con;
@@ -348,7 +348,7 @@ public class QueryReservation {
 				// Query
 				
 				try {
-					PreparedStatement stmd = connection.prepareStatement("select * from reservation where reservation.businessid = ? AND reservation.dates BETWEEN ? and ?");
+					PreparedStatement stmd = connection.prepareStatement("select * from orders where orders.businessid = ? AND orders.timemade BETWEEN ? and ?");
 					stmd.setString(1, businessID);
 					stmd.setTimestamp(2, beginTime);
 					stmd.setTimestamp(3, endTime);
@@ -358,16 +358,13 @@ public class QueryReservation {
 					
 					
 					
-					
 					TableFromResultSet.replaceTable(resultTable, rs, rsmd);
 					
 					/*
 					if(!rs.next()) {
 						errorMessage.setText("There are no Reservations");
-					}
-					*/
-
-					
+						
+					} */
 					
 				} catch (SQLException ex) {
 					System.out.println(ex.getMessage());
