@@ -2,13 +2,19 @@ package ownerFunctionality;
 
 import java.sql.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.management.Query;
 import javax.swing.*;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
+
 import customerFunctionality.ReservationMakingDialog;
+import sun.security.pkcs.ParsingException;
 import utility.*;
 
 public class QueryReservation {
@@ -17,7 +23,7 @@ public class QueryReservation {
 	private Connection connection;
 	
 	private String businessName;
-	private int businessID;
+	private String businessID;
 	
 	// Frame and Textfields
 	private JFrame mainframe;
@@ -310,6 +316,33 @@ public class QueryReservation {
 		gb.setConstraints(scrollPane, tableC);
 		contentpane.add(scrollPane);
 		
+		// End of UI
+		// Action
+		
+		ActionListener searchListener = new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				// Check BusinessID has same owner name
+				// make statement
+				
+				try {
+					checkID();				
+				} catch (Exception ex) {
+					errorMessage.setText("Denied: " + ex.getMessage());
+					return;
+				}
+								
+				
+				// Parse dates into timestamps
+				
+				// Query
+				
+				// Display
+				
+			}
+		}; searchButton.addActionListener(searchListener);
+		
 
 
 		
@@ -345,6 +378,45 @@ public class QueryReservation {
 		mainframe.setVisible(true);
 		
 		
+	}
+	
+	// Check if Username is the owner of businessID
+	
+	private void checkID() throws Exception {
+		
+		// BusinessID must be integer
+		try {
+		businessID = businessIDfield.getText(); 
+		} catch (Exception e) {
+			
+			System.out.println("BusinessID was not the correct format");
+			System.out.println("Message: " + e.getMessage());
+					
+		}
+		
+		System.out.print("BusinessID parsed is: " + businessID);
+		
+		PreparedStatement pstmd = connection.prepareStatement("select ownerUsername from business where business.businessid = ?");
+		pstmd.setString(1, businessID);
+		
+		
+		ResultSet rs = pstmd.executeQuery();
+		
+		// Check if there is an owner attached to the id
+		
+		// if there isn't any, return false
+		if (!rs.next()) {
+			throw new Exception("No Business Matching ID");
+			
+		}
+		
+			
+		if (rs.getString("ownerUserName").equals(businessName)) {
+			return;
+		}
+		
+		throw new Exception("BusinessID does not match Owner");
+	
 	}
 	
 	
