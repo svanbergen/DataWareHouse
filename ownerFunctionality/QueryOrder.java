@@ -10,12 +10,12 @@ import java.awt.event.WindowEvent;
 import javax.management.Query;
 import javax.swing.*;
 
-import com.oracle.webservices.internal.impl.internalspi.encoding.StreamDecoder;
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
+//import com.oracle.webservices.internal.impl.internalspi.encoding.StreamDecoder;
+//import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+//import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
 
 import customerFunctionality.ReservationMakingDialog;
-import sun.security.pkcs.ParsingException;
+//import sun.security.pkcs.ParsingException;
 import utility.*;
 
 public class QueryOrder {
