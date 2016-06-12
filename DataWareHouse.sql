@@ -260,7 +260,7 @@ grant select on residesin to public;
 
 CREATE TABLE Reservation (
 	Dates timestamp,
-	customerUsername varchar(25) not null unique,
+	customerUsername varchar(25) not null,
 	businessID int,
 	Primary Key(dates, customerUsername, businessID),
 	Foreign Key(CustomerUsername) references Customer,
