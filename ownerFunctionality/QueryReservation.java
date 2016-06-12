@@ -355,7 +355,15 @@ public class QueryReservation {
 					
 					ResultSet rs = stmd.executeQuery();
 					ResultSetMetaData rsmd = stmd.getMetaData();
+					
+					
+					
 					TableFromResultSet.replaceTable(resultTable, rs, rsmd);
+					
+					if(!rs.next()) {
+						errorMessage.setText("There are no Reservations");
+					}
+					
 				} catch (SQLException ex) {
 					System.out.println(ex.getMessage());
 				}
@@ -367,28 +375,6 @@ public class QueryReservation {
 				
 			}
 		}; searchButton.addActionListener(searchListener);
-		
-
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		// close window
 		mainframe.addWindowListener(new WindowAdapter() 
