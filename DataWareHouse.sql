@@ -128,7 +128,7 @@ grant select on menuitem to public;
 CREATE TABLE Orders (
 	OrderID int Primary Key,
 	timeMade timestamp,
-	Price float not null,
+	Price float,
 	BusinessID int not null,
 	customerUserName varchar(25) not null,
 	Foreign Key(BusinessID) references Business
