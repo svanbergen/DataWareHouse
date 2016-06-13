@@ -19,6 +19,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Calendar;
+
 import utility.*;
 import java.awt.Color;
 import javax.swing.SwingConstants;
@@ -373,11 +375,46 @@ public class ReservationMakingDialog extends JDialog {
 			System.out.println(ts.toString());
 			
 			businessId = Integer.parseInt(businessIdTextField.getText());
-		}catch(Exception ex){
+			
+			
+			
+			
+			
+//			if (year < c.YEAR 
+//					|| (year==c.YEAR && month<c.MONTH)
+//					|| (year==c.YEAR && month == c.MONTH && day< c.DAY_OF_MONTH)
+//					|| (year==c.YEAR && month == c.MONTH && day== c.DAY_OF_MONTH && hour < c.HOUR_OF_DAY)
+//					||(year==c.YEAR && month == c.MONTH && day== c.DAY_OF_MONTH && hour==c.HOUR_OF_DAY && minute<c.MINUTE)){
+//				statusLabel.setText("You Cannot Book a Reservation in the Past. Move On Man!");
+//				throw new Exception();
+//			}
+			
+			
+			
+		}catch( InvalidDateException ex){
+			ex.printStackTrace();
+			statusLabel.setText("The time or date entered is not valid.");
+			throw new Exception();
+		}
+		
+		catch(Exception ex){
 			statusLabel.setVisible(true);
 			statusLabel.setText("make sure the date and business id are valid");
 			throw new Exception();
 		}
+		
+		Calendar currentTime = Calendar.getInstance();
+		Calendar inputTime = Calendar.getInstance();
+		inputTime.setTimeInMillis( ts.getTime() );
+		
+		System.out.println("current time: " + currentTime);
+		System.out.println("input time: " + inputTime);
+		
+		if(inputTime.before(currentTime)){
+			statusLabel.setText("You Cannot Book a Reservation in the Past. Move On Man!");
+			throw new Exception();
+		}
+		
 	}
 	
 	
