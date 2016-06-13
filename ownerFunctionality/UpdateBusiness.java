@@ -299,6 +299,8 @@ public class UpdateBusiness {
 				
 				// parse data
 				
+				
+				
 				try {
 					checkID();				
 				} catch (Exception ex) {
@@ -441,8 +443,97 @@ public class UpdateBusiness {
 					errorMessage.setText("Business Parsing probably went wrong");
 				}
 				
-				/*
+				
 				try {
+					
+					String address = addressField.getText();
+					String unit = unitField.getText();
+					
+					String postalCode = postalCodeField.getText();
+					String city = cityField.getText();
+					String province = provinceField.getText();
+					
+					
+					// if postalcode is empty, postal code table not changed
+					// if postalcode not empty
+					
+					// check if postal code is empty or not
+					if(!postalCode.equals("")) {
+						
+						//check if correct format
+						if(!postalCode.matches("[A-Z][0-9][A-Z] [0-9][A-Z][0-9]")){
+							errorMessage.setText("Invalid postal code (must be of the form X1X 1X1)");
+							return;
+						} 
+						
+						// correct format -> check if city and province are filled in
+						if(city.equals("") || province.equals("")){
+							errorMessage.setText("Must specify city and province");
+							return;
+						}
+						
+						// Everything works, delete stuff fom POSTAL TABLE
+						
+						// filled in, get old postal code
+						String oldPostal = "";
+						
+						PreparedStatement getOldPostal = connection.prepareStatement("select location.postalcode from located, location where located.businessid = ?");
+						getOldPostal.setString(1, businessID);
+						
+						ResultSet postalResult = getOldPostal.executeQuery();
+						oldPostal = postalResult.getString(1);
+						
+						//  insert new postal
+						PreparedStatement postalAdd = connection.prepareStatement("insert into postalcode values(?,?,?)");
+						postalAdd.setString(1, postalCode);
+						postalAdd.setString(2, city);
+						postalAdd.setString(3, province);
+						int postalInserted = postalAdd.executeUpdate();
+						
+						System.out.println("New Postal Inserted: " + postalInserted);
+						
+						// delete old postal
+						PreparedStatement deletePostal = connection.prepareStatement("delete from postalcode where postalcode.postalcode = ?");
+						deletePostal.setString(1, oldPostal);
+						int postalDeleted = deletePostal.executeUpdate();
+						
+						System.out.println("Old Postal deleted: " + postalDeleted);
+						
+						
+						
+						// Postal table stuff done
+						
+						// get LocationID
+						String oldLocationID = "";
+						
+						PreparedStatement getOldLocationID = connection.prepareStatement("select locationid from located where located.businessid = ?");
+						getOldLocationID.setString(1, businessID);
+						
+						ResultSet locationResult = getOldLocationID.executeQuery();
+						oldLocationID = locationResult.getString(1);
+						
+						// delete old Location
+						PreparedStatement deleteLocation = connection.prepareStatement("delete from location where location.postalcode = ?");
+						deleteLocation.setString(1, oldPostal);
+						int locationDeleted = deleteLocation.executeUpdate();
+						
+						System.out.println("Old Location deleted: " + locationDeleted);
+						
+						// delete old Located
+						PreparedStatement deleteLocated = connection.prepareStatement("delete from located where located.locationid = ?");
+						deleteLocated.setString(1, oldLocationID);
+						
+						int locatedDeleted = deleteLocated.executeUpdate();
+						
+						System.out.println("Old located deleted: " + locatedDeleted);
+						
+						
+						
+						
+						
+						
+						
+					}
 					
 					PreparedStatement preparedStatementLocation = connection.prepareStatement("");
 					
@@ -450,11 +541,14 @@ public class UpdateBusiness {
 					errorMessage.setText(e1.getMessage());
 				} catch (Exception exception) {
 					errorMessage.setText("Location Parsing probably went wrong");
-				} */
+				} 
 				
 				// update
 				
 				// show message
+				
+				
+				errorMessage.setText("Update Accepted");
 				
 			}
 		}; searchButton.addActionListener(searchListener);
@@ -477,18 +571,24 @@ public class UpdateBusiness {
 	}
 	
 	private void checkID() throws Exception {
+		
 
-		// BusinessID must be integer
+		
 		try {
 
 			businessID = businessIDField.getText(); 
+			if(businessID.equals("")) {
+				throw new Exception("Must enter BusinessID");
+			}
+			
 		} catch (Exception e) {
 
 			System.out.println("BusinessID was not the correct format");
 			System.out.println("Message: " + e.getMessage());
 
 		}
-
+		
+		
 		//System.out.println("BusinessID parsed is: " + businessID);
 
 		PreparedStatement pstmd = connection.prepareStatement("select ownerUsername from business where business.businessid = ?");
