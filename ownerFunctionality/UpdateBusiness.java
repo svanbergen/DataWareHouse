@@ -2,11 +2,14 @@ package ownerFunctionality;
 
 import java.sql.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+import sun.security.pkcs.ParsingException;
 import utility.*;
 
 
@@ -285,14 +288,176 @@ public class UpdateBusiness {
 		gb.setConstraints(searchButton, constraints);
 		contentpane.add(searchButton);
 		
+		// End of GUI
 		
+		// Action Listener for search button
 		
-		/* 
-		constraints.gridy = 7;
-		gb.setConstraints(, constraints);
-		contentpane.add();
-		 */
-		
+		ActionListener searchListener = new ActionListener() {
+			
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				// parse data
+				
+				try {
+					checkID();				
+				} catch (Exception ex) {
+					errorMessage.setText("Denied: " + ex.getMessage());
+					return;
+				}
+				// generate query
+				
+				
+				try {
+					
+					// Update statement head, update every field that is not empty by string append.
+					String statement = "update business set business.ownerUsername = " + "'" + businessName + "'";
+					
+					// Website
+					
+					String website = websiteField.getText();
+					
+					if (!(website.equals(""))) {
+						statement = statement.concat("business.website = " + "'" + website + "'" );
+					}
+					
+					String type = typeField.getText();
+					
+					if (!(type.equals(""))) {
+						statement = statement.concat(", business.type = " + "'" + type + "'");
+					}
+									
+					// Phone
+					String phone1 = PhoneField1.getText();
+					String phone2 = PhoneField2.getText();
+					String phone3 = PhoneField3.getText();
+					
+					// Check if Phone number is correct format or not
+					if(!(phone1.equals("") && phone2.equals("") && phone3.equals(""))){
+						String phone = phone1.concat("-").concat(phone2).concat("-").concat(phone3);
+						if(!phone.matches("[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]")){
+							errorMessage.setText("Invalid phone number");
+							return;
+						}
+						else{
+							statement = statement.concat(", business.phonenum = " + "'" + phone + "'");
+						}
+					}
+					
+					// Days
+					String days = "";
+					
+					// Determine value of days
+					if(m.isSelected()){
+						days = days.concat("M");
+					}
+					if(t.isSelected()){
+						days = days.concat("T");
+					}
+					if(w.isSelected()){
+						days = days.concat("W");
+					}
+					if(r.isSelected()){
+						days = days.concat("R");
+					}
+					if(f.isSelected()){
+						days = days.concat("F");
+					}
+					if(s.isSelected()){
+						days = days.concat("S");
+					}
+					if(u.isSelected()){
+						days = days.concat("U");
+					}
+					if (!(days.equals(""))) {
+						statement = statement.concat(", business.dayOfOperation = " + "'" + days + "'");
+					}
+					
+					// Open / Close 
+					String startHour = startHourField.getText();
+					String startMin = startMinField.getText();
+					String finHour = finHourField.getText();
+					String finMin = finMinField.getText();
+					
+					if(!startHour.equals("") || !startMin.equals("")){
+						if(!(startHour.matches("[0-9]+") && startMin.matches("[0-9]+"))){
+							errorMessage.setText("Invalid time");
+							return;
+						}
+						else{
+							int sH = Integer.parseInt(startHour);
+							int sM = Integer.parseInt(startMin);
+							int startTime;
+							if(sH < 24 && sH >= 0 && sM >=0 && sM < 60){
+								startTime = sH*100 + sM;
+
+								statement = statement.concat(", business.starttime = " + startTime);
+							}
+							else{
+								errorMessage.setText("Invalid opening time");
+								return;
+							}
+						}
+					}
+					
+					if(!finHour.equals("") || !finMin.equals("")){
+						if(!(finHour.matches("[0-9]+") && finMin.matches("[0-9]+"))){
+							errorMessage.setText("Invalid time");
+							return;
+						}
+						else{
+							int fH = Integer.parseInt(finHour);
+							int fM = Integer.parseInt(finMin);
+							int finTime;
+							if(fH < 24 && fH >= 0 && fM >=0 && fM < 60){
+								finTime = fH*100 + fM;
+								
+								statement = statement.concat(", business.finishtime = " + finTime);
+							}
+							else{
+								errorMessage.setText("Invalid closing time");
+								return;
+							}
+						}
+					}
+					
+					statement = statement.concat(" where business.ownerUsername = " + "'" + businessName + "'");
+					System.out.println(statement + "\n");
+					
+					// Make query for business
+					PreparedStatement preparedStatement = connection.prepareStatement(statement);
+					
+					int updateResult = preparedStatement.executeUpdate();
+					System.out.println("This many rows are updated: " + updateResult);
+					
+					// Unit - Null
+					// Street
+					// City
+					// Prov
+					// Postal 
+				} catch (SQLException e1) {
+					errorMessage.setText(e1.getMessage());
+				} catch (Exception exception) {
+					errorMessage.setText("Business Parsing probably went wrong");
+				}
+				
+				/*
+				try {
+					
+					PreparedStatement preparedStatementLocation = connection.prepareStatement("");
+					
+				} catch (SQLException e1) {
+					errorMessage.setText(e1.getMessage());
+				} catch (Exception exception) {
+					errorMessage.setText("Location Parsing probably went wrong");
+				} */
+				
+				// update
+				
+				// show message
+				
+			}
+		}; searchButton.addActionListener(searchListener);
 		
 		
 		
@@ -311,157 +476,194 @@ public class UpdateBusiness {
 		});
 	}
 	
-	// Method to create phone JPanel
-		JPanel createPhonePanel(){
-			JPanel phonePanel = new JPanel();
+	private void checkID() throws Exception {
 
-			GridBagLayout gb = new GridBagLayout();
-			phonePanel.setLayout(gb);
-			phonePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		// BusinessID must be integer
+		try {
 
-			// Phone fields 
-			GridBagConstraints phoneFieldC = new GridBagConstraints();
-			phoneFieldC.gridy = 1;
-			phoneFieldC.gridx = 1;
-			phoneFieldC.weightx=1.;
-			phoneFieldC.fill=GridBagConstraints.HORIZONTAL;
-			phoneFieldC.anchor = GridBagConstraints.WEST;
-			gb.setConstraints(PhoneField1, phoneFieldC);
-			phonePanel.add(PhoneField1);
-			phoneFieldC.gridx = 2;
-			gb.setConstraints(PhoneField2, phoneFieldC);
-			phonePanel.add(PhoneField2);
-			phoneFieldC.gridx = 3;
-			phoneFieldC.gridwidth = GridBagConstraints.REMAINDER;
-			gb.setConstraints(PhoneField3, phoneFieldC);
-			phonePanel.add(PhoneField3);
+			businessID = businessIDField.getText(); 
+		} catch (Exception e) {
 
-			return phonePanel;
-		}
-		
-		JPanel createDayPanel(){
-			JPanel dayPanel = new JPanel();
+			System.out.println("BusinessID was not the correct format");
+			System.out.println("Message: " + e.getMessage());
 
-			GridBagLayout gb = new GridBagLayout();
-			dayPanel.setLayout(gb);
-			dayPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
-			// Day boxes
-			GridBagConstraints l = new GridBagConstraints();
-			l.anchor = GridBagConstraints.WEST;
-			l.gridy = 1;
-			l.gridx = 1;
-			JLabel ml = new JLabel(" M: ");
-			gb.setConstraints(ml, l);
-			dayPanel.add(ml);
-			l.gridx = 2;
-			gb.setConstraints(m, l);
-			dayPanel.add(m);
-			l.gridx = 3;
-			JLabel tl = new JLabel(" T: ");
-			gb.setConstraints(tl, l);
-			dayPanel.add(tl);
-			l.gridx = 4;
-			gb.setConstraints(t, l);
-			dayPanel.add(t);
-			l.gridx = 5;
-			JLabel wl = new JLabel(" W: ");
-			gb.setConstraints(wl, l);
-			dayPanel.add(wl);
-			l.gridx = 6;
-			gb.setConstraints(w, l);
-			dayPanel.add(w);
-			l.gridx = 7;
-			JLabel rl = new JLabel(" TH: ");
-			gb.setConstraints(rl, l);
-			dayPanel.add(rl);
-			l.gridx = 8;
-			gb.setConstraints(r, l);
-			dayPanel.add(r);
-			l.gridx = 9;
-			JLabel fl = new JLabel(" F: ");
-			gb.setConstraints(fl, l);
-			dayPanel.add(fl);
-			l.gridx = 10;
-			gb.setConstraints(f, l);
-			dayPanel.add(f);
-			l.gridx = 11;
-			JLabel sl = new JLabel(" S: ");
-			gb.setConstraints(sl, l);
-			dayPanel.add(sl);
-			l.gridx = 12;
-			gb.setConstraints(s, l);
-			dayPanel.add(s);
-			l.gridx = 13;
-			JLabel ul = new JLabel(" SU: ");
-			gb.setConstraints(ul, l);
-			dayPanel.add(ul);
-			l.gridx = 14;
-			l.gridwidth = GridBagConstraints.REMAINDER;
-			gb.setConstraints(u, l);
-			dayPanel.add(u);
-
-			return dayPanel;
 		}
 
-		JPanel createOpeningPanel(){
-			JPanel openPanel = new JPanel();
-			GridBagLayout gb = new GridBagLayout();
-			openPanel.setLayout(gb);
-			openPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			
-			GridBagConstraints of = new GridBagConstraints();
-			of.anchor = GridBagConstraints.WEST;
-			of.weightx=1.;
-			of.fill=GridBagConstraints.HORIZONTAL;
-			of.gridy = 1;
-			of.gridx = 1;
-			
-			JLabel oH = new JLabel(" H: ");
-			gb.setConstraints(oH, of);
-			openPanel.add(oH);
-			of.gridx = 2;
-			gb.setConstraints(startHourField, of);
-			openPanel.add(startHourField);
-			of.gridx = 3;
-			JLabel oM = new JLabel(" M: ");
-			gb.setConstraints(oM, of);
-			openPanel.add(oM);
-			of.gridx = 4;
-			gb.setConstraints(startMinField, of);
-			openPanel.add(startMinField);
+		//System.out.println("BusinessID parsed is: " + businessID);
 
-			return openPanel;
+		PreparedStatement pstmd = connection.prepareStatement("select ownerUsername from business where business.businessid = ?");
+		pstmd.setString(1, businessID);
+
+
+		ResultSet rs = pstmd.executeQuery();
+
+		// Check if there is an owner attached to the id
+
+		// if there isn't any, return false
+		if (!rs.next()) {
+			throw new Exception("No Business Matching ID");
+
 		}
 
-		// Method to create closing time panel
-		JPanel createClosingPanel(){
-			JPanel closePanel = new JPanel();
-			GridBagLayout gb = new GridBagLayout();
-			closePanel.setLayout(gb);
-			closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			
-			GridBagConstraints cf = new GridBagConstraints();
-			cf.anchor = GridBagConstraints.WEST;
-			cf.weightx=1.;
-			cf.fill=GridBagConstraints.HORIZONTAL;
-			cf.gridx = 1;
-			cf.gridy = 12;
-			
-			JLabel cH = new JLabel(" H: ");
-			gb.setConstraints(cH, cf);
-			closePanel.add(cH);
-			cf.gridx = 2;
-			gb.setConstraints(finHourField, cf);
-			closePanel.add(finHourField);
-			cf.gridx = 3;
-			JLabel cM = new JLabel(" M: ");
-			gb.setConstraints(cM, cf);
-			closePanel.add(cM);
-			cf.gridx = 4;
-			gb.setConstraints(finMinField, cf);
-			closePanel.add(finMinField);
 
-			return closePanel;
+		if (rs.getString("ownerUserName").equals(businessName)) {
+			return;
 		}
+
+		throw new Exception("BusinessID does not match Owner");
+
+
+	}
+
+	JPanel createPhonePanel(){
+		JPanel phonePanel = new JPanel();
+
+		GridBagLayout gb = new GridBagLayout();
+		phonePanel.setLayout(gb);
+		phonePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		// Phone fields 
+		GridBagConstraints phoneFieldC = new GridBagConstraints();
+		phoneFieldC.gridy = 1;
+		phoneFieldC.gridx = 1;
+		phoneFieldC.weightx=1.;
+		phoneFieldC.fill=GridBagConstraints.HORIZONTAL;
+		phoneFieldC.anchor = GridBagConstraints.WEST;
+		gb.setConstraints(PhoneField1, phoneFieldC);
+		phonePanel.add(PhoneField1);
+		phoneFieldC.gridx = 2;
+		gb.setConstraints(PhoneField2, phoneFieldC);
+		phonePanel.add(PhoneField2);
+		phoneFieldC.gridx = 3;
+		phoneFieldC.gridwidth = GridBagConstraints.REMAINDER;
+		gb.setConstraints(PhoneField3, phoneFieldC);
+		phonePanel.add(PhoneField3);
+
+		return phonePanel;
+	}
+
+	JPanel createDayPanel(){
+		JPanel dayPanel = new JPanel();
+
+		GridBagLayout gb = new GridBagLayout();
+		dayPanel.setLayout(gb);
+		dayPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		// Day boxes
+		GridBagConstraints l = new GridBagConstraints();
+		l.anchor = GridBagConstraints.WEST;
+		l.gridy = 1;
+		l.gridx = 1;
+		JLabel ml = new JLabel(" M: ");
+		gb.setConstraints(ml, l);
+		dayPanel.add(ml);
+		l.gridx = 2;
+		gb.setConstraints(m, l);
+		dayPanel.add(m);
+		l.gridx = 3;
+		JLabel tl = new JLabel(" T: ");
+		gb.setConstraints(tl, l);
+		dayPanel.add(tl);
+		l.gridx = 4;
+		gb.setConstraints(t, l);
+		dayPanel.add(t);
+		l.gridx = 5;
+		JLabel wl = new JLabel(" W: ");
+		gb.setConstraints(wl, l);
+		dayPanel.add(wl);
+		l.gridx = 6;
+		gb.setConstraints(w, l);
+		dayPanel.add(w);
+		l.gridx = 7;
+		JLabel rl = new JLabel(" TH: ");
+		gb.setConstraints(rl, l);
+		dayPanel.add(rl);
+		l.gridx = 8;
+		gb.setConstraints(r, l);
+		dayPanel.add(r);
+		l.gridx = 9;
+		JLabel fl = new JLabel(" F: ");
+		gb.setConstraints(fl, l);
+		dayPanel.add(fl);
+		l.gridx = 10;
+		gb.setConstraints(f, l);
+		dayPanel.add(f);
+		l.gridx = 11;
+		JLabel sl = new JLabel(" S: ");
+		gb.setConstraints(sl, l);
+		dayPanel.add(sl);
+		l.gridx = 12;
+		gb.setConstraints(s, l);
+		dayPanel.add(s);
+		l.gridx = 13;
+		JLabel ul = new JLabel(" SU: ");
+		gb.setConstraints(ul, l);
+		dayPanel.add(ul);
+		l.gridx = 14;
+		l.gridwidth = GridBagConstraints.REMAINDER;
+		gb.setConstraints(u, l);
+		dayPanel.add(u);
+
+		return dayPanel;
+	}
+
+	JPanel createOpeningPanel(){
+		JPanel openPanel = new JPanel();
+		GridBagLayout gb = new GridBagLayout();
+		openPanel.setLayout(gb);
+		openPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		GridBagConstraints of = new GridBagConstraints();
+		of.anchor = GridBagConstraints.WEST;
+		of.weightx=1.;
+		of.fill=GridBagConstraints.HORIZONTAL;
+		of.gridy = 1;
+		of.gridx = 1;
+
+		JLabel oH = new JLabel(" H: ");
+		gb.setConstraints(oH, of);
+		openPanel.add(oH);
+		of.gridx = 2;
+		gb.setConstraints(startHourField, of);
+		openPanel.add(startHourField);
+		of.gridx = 3;
+		JLabel oM = new JLabel(" M: ");
+		gb.setConstraints(oM, of);
+		openPanel.add(oM);
+		of.gridx = 4;
+		gb.setConstraints(startMinField, of);
+		openPanel.add(startMinField);
+
+		return openPanel;
+	}
+
+	JPanel createClosingPanel(){
+		JPanel closePanel = new JPanel();
+		GridBagLayout gb = new GridBagLayout();
+		closePanel.setLayout(gb);
+		closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		GridBagConstraints cf = new GridBagConstraints();
+		cf.anchor = GridBagConstraints.WEST;
+		cf.weightx=1.;
+		cf.fill=GridBagConstraints.HORIZONTAL;
+		cf.gridx = 1;
+		cf.gridy = 12;
+
+		JLabel cH = new JLabel(" H: ");
+		gb.setConstraints(cH, cf);
+		closePanel.add(cH);
+		cf.gridx = 2;
+		gb.setConstraints(finHourField, cf);
+		closePanel.add(finHourField);
+		cf.gridx = 3;
+		JLabel cM = new JLabel(" M: ");
+		gb.setConstraints(cM, cf);
+		closePanel.add(cM);
+		cf.gridx = 4;
+		gb.setConstraints(finMinField, cf);
+		closePanel.add(finMinField);
+
+		return closePanel;
+	}
 }
