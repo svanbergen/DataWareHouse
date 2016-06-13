@@ -221,7 +221,7 @@ public class BusinessStatistics extends JDialog {
 						}
 						
 						
-						String customerStatsQuery = "select Min(numOrders), Max(numOrders),Avg(numOrders), count(numOrders) from"
+						String customerStatsQuery = "select Min(numOrders), Max(numOrders),Avg(numOrders), SUM(numOrders) from"
 								+ "(select COUNT(*) AS numOrders from orders where businessID=? GROUP BY customerUserName) ";
 						try{
 							PreparedStatement stmt = con.prepareStatement(customerStatsQuery);

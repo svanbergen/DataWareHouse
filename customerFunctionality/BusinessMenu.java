@@ -99,7 +99,7 @@ public class BusinessMenu extends JDialog {
 							return;
 						}
 						
-						String getMenuQuery = "select menuItemID, Name, Price, Type From MenuItem WHERE BusinessID = ?";
+						String getMenuQuery = "select menuItemID, Name, Price, ItemType From MenuItem WHERE BusinessID = ?";
 						try{
 							PreparedStatement stmt = con.prepareStatement(getMenuQuery);
 							stmt.setString(1, ""+ businessId);
