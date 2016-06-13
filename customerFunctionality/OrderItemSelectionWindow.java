@@ -3,12 +3,14 @@ package customerFunctionality;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.sql.*;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import utility.PopUp;
 import utility.TableFromResultSet;
 
 import javax.swing.JLabel;
@@ -121,7 +123,7 @@ public class OrderItemSelectionWindow extends JDialog {
 						
 					}catch(SQLException ex){
 						ex.printStackTrace();
-						statusLabel.setText("Something went wrong. Make sure the Menu Item ID actually exists.");
+						statusLabel.setText("Something went wrong. Make sure the ID is valid.");
 						return;
 					}
 					
@@ -139,7 +141,7 @@ public class OrderItemSelectionWindow extends JDialog {
 		{
 			 statusLabel = new JLabel("");
 			statusLabel.setForeground(Color.RED);
-			statusLabel.setBounds(6, 220, 61, 16);
+			statusLabel.setBounds(6, 220, 414, 16);
 			contentPanel.add(statusLabel);
 		}
 		{
@@ -148,10 +150,40 @@ public class OrderItemSelectionWindow extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton submitOrderButton = new JButton("Submit Order");
+				submitOrderButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						Timestamp currentTimestamp = new Timestamp((Calendar.getInstance()).getTime().getTime());
+						
+						
+						String timeStampOrderQuery = "Update Order set timeMade=? where orderID = ?";
+						try{
+							PreparedStatement ps = con.prepareStatement(timeStampOrderQuery);
+							
+							ps.setTimestamp(1, currentTimestamp);
+							ps.setString(2, orderId);
+							
+							PopUp pp = new PopUp("order submitted succesfully");
+							
+							closeDialog();
+							
+						}catch(SQLException ex){
+							ex.printStackTrace();
+						}
+						
+						
+						
+					}
+				});
 				buttonPane.add(submitOrderButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						closeDialog();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -160,10 +192,11 @@ public class OrderItemSelectionWindow extends JDialog {
 	
 	
 	public void updateTable(){
-		String getItemsOnMenuQuery = "SELECT M.MenuItemID, M.name"
-									+ "FROM MenuItem M,Includes I"
-									+ "WHERE I.menuItemID = M.menuItemID"
-									+ "AND I.orderID = "+ orderId;
+		
+		System.out.println("in updateTable()");
+		
+		String getItemsOnMenuQuery = 
+				"SELECT M.MenuItemID, M.name FROM MenuItem M,Includes I WHERE I.menuItemID = M.menuItemID AND I.orderID = "+ orderId;
 		
 		try{
 			Statement stmt = con.createStatement();
@@ -180,9 +213,7 @@ public class OrderItemSelectionWindow extends JDialog {
 		
 		
 		
-		String getTotalPriceQuery = "select price"
-									+ "FROM orders"
-									+ "where orderid=" + orderId;
+		String getTotalPriceQuery = "select price FROM orders where orderid=" + orderId;
 				
 		try{
 			Statement stmt = con.createStatement();
@@ -200,7 +231,9 @@ public class OrderItemSelectionWindow extends JDialog {
 	}
 	
 	
-	
+	public void closeDialog(){
+		this.dispose();
+	}
 	
 	
 }

@@ -109,6 +109,11 @@ public class OrderWindow extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						closeDialog();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -119,7 +124,7 @@ public class OrderWindow extends JDialog {
 	
 	public void createOrder(){
 		
-		String createOrderQuery = "insert into orders(businessID,customerUserName) values(?,?)";
+		String createOrderQuery = "insert into orders(businessID,customerUserName, Price) values(?,?,?)";
 		
 		
 		try{
@@ -131,6 +136,7 @@ public class OrderWindow extends JDialog {
 		PreparedStatement ps = con.prepareStatement(createOrderQuery , new String[] { "OrderID" });
 		ps.setInt(1, businessId);
 		ps.setString(2, username);
+		ps.setFloat(3, 0);
 		
 		
 		System.out.println("stmt created");
@@ -160,6 +166,9 @@ public class OrderWindow extends JDialog {
 		
 	}
 	
+	public void closeDialog(){
+		this.dispose();
+	}
 	
 	
 }
