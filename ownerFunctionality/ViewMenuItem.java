@@ -18,6 +18,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -65,7 +66,11 @@ public class ViewMenuItem {
 
 		buttonC.gridy = 1;
 		gb.setConstraints(menuPage, buttonC);
-		contentPane.add(menuPage);
+		GridBagConstraints gbc_menuPage = new GridBagConstraints();
+		gbc_menuPage.insets = new Insets(0, 0, 5, 5);
+		gbc_menuPage.gridx = 0;
+		gbc_menuPage.gridy = 0;
+		contentPane.add(menuPage, gbc_menuPage);
 
 		menuItems = new JTable();
 
@@ -73,7 +78,82 @@ public class ViewMenuItem {
 		scrollPane.setViewportView(menuItems);
 
 		gb.setConstraints(scrollPane, tableC);
-		contentPane.add(scrollPane);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.gridx = 1;
+		gbc_scrollPane.gridy = 0;
+		contentPane.add(scrollPane, gbc_scrollPane);
+		
+//		JButton deleteButton = new JButton("Delete Menu Item");
+//		deleteButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				try {
+//					// get the selected row
+//					int row = menuItems.getSelectedRow();
+//					//System.out.println(row);
+//
+//					// make sure a row is selected
+//					if (row < 0) {
+//						JOptionPane.showMessageDialog(null, 
+//								"You must select a menu item", "Error", JOptionPane.ERROR_MESSAGE);				
+//						return;
+//					}
+//
+//					// prompt the user
+//					int response = JOptionPane.showConfirmDialog(
+//							null, "Delete this menu item?", "Confirm", 
+//							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+//
+//					if (response != JOptionPane.YES_OPTION) {
+//						return;
+//					}
+//
+//					// get the current menuitem
+//
+//					MenuItem temp = (MenuItem) menuItems.getValueAt(row, MenuItemTable.OBJECT_COL);
+//
+//					int selected = temp.getId();
+//
+//
+//					// delete it
+//					try{
+//					
+//						PreparedStatement stmt = con.prepareStatement("delete from MenuItem where menuItemID = ?");
+//						stmt.setInt(1, selected);
+//						ResultSet rs = stmt.executeQuery();
+//						ResultSetMetaData rsmd = rs.getMetaData();
+//						TableFromResultSet.replaceTable(menuItems, rs, rsmd);
+//						
+//
+//					}
+//					catch(SQLException ex){
+//						System.out.println("Message: " + ex.getMessage());
+//					}
+//
+//					// show success message
+//					JOptionPane.showMessageDialog(null,
+//							"Menu Item deleted succesfully.", "Menu Item Deleted",
+//							JOptionPane.INFORMATION_MESSAGE);
+//
+//				} catch (Exception exc) {
+//					JOptionPane.showMessageDialog(null,
+//							"Error deleting menu item: " + exc.getMessage(), "Error",
+//							JOptionPane.ERROR_MESSAGE);
+//				}
+//
+//
+//
+//			}
+//		});
+//		GridBagConstraints gbc_deleteButton = new GridBagConstraints();
+//		gbc_deleteButton.gridx = 1;
+//		gbc_deleteButton.gridy = 1;
+//		contentPane.add(deleteButton, gbc_deleteButton);
+//		
+		
+		
+		
 		try{
 
 			PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
@@ -81,6 +161,8 @@ public class ViewMenuItem {
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			TableFromResultSet.replaceTable(menuItems, rs, rsmd);
+			
+
 		}
 		catch(SQLException ex){
 			System.out.println("Message: " + ex.getMessage());

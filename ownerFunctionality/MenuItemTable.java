@@ -4,14 +4,17 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.sun.istack.internal.FinalArrayList;
+
 public class MenuItemTable extends AbstractTableModel{
 	
 	public static final int OBJECT_COL = -1;
-	private static final int NAME_COL = 0;
-	private static final int TYPE_COL = 1;
-	private static final int PRICE_COL = 2;
+	private static final int ID_COL = 0;
+	private static final int NAME_COL = 1;
+	private static final int TYPE_COL = 2;
+	private static final int PRICE_COL = 3;
 
-	private String[] columnNames = { "Name", "Type/Category", "Price"};
+	private String[] columnNames = { "MENUITEMID", "NAME", "ITEMTYPE", "PRICE"};
 	private List<MenuItem> menuItems;
 
 	public MenuItemTable(List<MenuItem> theMenuItems) {
@@ -38,6 +41,8 @@ public class MenuItemTable extends AbstractTableModel{
 		MenuItem tempMenuItem = menuItems.get(row);
 
 		switch (col) {
+		case ID_COL:
+			return tempMenuItem.getId();
 		case NAME_COL:
 			return tempMenuItem.getItemName();
 		case TYPE_COL:

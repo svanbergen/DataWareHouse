@@ -181,7 +181,7 @@ public class AddMenuItem {
 				String price = priceField.getText();
 				String businessId = businessIdField.getText();
 
-				// Construct insertion of business
+				// Construct insertion 
 				String loginQuery = "insert into menuItem values (1, ?, ?, ?, ?)";
 
 				// Attempt insertion
@@ -191,8 +191,7 @@ public class AddMenuItem {
 					
 						stmt.setFloat(1, p);
 						
-						
-						
+
 						if(type.equals("")){
 							stmt.setNull(2, Types.VARCHAR);
 						}

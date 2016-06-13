@@ -50,7 +50,8 @@ public class OwnerMenu {
 		JButton QueryOrderButton = new JButton("Query Order");
 		JButton menuItemsButton = new JButton("Menu Items");
 		JButton addMenuItemButton = new JButton("Add Menu Item");
-		
+		JButton deleteMenuItemButton = new JButton("Delete Menu Item");
+		JButton updateMenuItemButton = new JButton("Update Menu Item Price");
 		
 		JPanel contentPane = new JPanel();
 		menuFrame.setContentPane(contentPane);
@@ -126,6 +127,14 @@ public class OwnerMenu {
 		buttonC.gridy = 13;
 		gb.setConstraints(addMenuItemButton, buttonC);
 		contentPane.add(addMenuItemButton);
+		
+		buttonC.gridy = 14;
+		gb.setConstraints(deleteMenuItemButton, buttonC);
+		contentPane.add(deleteMenuItemButton);
+		
+		buttonC.gridy = 15;
+		gb.setConstraints(updateMenuItemButton, buttonC);
+		contentPane.add(updateMenuItemButton);
 		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
@@ -262,6 +271,20 @@ public class OwnerMenu {
 					public void actionPerformed(ActionEvent e) {
 						
 						AddMenuItem addMenuItem = new AddMenuItem(con, username);
+					}
+				});
+				
+				deleteMenuItemButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						DeleteMenuItem deleteMenuItem = new DeleteMenuItem(con, username);
+					}
+				});
+				
+				updateMenuItemButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						UpdateMenuItemPrice updateMenuItemPrice = new UpdateMenuItemPrice(con, username);
 					}
 				});
 				

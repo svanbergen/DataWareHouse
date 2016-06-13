@@ -3,66 +3,66 @@ package ownerFunctionality;
 import java.math.BigDecimal;
 
 public class MenuItem {
-	private int id;
-	private BigDecimal price;
-	String itemType;
-	String itemName;
-	int businessId;
+	private int menuItemID;
+	private float Price;
+	String ItemType;
+	String Name;
+	int BusinessID;
+	
 
-
-	public MenuItem(String itemName, String itemType, BigDecimal price, int businessId) {
-		this(0, itemName, itemType, price, businessId);
+	public MenuItem(float Price, String ItemType, String Name, int BusinessID) {
+		this(0, Price, ItemType, Name, BusinessID);
 	}
 	
-	public MenuItem(int id, String itemName, String itemType, BigDecimal price, int businessId) {
+	public MenuItem(int id, Float price, String itemType, String name, int businessId) {
 		// TODO Auto-generated constructor stub
 		super();
-		this.id = id;
-		this.price = price;
-		this.itemType = itemType;
-		this.itemName = itemName;
-		this.businessId = businessId;
+		this.menuItemID = id;
+		this.Price = price;
+		this.ItemType = itemType;
+		this.Name = name;
+		this.BusinessID = businessId;
 	}
 
 
 	public int getId() {
-		return id;
+		return menuItemID;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.menuItemID = id;
 	}
 
 	public String getItemName() {
-		return itemName;
+		return Name;
 	}
 
 	public void setItemName(String itemName) {
-		this.itemName = itemName;
+		this.Name = itemName;
 	}
 
 	public String getItemType() {
-		return itemType;
+		return ItemType;
 	}
 
 	public void setItemType(String itemType) {
-		this.itemType = itemType;
+		this.ItemType = itemType;
 	}
 
-	public BigDecimal getPrice() {
-		return price;
+	public float getPrice() {
+		return Price;
 	}
 
-	public void setPrice(BigDecimal price) {
-		this.price = price;
+	public void setPrice(Float price) {
+		this.Price = price;
 	}
 	
 	public int getBusinessId() {
-		return businessId;
+		return BusinessID;
 	}
 	
 	public void setBusinessId(int businessId) {
-		this.businessId = businessId;
+		this.BusinessID = businessId;
 	}
 
 }
