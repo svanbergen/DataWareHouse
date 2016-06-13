@@ -519,6 +519,11 @@ public class UpdateBusiness {
 						
 						System.out.println("Old Location deleted: " + locationDeleted);
 						
+						///////////////////
+						// Don't think need to deleted located, reuse same locationID
+						//////////////////
+						
+						/*///////////////////////
 						// delete old Located
 						PreparedStatement deleteLocated = connection.prepareStatement("delete from located where located.locationid = ?");
 						deleteLocated.setString(1, oldLocationID);
@@ -526,6 +531,29 @@ public class UpdateBusiness {
 						int locatedDeleted = deleteLocated.executeUpdate();
 						
 						System.out.println("Old located deleted: " + locatedDeleted);
+						*////////////////////////
+						
+						// everything deleted with the old address
+						// time to add a into located, location.
+						
+						// check if unit is null, for different insert parameters
+						
+						PreparedStatement insertLocation = connection.prepareStatement("insert into location values(?,?,?,?)");
+						
+						if (!unit.equals("")) {
+							insertLocation.setString(2, unit);
+						} else insertLocation.setNull(2, Types.VARCHAR);
+						
+						insertLocation.setString(1, oldLocationID);
+						insertLocation.setString(3, address);
+						insertLocation.setString(4, postalCode);
+						
+						int locationAdded = insertLocation.executeUpdate();
+						
+						System.out.println("Locations inserted: " + locationAdded);
+						
+						
+						
 						
 						
 						
@@ -535,7 +563,7 @@ public class UpdateBusiness {
 						
 					}
 					
-					PreparedStatement preparedStatementLocation = connection.prepareStatement("");
+					
 					
 				} catch (SQLException e1) {
 					errorMessage.setText(e1.getMessage());
