@@ -101,7 +101,7 @@ grant select on review to public;
 
 
 CREATE TABLE MenuItem (
-	menuItemID int Primary Key AUTOINCREMENT,
+	menuItemID int Primary Key,
 	Price float not null,
 	ItemType varchar(15),
 	Name varchar(20) not null,
@@ -154,6 +154,7 @@ CREATE TABLE BigSpenders (
 	CustomerUsername varchar(25),
 	orderid int,
 	price float,
+	businessid int,
 	Foreign Key(customerUsername) references Customer,
 	Foreign Key(OrderID) references Orders,
 	Primary Key(customerUsername,OrderID),
@@ -165,7 +166,7 @@ CREATE OR REPLACE TRIGGER spender_trig
  FOR EACH ROW
  		WHEN (new.price > 100)
 		BEGIN
-			INSERT INTO BigSpenders values(:new.customerUsername, :new.orderid, :new.price);
+			INSERT INTO BigSpenders values(:new.customerUsername, :new.orderid, :new.price, :new.businessid);
 		EXCEPTION
   			WHEN DUP_VAL_ON_INDEX
  			THEN ROLLBACK;

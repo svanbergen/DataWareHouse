@@ -2,11 +2,14 @@ package ownerFunctionality;
 
 import java.sql.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+import sun.security.pkcs.ParsingException;
 import utility.*;
 
 
@@ -103,6 +106,8 @@ public class UpdateBusiness {
 		JLabel operationLabel = new JLabel("Days of Operation: ");
 		JLabel startLabel = new JLabel("Opens by: ");
 		JLabel finiLabel = new JLabel("Closes after: ");
+
+		JLabel locationLabel = new JLabel("Location");
 		
 		JLabel unitLabel = new JLabel("Unit: ");
 		JLabel addressLabel = new JLabel("Address: ");
@@ -126,11 +131,456 @@ public class UpdateBusiness {
 		// Constraints
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.insets = new Insets(5, 5, 5, 5);
+		//constraints.anchor = GridBagConstraints.WEST;
 		
 		// Set content pane
 		contentpane.setLayout(gb);
 		
 		// Placing Components
+		
+		
+		// Title Label
+		constraints.gridy = 1;
+		gb.setConstraints(titleLabel, constraints);
+		contentpane.add(titleLabel);
+		
+		// BusinessID Label
+		constraints.gridy = 2;
+		gb.setConstraints(businessIDLabel, constraints);
+		contentpane.add(businessIDLabel);
+		
+		// BusinessID field
+		constraints.gridy = 3;
+		gb.setConstraints(businessIDField, constraints);
+		contentpane.add(businessIDField);
+		
+		// Website Label
+		constraints.gridy = 4;
+		gb.setConstraints(websiteLabel, constraints);
+		contentpane.add(websiteLabel);
+		
+		// Website field
+		constraints.gridy = 5;
+		gb.setConstraints(websiteField, constraints);
+		contentpane.add(websiteField);
+		
+		// Type Label
+		constraints.gridy = 6;
+		gb.setConstraints(typeLabel, constraints);
+		contentpane.add(typeLabel);
+		
+		
+		// Type Field
+		constraints.gridy = 7;
+		gb.setConstraints(typeField, constraints);
+		contentpane.add(typeField);
+		
+		// Phone Label
+		constraints.gridy = 8;
+		gb.setConstraints(phoneLabel, constraints);
+		contentpane.add(phoneLabel);
+
+		// Phone Panel/Fields
+		constraints.gridy = 9;
+		JPanel phonePanel = createPhonePanel();
+		gb.setConstraints(phonePanel, constraints);
+		contentpane.add(phonePanel);
+		
+		// Operation Label
+		constraints.gridy = 10;
+		gb.setConstraints(operationLabel, constraints);
+		contentpane.add(operationLabel);
+		
+		// Days of Operation checkboxes/panel
+		constraints.gridy = 11;
+		JPanel dayBoxPanel = createDayPanel();
+		gb.setConstraints(dayBoxPanel, constraints);
+		contentpane.add(dayBoxPanel);
+		
+		// Open By Label
+		constraints.gridy = 12;
+		gb.setConstraints(startLabel, constraints);
+		contentpane.add(startLabel);
+		
+		// Open time fields
+		JPanel openPanel = createOpeningPanel();
+		constraints.gridy = 13;
+		gb.setConstraints(openPanel, constraints);
+		contentpane.add(openPanel);
+		
+		// Close by Label
+		constraints.gridy = 14;
+		gb.setConstraints(finiLabel, constraints);
+		contentpane.add(finiLabel);
+		
+		// Close time fields
+		JPanel closePanel = createClosingPanel();
+		constraints.gridy = 15;
+		gb.setConstraints(closePanel, constraints);
+		contentpane.add(closePanel);
+		
+		// Location Label
+		constraints.gridy = 16;
+		gb.setConstraints(locationLabel, constraints);
+		contentpane.add(locationLabel);
+		
+		// Unit Label
+		constraints.gridy = 17;
+		gb.setConstraints(unitLabel, constraints);
+		contentpane.add(unitLabel);
+		
+		// Unit Field
+		constraints.gridy = 18;
+		gb.setConstraints(unitField, constraints);
+		contentpane.add(unitField);
+		
+		// Street Label
+		constraints.gridy = 19;
+		gb.setConstraints(addressLabel, constraints);
+		contentpane.add(addressLabel);
+		
+		// Street field
+		constraints.gridy = 20;
+		gb.setConstraints(addressField, constraints);
+		contentpane.add(addressField);
+		
+		// City Label
+		constraints.gridy = 21;
+		gb.setConstraints(cityLabel, constraints);
+		contentpane.add(cityLabel);
+		
+		// City fields
+		constraints.gridy = 22;
+		gb.setConstraints(cityField, constraints);
+		contentpane.add(cityField);
+		
+		// Prov Label
+		constraints.gridy = 23;
+		gb.setConstraints(provLabel, constraints);
+		contentpane.add(provLabel);
+		
+		// Prov field
+		constraints.gridy = 24;
+		gb.setConstraints(provinceField, constraints);
+		contentpane.add(provinceField);
+
+		// Postal Label
+		constraints.gridy = 25;
+		gb.setConstraints(postalLabel, constraints);
+		contentpane.add(postalLabel);
+		
+		// Postal Field
+		constraints.gridy = 26;
+		gb.setConstraints(postalCodeField, constraints);
+		contentpane.add(postalCodeField);
+		
+		
+		// Error Message
+		JLabel errorMessage = new JLabel(" ");
+		errorMessage.setForeground (Color.red);
+		constraints.gridy = 27;
+		gb.setConstraints(errorMessage, constraints);
+		contentpane.add(errorMessage);
+		
+		// Search Button
+		constraints.gridy = 29;
+		gb.setConstraints(searchButton, constraints);
+		contentpane.add(searchButton);
+		
+		// End of GUI
+		
+		// Action Listener for search button
+		
+		ActionListener searchListener = new ActionListener() {
+			
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				// parse data
+				
+				
+				
+				try {
+					checkID();				
+				} catch (Exception ex) {
+					errorMessage.setText("Denied: " + ex.getMessage());
+					return;
+				}
+				// generate query
+				
+				
+				try {
+					
+					// Update statement head, update every field that is not empty by string append.
+					String statement = "update business set business.ownerUsername = " + "'" + businessName + "'";
+					
+					// Website
+					
+					String website = websiteField.getText();
+					
+					if (!(website.equals(""))) {
+						statement = statement.concat("business.website = " + "'" + website + "'" );
+					}
+					
+					String type = typeField.getText();
+					
+					if (!(type.equals(""))) {
+						statement = statement.concat(", business.type = " + "'" + type + "'");
+					}
+									
+					// Phone
+					String phone1 = PhoneField1.getText();
+					String phone2 = PhoneField2.getText();
+					String phone3 = PhoneField3.getText();
+					
+					// Check if Phone number is correct format or not
+					if(!(phone1.equals("") && phone2.equals("") && phone3.equals(""))){
+						String phone = phone1.concat("-").concat(phone2).concat("-").concat(phone3);
+						if(!phone.matches("[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]")){
+							errorMessage.setText("Invalid phone number");
+							return;
+						}
+						else{
+							statement = statement.concat(", business.phonenum = " + "'" + phone + "'");
+						}
+					}
+					
+					// Days
+					String days = "";
+					
+					// Determine value of days
+					if(m.isSelected()){
+						days = days.concat("M");
+					}
+					if(t.isSelected()){
+						days = days.concat("T");
+					}
+					if(w.isSelected()){
+						days = days.concat("W");
+					}
+					if(r.isSelected()){
+						days = days.concat("R");
+					}
+					if(f.isSelected()){
+						days = days.concat("F");
+					}
+					if(s.isSelected()){
+						days = days.concat("S");
+					}
+					if(u.isSelected()){
+						days = days.concat("U");
+					}
+					if (!(days.equals(""))) {
+						statement = statement.concat(", business.dayOfOperation = " + "'" + days + "'");
+					}
+					
+					// Open / Close 
+					String startHour = startHourField.getText();
+					String startMin = startMinField.getText();
+					String finHour = finHourField.getText();
+					String finMin = finMinField.getText();
+					
+					if(!startHour.equals("") || !startMin.equals("")){
+						if(!(startHour.matches("[0-9]+") && startMin.matches("[0-9]+"))){
+							errorMessage.setText("Invalid time");
+							return;
+						}
+						else{
+							int sH = Integer.parseInt(startHour);
+							int sM = Integer.parseInt(startMin);
+							int startTime;
+							if(sH < 24 && sH >= 0 && sM >=0 && sM < 60){
+								startTime = sH*100 + sM;
+
+								statement = statement.concat(", business.starttime = " + startTime);
+							}
+							else{
+								errorMessage.setText("Invalid opening time");
+								return;
+							}
+						}
+					}
+					
+					if(!finHour.equals("") || !finMin.equals("")){
+						if(!(finHour.matches("[0-9]+") && finMin.matches("[0-9]+"))){
+							errorMessage.setText("Invalid time");
+							return;
+						}
+						else{
+							int fH = Integer.parseInt(finHour);
+							int fM = Integer.parseInt(finMin);
+							int finTime;
+							if(fH < 24 && fH >= 0 && fM >=0 && fM < 60){
+								finTime = fH*100 + fM;
+								
+								statement = statement.concat(", business.finishtime = " + finTime);
+							}
+							else{
+								errorMessage.setText("Invalid closing time");
+								return;
+							}
+						}
+					}
+					
+					statement = statement.concat(" where business.ownerUsername = " + "'" + businessName + "'");
+					System.out.println(statement + "\n");
+					
+					// Make query for business
+					PreparedStatement preparedStatement = connection.prepareStatement(statement);
+					
+					int updateResult = preparedStatement.executeUpdate();
+					System.out.println("This many rows are updated: " + updateResult);
+					
+					// Unit - Null
+					// Street
+					// City
+					// Prov
+					// Postal 
+				} catch (SQLException e1) {
+					errorMessage.setText(e1.getMessage());
+				} catch (Exception exception) {
+					errorMessage.setText("Business Parsing probably went wrong");
+				}
+				
+				
+				try {
+					
+					String address = addressField.getText();
+					String unit = unitField.getText();
+					
+					String postalCode = postalCodeField.getText();
+					String city = cityField.getText();
+					String province = provinceField.getText();
+					
+					
+					// if postalcode is empty, postal code table not changed
+					// if postalcode not empty
+					
+					// check if postal code is empty or not
+					if(!postalCode.equals("")) {
+						
+						//check if correct format
+						if(!postalCode.matches("[A-Z][0-9][A-Z] [0-9][A-Z][0-9]")){
+							errorMessage.setText("Invalid postal code (must be of the form X1X 1X1)");
+							return;
+						} 
+						
+						// correct format -> check if city and province are filled in
+						if(city.equals("") || province.equals("")){
+							errorMessage.setText("Must specify city and province");
+							return;
+						}
+						
+						// Everything works, delete stuff fom POSTAL TABLE
+						
+						// filled in, get old postal code
+						String oldPostal = "";
+						
+						PreparedStatement getOldPostal = connection.prepareStatement("select location.postalcode from located, location where located.businessid = ?");
+						getOldPostal.setString(1, businessID);
+						
+						ResultSet postalResult = getOldPostal.executeQuery();
+						oldPostal = postalResult.getString(1);
+						
+						//  insert new postal
+						PreparedStatement postalAdd = connection.prepareStatement("insert into postalcode values(?,?,?)");
+						postalAdd.setString(1, postalCode);
+						postalAdd.setString(2, city);
+						postalAdd.setString(3, province);
+						int postalInserted = postalAdd.executeUpdate();
+						
+						System.out.println("New Postal Inserted: " + postalInserted);
+						
+						// delete old postal
+						PreparedStatement deletePostal = connection.prepareStatement("delete from postalcode where postalcode.postalcode = ?");
+						deletePostal.setString(1, oldPostal);
+						int postalDeleted = deletePostal.executeUpdate();
+						
+						System.out.println("Old Postal deleted: " + postalDeleted);
+						
+						
+						
+						// Postal table stuff done
+						
+						// get LocationID
+						String oldLocationID = "";
+						
+						PreparedStatement getOldLocationID = connection.prepareStatement("select locationid from located where located.businessid = ?");
+						getOldLocationID.setString(1, businessID);
+						
+						ResultSet locationResult = getOldLocationID.executeQuery();
+						oldLocationID = locationResult.getString(1);
+						
+						// delete old Location
+						PreparedStatement deleteLocation = connection.prepareStatement("delete from location where location.postalcode = ?");
+						deleteLocation.setString(1, oldPostal);
+						int locationDeleted = deleteLocation.executeUpdate();
+						
+						System.out.println("Old Location deleted: " + locationDeleted);
+						
+						///////////////////
+						// Don't think need to deleted located, reuse same locationID
+						//////////////////
+						
+						/*///////////////////////
+						// delete old Located
+						PreparedStatement deleteLocated = connection.prepareStatement("delete from located where located.locationid = ?");
+						deleteLocated.setString(1, oldLocationID);
+						
+						int locatedDeleted = deleteLocated.executeUpdate();
+						
+						System.out.println("Old located deleted: " + locatedDeleted);
+						*////////////////////////
+						
+						// everything deleted with the old address
+						// time to add a into located, location.
+						
+						// check if unit is null, for different insert parameters
+						
+						PreparedStatement insertLocation = connection.prepareStatement("insert into location values(?,?,?,?)");
+						
+						if (!unit.equals("")) {
+							insertLocation.setString(2, unit);
+						} else insertLocation.setNull(2, Types.VARCHAR);
+						
+						insertLocation.setString(1, oldLocationID);
+						insertLocation.setString(3, address);
+						insertLocation.setString(4, postalCode);
+						
+						int locationAdded = insertLocation.executeUpdate();
+						
+						System.out.println("Locations inserted: " + locationAdded);
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+					}
+					
+					
+					
+				} catch (SQLException e1) {
+					errorMessage.setText(e1.getMessage());
+				} catch (Exception exception) {
+					errorMessage.setText("Location Parsing probably went wrong");
+				} 
+				
+				// update
+				
+				// show message
+				
+				
+				errorMessage.setText("Update Accepted");
+				
+			}
+		}; searchButton.addActionListener(searchListener);
+		
 		
 		
 		
@@ -148,6 +598,200 @@ public class UpdateBusiness {
 		});
 	}
 	
-	
+	private void checkID() throws Exception {
+		
 
+		
+		try {
+
+			businessID = businessIDField.getText(); 
+			if(businessID.equals("")) {
+				throw new Exception("Must enter BusinessID");
+			}
+			
+		} catch (Exception e) {
+
+			System.out.println("BusinessID was not the correct format");
+			System.out.println("Message: " + e.getMessage());
+
+		}
+		
+		
+		//System.out.println("BusinessID parsed is: " + businessID);
+
+		PreparedStatement pstmd = connection.prepareStatement("select ownerUsername from business where business.businessid = ?");
+		pstmd.setString(1, businessID);
+
+
+		ResultSet rs = pstmd.executeQuery();
+
+		// Check if there is an owner attached to the id
+
+		// if there isn't any, return false
+		if (!rs.next()) {
+			throw new Exception("No Business Matching ID");
+
+		}
+
+
+		if (rs.getString("ownerUserName").equals(businessName)) {
+			return;
+		}
+
+		throw new Exception("BusinessID does not match Owner");
+
+
+	}
+
+	JPanel createPhonePanel(){
+		JPanel phonePanel = new JPanel();
+
+		GridBagLayout gb = new GridBagLayout();
+		phonePanel.setLayout(gb);
+		phonePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		// Phone fields 
+		GridBagConstraints phoneFieldC = new GridBagConstraints();
+		phoneFieldC.gridy = 1;
+		phoneFieldC.gridx = 1;
+		phoneFieldC.weightx=1.;
+		phoneFieldC.fill=GridBagConstraints.HORIZONTAL;
+		phoneFieldC.anchor = GridBagConstraints.WEST;
+		gb.setConstraints(PhoneField1, phoneFieldC);
+		phonePanel.add(PhoneField1);
+		phoneFieldC.gridx = 2;
+		gb.setConstraints(PhoneField2, phoneFieldC);
+		phonePanel.add(PhoneField2);
+		phoneFieldC.gridx = 3;
+		phoneFieldC.gridwidth = GridBagConstraints.REMAINDER;
+		gb.setConstraints(PhoneField3, phoneFieldC);
+		phonePanel.add(PhoneField3);
+
+		return phonePanel;
+	}
+
+	JPanel createDayPanel(){
+		JPanel dayPanel = new JPanel();
+
+		GridBagLayout gb = new GridBagLayout();
+		dayPanel.setLayout(gb);
+		dayPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		// Day boxes
+		GridBagConstraints l = new GridBagConstraints();
+		l.anchor = GridBagConstraints.WEST;
+		l.gridy = 1;
+		l.gridx = 1;
+		JLabel ml = new JLabel(" M: ");
+		gb.setConstraints(ml, l);
+		dayPanel.add(ml);
+		l.gridx = 2;
+		gb.setConstraints(m, l);
+		dayPanel.add(m);
+		l.gridx = 3;
+		JLabel tl = new JLabel(" T: ");
+		gb.setConstraints(tl, l);
+		dayPanel.add(tl);
+		l.gridx = 4;
+		gb.setConstraints(t, l);
+		dayPanel.add(t);
+		l.gridx = 5;
+		JLabel wl = new JLabel(" W: ");
+		gb.setConstraints(wl, l);
+		dayPanel.add(wl);
+		l.gridx = 6;
+		gb.setConstraints(w, l);
+		dayPanel.add(w);
+		l.gridx = 7;
+		JLabel rl = new JLabel(" TH: ");
+		gb.setConstraints(rl, l);
+		dayPanel.add(rl);
+		l.gridx = 8;
+		gb.setConstraints(r, l);
+		dayPanel.add(r);
+		l.gridx = 9;
+		JLabel fl = new JLabel(" F: ");
+		gb.setConstraints(fl, l);
+		dayPanel.add(fl);
+		l.gridx = 10;
+		gb.setConstraints(f, l);
+		dayPanel.add(f);
+		l.gridx = 11;
+		JLabel sl = new JLabel(" S: ");
+		gb.setConstraints(sl, l);
+		dayPanel.add(sl);
+		l.gridx = 12;
+		gb.setConstraints(s, l);
+		dayPanel.add(s);
+		l.gridx = 13;
+		JLabel ul = new JLabel(" SU: ");
+		gb.setConstraints(ul, l);
+		dayPanel.add(ul);
+		l.gridx = 14;
+		l.gridwidth = GridBagConstraints.REMAINDER;
+		gb.setConstraints(u, l);
+		dayPanel.add(u);
+
+		return dayPanel;
+	}
+
+	JPanel createOpeningPanel(){
+		JPanel openPanel = new JPanel();
+		GridBagLayout gb = new GridBagLayout();
+		openPanel.setLayout(gb);
+		openPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		GridBagConstraints of = new GridBagConstraints();
+		of.anchor = GridBagConstraints.WEST;
+		of.weightx=1.;
+		of.fill=GridBagConstraints.HORIZONTAL;
+		of.gridy = 1;
+		of.gridx = 1;
+
+		JLabel oH = new JLabel(" H: ");
+		gb.setConstraints(oH, of);
+		openPanel.add(oH);
+		of.gridx = 2;
+		gb.setConstraints(startHourField, of);
+		openPanel.add(startHourField);
+		of.gridx = 3;
+		JLabel oM = new JLabel(" M: ");
+		gb.setConstraints(oM, of);
+		openPanel.add(oM);
+		of.gridx = 4;
+		gb.setConstraints(startMinField, of);
+		openPanel.add(startMinField);
+
+		return openPanel;
+	}
+
+	JPanel createClosingPanel(){
+		JPanel closePanel = new JPanel();
+		GridBagLayout gb = new GridBagLayout();
+		closePanel.setLayout(gb);
+		closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		GridBagConstraints cf = new GridBagConstraints();
+		cf.anchor = GridBagConstraints.WEST;
+		cf.weightx=1.;
+		cf.fill=GridBagConstraints.HORIZONTAL;
+		cf.gridx = 1;
+		cf.gridy = 12;
+
+		JLabel cH = new JLabel(" H: ");
+		gb.setConstraints(cH, cf);
+		closePanel.add(cH);
+		cf.gridx = 2;
+		gb.setConstraints(finHourField, cf);
+		closePanel.add(finHourField);
+		cf.gridx = 3;
+		JLabel cM = new JLabel(" M: ");
+		gb.setConstraints(cM, cf);
+		closePanel.add(cM);
+		cf.gridx = 4;
+		gb.setConstraints(finMinField, cf);
+		closePanel.add(finMinField);
+
+		return closePanel;
+	}
 }

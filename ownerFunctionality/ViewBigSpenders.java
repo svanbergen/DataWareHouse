@@ -5,8 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,31 +13,30 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import utility.TableFromResultSet;
 
-public class ViewMenuItem {
+public class ViewBigSpenders {
+	
 	Connection con;
 	String username;
-	JFrame menuFrame;
-	JTable menuItems;
+	JFrame bigSpenderFrame;
+	JTable reviews;
 
-	public ViewMenuItem(Connection con, String username){
+	public ViewBigSpenders(Connection con, String username){
 		this.con = con;
 		this.username = username;
 
-		menuFrame = new JFrame("Menu Items");
-		JLabel menuPage = new JLabel("Menu Items");
+		bigSpenderFrame = new JFrame("Big Spenders at Your Businesses");
+		JLabel spenderPage = new JLabel("Big Spenders at Your Businesses");
 
 		JPanel contentPane = new JPanel();
-		menuFrame.setContentPane(contentPane);
+		bigSpenderFrame.setContentPane(contentPane);
 		GridBagLayout gb = new GridBagLayout();
 
 		contentPane.setLayout(gb);
@@ -64,23 +61,23 @@ public class ViewMenuItem {
 		tableC.gridheight = 15;
 
 		buttonC.gridy = 1;
-		gb.setConstraints(menuPage, buttonC);
-		contentPane.add(menuPage);
+		gb.setConstraints(spenderPage, buttonC);
+		contentPane.add(spenderPage);
 
-		menuItems = new JTable();
+		reviews = new JTable();
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(menuItems);
+		scrollPane.setViewportView(reviews);
 
 		gb.setConstraints(scrollPane, tableC);
 		contentPane.add(scrollPane);
 		try{
 
-			PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+			PreparedStatement stmt = con.prepareStatement("select bigspenders.businessid, bigspenders.customerusername, bigspenders.orderid, bigspenders.price from bigspenders, business where business.BusinessID = bigspenders.businessid and business.ownerUsername = ?");
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
-			TableFromResultSet.replaceTable(menuItems, rs, rsmd);
+			TableFromResultSet.replaceTable(reviews, rs, rsmd);
 		}
 		catch(SQLException ex){
 			System.out.println("Message: " + ex.getMessage());
@@ -88,27 +85,14 @@ public class ViewMenuItem {
 
 
 		// Resize window
-		menuFrame.pack();
+		bigSpenderFrame.pack();
 
 		// Centre window
-		Dimension d = menuFrame.getToolkit().getScreenSize();
-		Rectangle r = menuFrame.getBounds();
-		menuFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+		Dimension d = bigSpenderFrame.getToolkit().getScreenSize();
+		Rectangle r = bigSpenderFrame.getBounds();
+		bigSpenderFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
 
 		// Set window visible
-		menuFrame.setVisible(true);
-
-
-		// Attempt to load the Oracle JDBC driver
-		try 
-		{
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		}
-		catch (SQLException ex)
-		{
-			System.out.println("Message: " + ex.getMessage());
-			System.exit(-1);
-		}
-
+		bigSpenderFrame.setVisible(true);
 	}
 }

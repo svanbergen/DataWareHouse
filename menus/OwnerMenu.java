@@ -42,13 +42,15 @@ public class OwnerMenu {
 		JButton viewReviewbutton = new JButton("View Reviews");
 		JButton writeReplyButton = new JButton("Reply to Review");
 		JButton QueryReservationButton = new JButton("Query Reservation");
+		JButton bigSpenderButton = new JButton("View Big Spenders");
 
 		JButton businessStatButton = new JButton("Business Statistics");
 		
 
 		JButton QueryOrderButton = new JButton("Query Order");
 		JButton menuItemsButton = new JButton("Menu Items");
-
+		JButton addMenuItemButton = new JButton("Add Menu Item");
+		
 		
 		JPanel contentPane = new JPanel();
 		menuFrame.setContentPane(contentPane);
@@ -105,7 +107,7 @@ public class OwnerMenu {
 		gb.setConstraints(QueryReservationButton, buttonC);
 		contentPane.add(QueryReservationButton);
 		
-		buttonC.gridy = 9;
+		buttonC.gridy = 10;
 		gb.setConstraints(businessStatButton, buttonC);
 		contentPane.add(businessStatButton);
 		
@@ -113,10 +115,17 @@ public class OwnerMenu {
 		gb.setConstraints(QueryOrderButton, buttonC);
 		contentPane.add(QueryOrderButton);
 		
-		buttonC.gridy = 10;
+		buttonC.gridy = 11;
 		gb.setConstraints(menuItemsButton, buttonC);
 		contentPane.add(menuItemsButton);
 		
+		buttonC.gridy = 12;
+		gb.setConstraints(bigSpenderButton, buttonC);
+		contentPane.add(bigSpenderButton);
+		
+		buttonC.gridy = 13;
+		gb.setConstraints(addMenuItemButton, buttonC);
+		contentPane.add(addMenuItemButton);
 		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
@@ -159,6 +168,15 @@ public class OwnerMenu {
 		};
 		refreshButton.addActionListener(refreshButtonListener);
 		
+		ActionListener bigSpenderButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				new ViewBigSpenders(con,username);
+			}
+		};
+		bigSpenderButton.addActionListener(bigSpenderButtonListener);
+		
 				ActionListener addBusinessButtonListener = new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e) 
@@ -174,6 +192,7 @@ public class OwnerMenu {
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
+						new UpdateBusiness(username, con);
 					}
 				};
 				updateBusinessButton.addActionListener(updateBusinessButtonListener);
@@ -228,8 +247,6 @@ public class OwnerMenu {
 					}
 				});
 				
-	
-
 				
 				
 				ActionListener businessStatButtonListener = new ActionListener()
@@ -241,6 +258,12 @@ public class OwnerMenu {
 				};
 				businessStatButton.addActionListener(businessStatButtonListener);
 				
+				addMenuItemButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						AddMenuItem addMenuItem = new AddMenuItem(con, username);
+					}
+				});
 				
 				
 		// On window close
@@ -276,41 +299,5 @@ public class OwnerMenu {
 
 	}
 
-
-	public List<MenuItem> getAllMenuItems() throws Exception {
-		List<MenuItem> list = new ArrayList<MenuItem>();
-		
-		Statement myStmt = null;
-		ResultSet myRs = null;
-		
-		try {
-			myStmt = con.createStatement();
-			myRs = myStmt.executeQuery("select * from MenuItem order by Name");
-			
-			while (myRs.next()) {
-				MenuItem tempMenuItem = convertRowToMenuItem(myRs);
-				list.add(tempMenuItem);
-			}
-
-			return list;		
-		}
-		catch (Exception e){
-			System.out.println();
-		}
-		return list;
-	}
-
-
-	private MenuItem convertRowToMenuItem(ResultSet myRs) throws SQLException {
-		int id = myRs.getInt("menuItemID");
-		String name = myRs.getString("Name");
-		String type = myRs.getString("ItemType");
-		int businessID = myRs.getInt("BusinessID");
-		BigDecimal price = myRs.getBigDecimal("Price");
-		
-		MenuItem tempMenuItem = new MenuItem(id, name, type, price, businessID);
-		
-		return tempMenuItem;
-	}
 
 }

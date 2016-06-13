@@ -263,7 +263,7 @@ public class UpdateCustomer {
 							PreparedStatement stmt = con.prepareStatement("update customer set phonenum = ? where customerusername = ?");
 							stmt.setString(1, phone);
 							stmt.setString(2, username);
-							stmt.executeQuery();
+							stmt.executeUpdate();
 						}
 					}
 
@@ -297,7 +297,7 @@ public class UpdateCustomer {
 								postalAdd.setString(1, postalCode);
 								postalAdd.setString(2, city);
 								postalAdd.setString(3, province);
-								postalAdd.executeQuery();
+								postalAdd.executeUpdate();
 							}
 						}
 
@@ -332,7 +332,7 @@ public class UpdateCustomer {
 								}
 								locationAdd.setString(2, address);
 								locationAdd.setString(3, postalCode);
-								locationAdd.executeQuery();
+								locationAdd.executeUpdate();
 
 							}
 						}
@@ -353,11 +353,11 @@ public class UpdateCustomer {
 						int locationid = locid.getInt(1);
 						PreparedStatement deleteStmt = con.prepareStatement("delete from residesin where customerusername = ?");
 						deleteStmt.setString(1, username);
-						deleteStmt.executeQuery();
+						deleteStmt.executeUpdate();
 						PreparedStatement updateStmt = con.prepareStatement("insert into residesin values(?, ?)");
 						updateStmt.setString(2, username);
 						updateStmt.setInt(1,locationid);
-						updateStmt.executeQuery();
+						updateStmt.executeUpdate();
 					}
 					// FINISH updating location
 
