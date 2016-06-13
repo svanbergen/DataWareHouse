@@ -155,17 +155,25 @@ public class OrderItemSelectionWindow extends JDialog {
 						
 						Timestamp currentTimestamp = new Timestamp((Calendar.getInstance()).getTime().getTime());
 						
+						System.out.println(currentTimestamp.toString());
 						
-						String timeStampOrderQuery = "Update Order set timeMade=? where orderID = ?";
+						String timeStampOrderQuery = "Update Orders set timeMade=? where orderID = ?";
 						try{
 							PreparedStatement ps = con.prepareStatement(timeStampOrderQuery);
 							
 							ps.setTimestamp(1, currentTimestamp);
 							ps.setString(2, orderId);
 							
-							PopUp pp = new PopUp("order submitted succesfully");
+							int row = ps.executeUpdate();
 							
-							closeDialog();
+							if(row>0){
+								PopUp pp = new PopUp("order submitted succesfully");
+								
+								closeDialog();
+							}else{
+								statusLabel.setText ("order could not be submitted");
+							}
+							
 							
 						}catch(SQLException ex){
 							ex.printStackTrace();
