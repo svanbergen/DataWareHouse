@@ -424,7 +424,7 @@ public class UpdateBusiness {
 					}
 					
 					statement = statement.concat(" where business.ownerUsername = " + "'" + businessName + "'");
-					System.out.println(statement + "\n");
+					System.out.println(statement);
 					
 					// Make query for business
 					PreparedStatement preparedStatement = connection.prepareStatement(statement);
@@ -446,116 +446,98 @@ public class UpdateBusiness {
 				
 				try {
 					
-					String address = addressField.getText();
-					String unit = unitField.getText();
-					
 					String postalCode = postalCodeField.getText();
 					String city = cityField.getText();
 					String province = provinceField.getText();
-					
-					
-					// if postalcode is empty, postal code table not changed
-					// if postalcode not empty
-					
-					// check if postal code is empty or not
-					if(!postalCode.equals("")) {
-						
-						//check if correct format
+					// Check error conditions for postalCode and create postalcode if missing from database
+					if(!postalCode.equals("")){
 						if(!postalCode.matches("[A-Z][0-9][A-Z] [0-9][A-Z][0-9]")){
 							errorMessage.setText("Invalid postal code (must be of the form X1X 1X1)");
 							return;
-						} 
-						
-						// correct format -> check if city and province are filled in
-						if(city.equals("") || province.equals("")){
+						}
+						else if(city.equals("") || province.equals("")){
 							errorMessage.setText("Must specify city and province");
 							return;
 						}
+						else{
+							PreparedStatement check = con.prepareStatement("select * from postalcode where postalcode = ?");
+							check.setString(1, postalCode);
+							ResultSet rs = check.executeQuery();
+							if(rs.next()){
+								if(!rs.getString(2).equals(city) || !rs.getString(3).equals(province)){
+									errorMessage.setText("Province and city do not match postal code");
+									return;
+								}
+							}
+							else{
+								PreparedStatement postalAdd = con.prepareStatement("insert into postalcode values(?,?,?)");
+								postalAdd.setString(1, postalCode);
+								postalAdd.setString(2, city);
+								postalAdd.setString(3, province);
+								postalAdd.executeUpdate();
+							}
+						}
+
+
+						// Check address errors and add address to database if missing
+						String address = addressField.getText();
+						String unit = unitField.getText();
+						if(address.equals("")){
+							errorMessage.setText("Must enter street address");
+							return;
+						}
+						else{
+							String statement = "select * from location where postalcode = '";
+							statement = statement.concat(postalCode).concat("' and streetadd = '").concat(address);
+
+							if(unit.equals("")){
+								statement = statement.concat("' and unitnum is null");
+							}
+							else{
+								statement = statement.concat("' and unitnum = '").concat(unit).concat("'");
+							}
+							PreparedStatement check = con.prepareStatement(statement);
+							ResultSet rs = check.executeQuery();
+							System.out.println(statement);
+							if(!rs.next()){
+								PreparedStatement locationAdd = con.prepareStatement("insert into location values(1,?,?,?)");
+								if(unit.equals("")){
+									locationAdd.setNull(1, Types.VARCHAR);
+								}
+								else{
+									locationAdd.setString(1, unit);
+								}
+								locationAdd.setString(2, address);
+								locationAdd.setString(3, postalCode);
+								locationAdd.executeUpdate();
+
+							}
+						}
+
+
+						String statement1 = "select * from location where postalcode = '";
+						statement1 = statement1.concat(postalCode).concat("' and streetadd = '").concat(address);
+
+						if(unit.equals("")){
+							statement1 = statement1.concat("' and unitnum is null");
+						}
+						else{
+							statement1 = statement1.concat("' and unitnum = '").concat(unit).concat("'");
+						}
 						
-						// Everything works, delete stuff fom POSTAL TABLE
+						System.out.println(statement1);
 						
-						// filled in, get old postal code
-						String oldPostal = "";
-						
-						PreparedStatement getOldPostal = connection.prepareStatement("select location.postalcode from located, location where located.businessid = ?");
-						getOldPostal.setString(1, businessID);
-						
-						ResultSet postalResult = getOldPostal.executeQuery();
-						oldPostal = postalResult.getString(1);
-						
-						//  insert new postal
-						PreparedStatement postalAdd = connection.prepareStatement("insert into postalcode values(?,?,?)");
-						postalAdd.setString(1, postalCode);
-						postalAdd.setString(2, city);
-						postalAdd.setString(3, province);
-						int postalInserted = postalAdd.executeUpdate();
-						
-						System.out.println("New Postal Inserted: " + postalInserted);
-						
-						// delete old postal
-						PreparedStatement deletePostal = connection.prepareStatement("delete from postalcode where postalcode.postalcode = ?");
-						deletePostal.setString(1, oldPostal);
-						int postalDeleted = deletePostal.executeUpdate();
-						
-						System.out.println("Old Postal deleted: " + postalDeleted);
-						
-						
-						
-						// Postal table stuff done
-						
-						// get LocationID
-						String oldLocationID = "";
-						
-						PreparedStatement getOldLocationID = connection.prepareStatement("select locationid from located where located.businessid = ?");
-						getOldLocationID.setString(1, businessID);
-						
-						ResultSet locationResult = getOldLocationID.executeQuery();
-						oldLocationID = locationResult.getString(1);
-						
-						// delete old Location
-						PreparedStatement deleteLocation = connection.prepareStatement("delete from location where location.postalcode = ?");
-						deleteLocation.setString(1, oldPostal);
-						int locationDeleted = deleteLocation.executeUpdate();
-						
-						System.out.println("Old Location deleted: " + locationDeleted);
-						
-						///////////////////
-						// Don't think need to deleted located, reuse same locationID
-						//////////////////
-						
-						/*///////////////////////
-						// delete old Located
-						PreparedStatement deleteLocated = connection.prepareStatement("delete from located where located.locationid = ?");
-						deleteLocated.setString(1, oldLocationID);
-						
-						int locatedDeleted = deleteLocated.executeUpdate();
-						
-						System.out.println("Old located deleted: " + locatedDeleted);
-						*////////////////////////
-						
-						// everything deleted with the old address
-						// time to add a into located, location.
-						
-						// check if unit is null, for different insert parameters
-						
-						PreparedStatement insertLocation = connection.prepareStatement("insert into location values(?,?,?,?)");
-						
-						if (!unit.equals("")) {
-							insertLocation.setString(2, unit);
-						} else insertLocation.setNull(2, Types.VARCHAR);
-						
-						insertLocation.setString(1, oldLocationID);
-						insertLocation.setString(3, address);
-						insertLocation.setString(4, postalCode);
-						
-						int locationAdded = insertLocation.executeUpdate();
-						
-						System.out.println("Locations inserted: " + locationAdded);
-						
-						
-						
-						
-						
+						PreparedStatement getidstmt = con.prepareStatement(statement1);
+						ResultSet locid = getidstmt.executeQuery();
+						locid.next();
+						int locationid = locid.getInt(1);
+						PreparedStatement deleteStmt = con.prepareStatement("delete from located where businessid = ?");
+						deleteStmt.setString(1, businessID);
+						deleteStmt.executeUpdate();
+						PreparedStatement updateStmt = con.prepareStatement("insert into located values(?, ?)");
+						updateStmt.setString(2, businessID);
+						updateStmt.setInt(1,locationid);
+						updateStmt.executeUpdate();
 						
 						
 						
