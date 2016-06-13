@@ -42,6 +42,7 @@ public class OwnerMenu {
 		JButton viewReviewbutton = new JButton("View Reviews");
 		JButton writeReplyButton = new JButton("Reply to Review");
 		JButton QueryReservationButton = new JButton("Query Reservation");
+		JButton bigSpenderButton = new JButton("View Big Spenders");
 
 		JButton businessStatButton = new JButton("Business Statistics");
 		
@@ -117,6 +118,9 @@ public class OwnerMenu {
 		gb.setConstraints(menuItemsButton, buttonC);
 		contentPane.add(menuItemsButton);
 		
+		buttonC.gridy = 11;
+		gb.setConstraints(bigSpenderButton, buttonC);
+		contentPane.add(bigSpenderButton);
 		
 		// Add all buttons before here
 		// Create table of all businesses associated with owner
@@ -158,6 +162,15 @@ public class OwnerMenu {
 			}
 		};
 		refreshButton.addActionListener(refreshButtonListener);
+		
+		ActionListener bigSpenderButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				new ViewBigSpenders(con,username);
+			}
+		};
+		bigSpenderButton.addActionListener(bigSpenderButtonListener);
 		
 				ActionListener addBusinessButtonListener = new ActionListener()
 				{
