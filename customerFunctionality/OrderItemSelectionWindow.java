@@ -27,6 +27,9 @@ public class OrderItemSelectionWindow extends JDialog {
 	
 	private String orderId;
 	private Connection con;
+	private int businessId;
+	
+	
 	private JTextField addMenuItemTextField;
 	
 	private JTable itemsTable;
@@ -39,7 +42,7 @@ public class OrderItemSelectionWindow extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public OrderItemSelectionWindow(Connection con, String orderId) {
+	public OrderItemSelectionWindow(Connection con, String orderId, int businessId) {
 		setTitle("Add Menu Items to your order");
 		
 		try {
@@ -51,7 +54,7 @@ public class OrderItemSelectionWindow extends JDialog {
 		
 		this.con = con;
 		this.orderId = orderId;
-		
+		this.businessId = businessId;
 		
 		
 		setBounds(100, 100, 450, 300);
@@ -103,6 +106,37 @@ public class OrderItemSelectionWindow extends JDialog {
 						statusLabel.setText("Invalid Input");
 						return;
 					}
+					
+					
+					
+					
+					String makeSureTheMenuItemIsOfferedByBusiness = "Select businessID from menuItem where menuItemID = ?";
+					try{
+						PreparedStatement stmt = con.prepareStatement(makeSureTheMenuItemIsOfferedByBusiness);
+						
+						stmt.setString(1, menuItemID +"");
+						
+						ResultSet rs = stmt.executeQuery();
+						
+						if(rs.next()){
+							
+							int x = rs.getInt(1);
+							
+							System.out.println("businessID from db: " + x);
+							System.out.println("Business id: " + businessId);
+							
+							if (businessId != x ){
+								statusLabel.setText("The menu id selected is not offered at this business");
+								return;
+							}
+						}
+					}catch(SQLException ex){
+						ex.printStackTrace();
+					}
+					
+					
+					
+					
 					
 					
 					System.out.println("order ID: " + orderId);

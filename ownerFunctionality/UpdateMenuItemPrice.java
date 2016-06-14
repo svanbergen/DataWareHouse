@@ -15,39 +15,41 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import javax.swing.BorderFactory;
 import javax.swing.*;
 
 import utility.TableFromResultSet;
 
 public class UpdateMenuItemPrice {
-	Connection con;
+	private Connection con;
 	private JFrame updateFrame;
 	private JTextField idField;
 	private JTextField priceField;
 
 	private JTable results;
 
-
-	String username;
+	private String businessName;
+	private String businessID;
+	private JTextField bidField;
 
 	public UpdateMenuItemPrice(Connection con, String username){
 		this.con = con;
-		this.username = username;
+		this.businessName = username;
 
 		// Define/initialize parts of frame
 		updateFrame = new JFrame("Set New Menu Item Price");
 		// Labels
 		JLabel titleLabel = new JLabel("Update Menu Item Price");
-
 		JLabel idLabel = new JLabel("Enter Menu Item ID: ");
 		JLabel priceLabel = new JLabel("Enter New Price: ");
+		JLabel bidLabel = new JLabel("Your Business ID: ");
 
 
 		idField = new JTextField(10);
 		idField.setMinimumSize(idField.getPreferredSize());
 		priceField = new JTextField(10);
 		priceField.setMinimumSize(priceField.getPreferredSize());
+		bidField = new JTextField(10);
+		bidField.setMinimumSize(bidField.getPreferredSize());
 
 		// Button
 		JButton updateButton = new JButton("Update");
@@ -97,28 +99,6 @@ public class UpdateMenuItemPrice {
 		gb.setConstraints(titleLabel, titleC);
 		contentPane.add(titleLabel);
 
-//		// id label 
-//		GridBagConstraints phoneC = new GridBagConstraints();
-//		phoneC.gridy = 2;
-//		phoneC.gridx = 1;
-//		phoneC.insets = new Insets(10, 10, 5, 0);
-//		phoneC.anchor = GridBagConstraints.WEST;
-//		gb.setConstraints(phoneLabel, phoneC);
-//		contentPane.add(phoneLabel);
-//
-//		// Phone field panel
-//		fieldC.gridy = 3;
-//		fieldC.gridx = 1;
-//		fieldC.insets = new Insets(5, 10, 10, 10);
-//		JPanel phonePanel = createPhonePanel();
-//		gb.setConstraints(phonePanel, fieldC);
-//		contentPane.add(phonePanel);
-//
-//		// Location title
-//		titleC.gridy = 4;
-//		gb.setConstraints(idLabel, titleC);
-//		contentPane.add(idLabel);
-
 		// Unit label
 		titleC.gridy = 5;
 		gb.setConstraints(idLabel, titleC);
@@ -140,6 +120,18 @@ public class UpdateMenuItemPrice {
 		fieldC.gridx = 1;
 		gb.setConstraints(priceField, fieldC);
 		contentPane.add(priceField);
+		
+		// businessid label 
+		labelC.gridy = 10;
+		labelC.gridx = 1;
+		gb.setConstraints(bidLabel, labelC);
+		contentPane.add(bidLabel);
+
+		// businessid field
+		fieldC.gridy = 11;
+		fieldC.gridx = 1;
+		gb.setConstraints(bidField, fieldC);
+		contentPane.add(bidField);
 
 		// Add button label 
 		buttonC.gridy = 15;
@@ -182,9 +174,13 @@ public class UpdateMenuItemPrice {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				try {
+					if (idField.getText().equals("") || bidField.getText().equals("")) {
+						errorMessage.setText("Please complete all fields");
+						return;
+					}
 
-
-	
+					else{
 				try {
 						// Check if missing
 						String id = idField.getText();
@@ -222,9 +218,16 @@ public class UpdateMenuItemPrice {
 				}
 							catch(SQLException ex){
 								System.out.println("Message: " + ex.getMessage());
-								errorMessage.setText("Unexpected database error");
+								errorMessage.setText("Invalid input");
 							}
-						}};
+						}
+				}
+					catch(Exception e2) {
+						errorMessage.setText("DENIED: " + e2.getMessage());
+						return;
+					}
+						}
+					};
 				
 			
 			
@@ -242,6 +245,43 @@ public class UpdateMenuItemPrice {
 
 		// Set window visible
 		updateFrame.setVisible(true);
+	}
+	
+
+	protected void checkID() throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			businessID = bidField.getText(); 
+			} catch (Exception e) {
+				
+				System.out.println("Invalid format for BusinessID");
+				System.out.println("Message: " + e.getMessage());
+						
+			}
+			
+			//System.out.print("BusinessID parsed is: " + businessID);
+			
+			PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
+			pstmd.setString(1, businessID);
+			
+			
+			ResultSet rs = pstmd.executeQuery();
+			
+			// Check if there is an owner attached to the id
+			
+			// if there isn't any, return false
+			if (!rs.next()) {
+				throw new Exception("No business associated with ID entered");
+				
+			}
+			
+				
+			if (rs.getString("ownerUserName").equals(businessName)) {
+				return;
+			}
+			
+			throw new Exception("BusinessID does not match Owner");
+			
 	}
 
 

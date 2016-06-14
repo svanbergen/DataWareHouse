@@ -183,7 +183,8 @@ CREATE TABLE Includes (
 	menuItemID int,
 	Primary Key (orderID, menuItemID),
 	Foreign Key(orderID) references Orders,
-	Foreign Key(menuItemID) references MenuItem );
+	Foreign Key(menuItemID) references MenuItem 
+	);
 
 grant select on includes to public;
 
@@ -350,52 +351,52 @@ insert into MenuItem
 	values(1, 16.00, 'Entree', 'Beef Souvlaki', 1);
 	
 insert into MenuItem
-	values(1, 16.00, 'Drink', 'Coffee', 1);
+	values(2, 16.00, 'Drink', 'Coffee', 1);
 	
 insert into MenuItem
-	values(6, 16.00, 'Entree', 'Beef Souvlaki', 3);
+	values(3, 16.00, 'Entree', 'Beef Souvlaki', 3);
 
 insert into MenuItem
-	values(5, 8.99, 'Appetizer', 'Seared Scallops', 2);
+	values(4, 8.99, 'Appetizer', 'Seared Scallops', 2);
 
 insert into MenuItem
-	values(6, 22.50, 'Entree', 'Prime Rib', 3);
+	values(5, 22.50, 'Entree', 'Prime Rib', 3);
 
 insert into MenuItem
-	values(2, 10.00, 'Appetizer', 'Salmon Sashimi', 4);
+	values(6, 10.00, 'Appetizer', 'Salmon Sashimi', 4);
 
 insert into MenuItem
-	values(3, 6.99, 'Entree', 'Fried Chicken', 5);
+	values(7, 6.99, 'Entree', 'Fried Chicken', 5);
 
 insert into Orders
-	values(13, TO_TIMESTAMP('2010/02/13 09:15:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 1, 'henry00123');
+	values(1, TO_TIMESTAMP('2010/02/13 09:15:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 1, 'henry00123');
 
 insert into Orders
-	values(3, TO_TIMESTAMP('2011/01/23 11:15:33', 'YYYY/MM/DD HH24:MI:SS'), 0, 2, 'angrytim');
+	values(2, TO_TIMESTAMP('2011/01/23 11:15:33', 'YYYY/MM/DD HH24:MI:SS'), 0, 2, 'angrytim');
 
 insert into Orders
-	values(25, TO_TIMESTAMP('2014/12/10 14:30:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 3, 'sarahgibson92');
+	values(3, TO_TIMESTAMP('2014/12/10 14:30:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 3, 'sarahgibson92');
 
 insert into Orders
-	values(19, TO_TIMESTAMP('2010/01/22 18:00:01', 'YYYY/MM/DD HH24:MI:SS'), 0, 4, 'joeiscool');
+	values(4, TO_TIMESTAMP(null, 'YYYY/MM/DD HH24:MI:SS'), 0, 4, 'joeiscool');
 
 insert into Orders
-	values(1, TO_TIMESTAMP('2014/02/13 09:30:30', 'YYYY/MM/DD HH24:MI:SS'), 0, 5, 'foodiefoodie');
+	values(5, TO_TIMESTAMP(null, 'YYYY/MM/DD HH24:MI:SS'), 0, 5, 'foodiefoodie');
 
 insert into Includes 
 	values(1, 1);
 
 insert into Includes 
-	values(2, 2);
+	values(1, 2);
 
 insert into Includes 
 	values(3, 3);
 
 insert into Includes 
-	values(4, 4);
+	values(2, 4);
 
 insert into Includes 
-	values(5, 5);
+	values(3, 5);
 
 insert into PostalCode
 	values('V6R 0X2', 'Vancouver', 'BC');

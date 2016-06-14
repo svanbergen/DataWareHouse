@@ -23,7 +23,7 @@ public class OrderWindow extends JDialog {
 	private String username;
 	private JTextField businessIDTextField;
 
-	private int  businessId;;
+	private int  businessId;
 	
 	public OrderWindow(Connection con, String username) {
 		setTitle("Create a New Order");
@@ -153,7 +153,7 @@ public class OrderWindow extends JDialog {
 				
 				System.out.println("returned order id is: " + orderId);
 				
-				OrderItemSelectionWindow oisw = new OrderItemSelectionWindow(con, ""+orderId);
+				OrderItemSelectionWindow oisw = new OrderItemSelectionWindow(con, ""+orderId , businessId);
 				}
 		}
 		

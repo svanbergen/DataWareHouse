@@ -570,13 +570,7 @@ public class UpdateBusiness {
 		mainframe.pack();
 		mainframe.setVisible(true);
 		
-		mainframe.addWindowListener(new WindowAdapter() 
-		{
-			public void windowClosing(WindowEvent e) 
-			{ 
-				System.exit(0); 
-			}
-		});
+		
 	}
 	
 	private void checkID() throws Exception {
