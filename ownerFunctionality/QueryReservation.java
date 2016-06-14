@@ -354,7 +354,7 @@ public class QueryReservation {
 					
 					
 					TableFromResultSet.replaceTable(resultTable, rs, rsmd);
-					rs.beforeFirst();
+					
 					
 					
 					
@@ -371,14 +371,7 @@ public class QueryReservation {
 			}
 		}; searchButton.addActionListener(searchListener);
 		
-		// close window
-		mainframe.addWindowListener(new WindowAdapter() 
-		{
-			public void windowClosing(WindowEvent e) 
-			{ 
-				System.exit(0); 
-			}
-		});
+		
 		
 		mainframe.pack();
 		mainframe.setVisible(true);

@@ -354,10 +354,7 @@ public class QueryOrder {
 					TableFromResultSet.replaceTable(resultTable, rs, rsmd);
 					
 					
-					if(!rs.next()) {
-						errorMessage.setText("There are no Reservations");
-						
-					}
+					
 					
 				} catch (SQLException ex) {
 					System.out.println(ex.getMessage());
@@ -371,14 +368,7 @@ public class QueryOrder {
 			}
 		}; searchButton.addActionListener(searchListener);
 		
-		// close window
-		mainframe.addWindowListener(new WindowAdapter() 
-		{
-			public void windowClosing(WindowEvent e) 
-			{ 
-				System.exit(0); 
-			}
-		});
+		
 		
 		mainframe.pack();
 		mainframe.setVisible(true);
