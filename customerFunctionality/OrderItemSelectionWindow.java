@@ -3,7 +3,9 @@ package customerFunctionality;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -21,9 +23,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
+
 public class OrderItemSelectionWindow extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	
+	private List<Integer> addedItems;
 	
 	private String orderId;
 	private Connection con;
@@ -56,6 +61,7 @@ public class OrderItemSelectionWindow extends JDialog {
 		this.orderId = orderId;
 		this.businessId = businessId;
 		
+		 addedItems = new ArrayList<Integer>();
 		
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -97,6 +103,8 @@ public class OrderItemSelectionWindow extends JDialog {
 			addToOrder.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
+					statusLabel.setText("");
+					
 					int menuItemID;
 					try{
 						menuItemID = Integer.parseInt(addMenuItemTextField.getText());
@@ -107,6 +115,10 @@ public class OrderItemSelectionWindow extends JDialog {
 						return;
 					}
 					
+					if(addedItems.contains(menuItemID)){
+						statusLabel.setText("This item has already been added");
+						return;
+					}
 					
 					
 					
@@ -151,6 +163,7 @@ public class OrderItemSelectionWindow extends JDialog {
 						
 						if(rows >0 ){
 							updateTable();
+							addedItems.add(menuItemID);
 						}else{
 							System.out.println("no rows affected after the update");
 						}
