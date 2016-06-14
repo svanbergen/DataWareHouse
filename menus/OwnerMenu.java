@@ -259,13 +259,11 @@ public class OwnerMenu {
 			}
 		});
 
-
-
 		ActionListener businessStatButtonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				BusinessStatistics bs = new BusinessStatistics(con, username);
+				new BusinessStatistics(con, username);
 			}
 		};
 		businessStatButton.addActionListener(businessStatButtonListener);

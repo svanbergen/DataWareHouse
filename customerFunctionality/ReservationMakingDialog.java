@@ -28,8 +28,10 @@ import javax.swing.SwingConstants;
 
 public class ReservationMakingDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	private final JPanel contentPanel = new JPanel();
-	
+
 	String username;
 	private JTextField businessIdTextField;
 	private JTextField HourTextField;
@@ -38,24 +40,17 @@ public class ReservationMakingDialog extends JDialog {
 	private JTextField dayTextField;
 	private JTextField yearTextField;
 	private JTextField minuteTextField;
-	
-	
+
 	int businessId;
 	Timestamp ts;
 	
-	private Connection con;
 	private JButton makeReservationButton;
-
-	/**
-	 * Launch the application.
-	 */
 
 
 	/**
 	 * Create the dialog.
 	 */
 	public ReservationMakingDialog(String username, Connection con) {
-		this.con = con;
 		setTitle("Booking a Table");
 		this.username = username;
 		setBounds(100, 100, 450, 300);
@@ -100,8 +95,8 @@ public class ReservationMakingDialog extends JDialog {
 			statusLabel = new JLabel("");
 			statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 			statusLabel.setForeground(Color.RED);
-			
-			
+
+
 			{
 				yearTextField = new JTextField();
 				GridBagConstraints gbc_yearTextField = new GridBagConstraints();
@@ -196,6 +191,8 @@ public class ReservationMakingDialog extends JDialog {
 			contentPanel.add(statusLabel, gbc_statusLabel);
 		}
 		{
+
+			// Button to make a reservation
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
@@ -209,17 +206,17 @@ public class ReservationMakingDialog extends JDialog {
 						}catch(Exception ex){
 							return;
 						}
-						
-						
+
+
 						String makeSureReservationExists = "select businessID from Reservation where dates =? AND customerUsername = ? AND businessID=?";
 						try{
 							PreparedStatement stmt = con.prepareStatement(makeSureReservationExists);
 							stmt.setTimestamp(1, ts);
 							stmt.setString(2, username);
 							stmt.setString(3, ""+ businessId);
-							
+
 							ResultSet rs = stmt.executeQuery();
-							
+
 							if(rs.next())
 							{
 								System.out.println("the reservation entered exists in the database");
@@ -232,25 +229,25 @@ public class ReservationMakingDialog extends JDialog {
 						}catch(SQLException ex){
 							System.out.println(ex.getMessage());
 						}
-						
+
 						String removeReservationQuery = "delete from Reservation where dates =? AND customerUsername = ? AND businessID=?";
 						try{
 							PreparedStatement stmt = con.prepareStatement(removeReservationQuery);
-							
+
 							stmt.setTimestamp(1, ts);
 							stmt.setString(2, username);
 							stmt.setString(3, ""+ businessId);
 							stmt.executeUpdate();
-							
-							
-							PopUp p = new PopUp("Reservation Cancelled successfully");
+
+
+							new PopUp("Reservation Cancelled successfully");
 							closeDialog();
-					}catch (SQLException ex) {
+						}catch (SQLException ex) {
 
-						System.out.println(ex.getMessage());
+							System.out.println(ex.getMessage());
 
-					}
 						}
+					}
 				});
 				buttonPane.add(btnCancelReservation);
 			}
@@ -271,13 +268,13 @@ public class ReservationMakingDialog extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		
-		
+
+		// Button to make reservation
 		ActionListener makeReservationButtonListener = new ActionListener(){
-			
+
 			public void actionPerformed(ActionEvent e){
 				System.out.println("makee reservation button pressed");
-				
+
 				try{
 					parseInput();
 				}catch(Exception ex){
@@ -288,9 +285,9 @@ public class ReservationMakingDialog extends JDialog {
 				try{
 					PreparedStatement stmt = con.prepareStatement(businessFlagQuery);
 					stmt.setString(1, ""+ businessId);
-					
+
 					ResultSet rs = stmt.executeQuery();
-					
+
 					char flag;
 					if(rs.next())
 					{
@@ -302,69 +299,40 @@ public class ReservationMakingDialog extends JDialog {
 					}
 					else
 					{
-						statusLabel.setText("the specified business does not exist");
+						statusLabel.setText("The specified business does not exist");
 						return;
-					}        
-					
-					
-					
+					}      
 				}
 				catch (SQLException ex)
 				{
 					System.out.println("Message: " + ex.getMessage());
 					statusLabel.setText("Business ID invlid");
 				}
-				
-				
-				
-				
 				String reservationInsertion = "INSERT INTO Reservation values(?,?,?)";
-				
+
 				try{
 					PreparedStatement stmt = con.prepareStatement(reservationInsertion);
 					stmt.setTimestamp(1, ts);
 					stmt.setString(2, username);
 					stmt.setString(3, ""+businessId );
-					
 					stmt.executeUpdate();
-					
-					
-					PopUp p = new PopUp("Reservation Made successfully. Hope you have a great Experience!");
-
-					
+					new PopUp("Reservation made successfully. Hope you have a great Experience!");
 					closeDialog();
-					
+
 				}
 				catch (SQLException ex)
 				{
 					System.out.println("Message: " + ex.getMessage());
 					statusLabel.setText("Invalid input");
 				}
-				
-				
-				
-				
-				
-				
-				
 			};
-
 		};
-		
-		
-		
 		makeReservationButton.addActionListener(makeReservationButtonListener);
-		
-		
-		
-		
-		
-		
 	}
-	
-	
+
+	// Method for parsing input
 	public void parseInput() throws Exception{
-		
+
 		try{
 			int year = Integer.parseInt(yearTextField.getText());
 			int month = Integer.parseInt(monthTextField.getText());
@@ -372,52 +340,36 @@ public class ReservationMakingDialog extends JDialog {
 			int hour = Integer.parseInt(HourTextField.getText());
 			int minute = Integer.parseInt(minuteTextField.getText());
 			ts = timeAndDate.makeTimestamp(year,month,day,hour,minute);
-			System.out.println(ts.toString());
-			
+			//System.out.println(ts.toString());
+
 			businessId = Integer.parseInt(businessIdTextField.getText());
-			
-			
-			
-			
-			
-//			if (year < c.YEAR 
-//					|| (year==c.YEAR && month<c.MONTH)
-//					|| (year==c.YEAR && month == c.MONTH && day< c.DAY_OF_MONTH)
-//					|| (year==c.YEAR && month == c.MONTH && day== c.DAY_OF_MONTH && hour < c.HOUR_OF_DAY)
-//					||(year==c.YEAR && month == c.MONTH && day== c.DAY_OF_MONTH && hour==c.HOUR_OF_DAY && minute<c.MINUTE)){
-//				statusLabel.setText("You Cannot Book a Reservation in the Past. Move On Man!");
-//				throw new Exception();
-//			}
-			
-			
-			
-		}catch( InvalidDateException ex){
+		}
+		// Check data is valid
+		catch(InvalidDateException ex){
 			ex.printStackTrace();
 			statusLabel.setText("The time or date entered is not valid.");
 			throw new Exception();
 		}
-		
 		catch(Exception ex){
 			statusLabel.setVisible(true);
-			statusLabel.setText("make sure the date and business id are valid");
+			statusLabel.setText("Make sure the date and business id are valid");
 			throw new Exception();
 		}
-		
+
 		Calendar currentTime = Calendar.getInstance();
 		Calendar inputTime = Calendar.getInstance();
 		inputTime.setTimeInMillis( ts.getTime() );
-		
-		System.out.println("current time: " + currentTime);
-		System.out.println("input time: " + inputTime);
-		
+
+		//System.out.println("current time: " + currentTime);
+		//System.out.println("input time: " + inputTime);
+
+		// Check input time is in the future
 		if(inputTime.before(currentTime)){
 			statusLabel.setText("You Cannot Book a Reservation in the Past. Move On Man!");
 			throw new Exception();
 		}
-		
+
 	}
-	
-	
 	public void closeDialog(){
 		this.dispose();
 	}

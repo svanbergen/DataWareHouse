@@ -30,7 +30,7 @@ public class CustomerMenu {
 		JButton searchForBusinessesButton = new JButton("Search for Businesses");
 		JButton searchForBusinessesByItemButton = new JButton("Search for Businesses by Item");
 		JButton makeReservationButton = new JButton("Make or Cancel a Reservation");
-		JButton getTheMenuForABusinessButton = new JButton("Get the Menu for a business");
+		JButton getTheMenuForABusinessButton = new JButton("Get the Menu for a Business");
 		JButton viewOAndRButton = new JButton("View Your Orders and Reservations");
 		JButton createAnOrderButton = new JButton("Create an Order");
 

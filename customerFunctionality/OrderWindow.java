@@ -16,29 +16,30 @@ import java.awt.Color;
 
 public class OrderWindow extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	private final JPanel contentPanel = new JPanel();
-	
-	
+
 	private Connection con;
 	private String username;
 	private JTextField businessIDTextField;
 
 	private int  businessId;
-	
+
 	public OrderWindow(Connection con, String username) {
 		setTitle("Create a New Order");
-		
+
 		this.username = username;
 		this.con = con;
-		
+
 		try {
 			this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			this.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
+		// Define layout
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -49,12 +50,12 @@ public class OrderWindow extends JDialog {
 			lblBusinessId.setBounds(6, 32, 81, 16);
 			contentPanel.add(lblBusinessId);
 		}
-		
+
 		businessIDTextField = new JTextField();
 		businessIDTextField.setBounds(99, 27, 73, 26);
 		contentPanel.add(businessIDTextField);
 		businessIDTextField.setColumns(10);
-		
+
 		JLabel statusLabel = new JLabel("");
 		statusLabel.setForeground(Color.RED);
 		statusLabel.setBounds(6, 197, 421, 16);
@@ -62,46 +63,46 @@ public class OrderWindow extends JDialog {
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			// Button to create order
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						
-						
-						
+
 						try{
 							businessId = Integer.parseInt(businessIDTextField.getText());
-						}catch(Exception ex){
+						}
+						catch(Exception ex){
 							ex.printStackTrace();
 							statusLabel.setText("Invalid Input");
 							return;
 						}
-						
-						
-						
+
+						// Check that business exists
 						String makeSureBusinessExistsQuery = "select * from Business where BusinessID = ?";
 						try{
 							PreparedStatement stmt = con.prepareStatement(makeSureBusinessExistsQuery);
 							stmt.setString(1, ""+ businessId);
-							
+
 							ResultSet rs = stmt.executeQuery();
-							
+
 							if(rs.next())
 							{
 								createOrder();
 							}
 							else
 							{
-								statusLabel.setText("the specified business does not exist");
+								statusLabel.setText("The specified business does not exist");
 								return;
 							}  
-						}catch(SQLException ex){
+						}
+						catch(SQLException ex){
 							ex.printStackTrace();
 						}
-						
+
 					}
-					
+
 				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
@@ -119,56 +120,44 @@ public class OrderWindow extends JDialog {
 			}
 		}
 	}
-	
-	
-	
+
+	// Method to create order
 	public void createOrder(){
-		
+
 		String createOrderQuery = "insert into orders(businessID,customerUserName, Price) values(?,?,?)";
-		
-		
+
 		try{
+			//System.out.println("about to prepare the statement that returns the generated key");
+			//System.out.println("businessID:" + businessId);
+			//System.out.println("username " + username );
+
+			PreparedStatement ps = con.prepareStatement(createOrderQuery , new String[] { "OrderID" });
+			ps.setInt(1, businessId);
+			ps.setString(2, username);
+			ps.setFloat(3, 0);
+
+			//System.out.println("stmt created");
 			
-		System.out.println("about to prepare the statement that returns the generated key");
-		System.out.println("businessID:" + businessId);
-		System.out.println("username " + username );
-			
-		PreparedStatement ps = con.prepareStatement(createOrderQuery , new String[] { "OrderID" });
-		ps.setInt(1, businessId);
-		ps.setString(2, username);
-		ps.setFloat(3, 0);
-		
-		
-		System.out.println("stmt created");
-		
-		
-	
-		
-		
-		if(ps.executeUpdate()>0){
-			ResultSet generatedKeys = ps.getGeneratedKeys(); 
-			if (null != generatedKeys && generatedKeys.next()) 
-			{ 
-				Long orderId = generatedKeys.getLong(1);
-				
-				System.out.println("returned order id is: " + orderId);
-				
-				OrderItemSelectionWindow oisw = new OrderItemSelectionWindow(con, ""+orderId , businessId);
+			if(ps.executeUpdate()>0){
+				ResultSet generatedKeys = ps.getGeneratedKeys(); 
+				if (null != generatedKeys && generatedKeys.next()) 
+				{ 
+					Long orderId = generatedKeys.getLong(1);
+
+					//System.out.println("returned order id is: " + orderId);
+
+					new OrderItemSelectionWindow(con, ""+orderId , businessId);
 				}
+			}
 		}
-		
-		
-		
-		
-		}catch(SQLException ex){
+		catch(SQLException ex){
 			ex.printStackTrace();
 		}
-		
 	}
-	
+
 	public void closeDialog(){
 		this.dispose();
 	}
-	
-	
+
+
 }
