@@ -78,7 +78,7 @@ public class OrderItemSelectionWindow extends JDialog {
 		}
 		{
 			totalPriceLabel = new JLabel("Total Price:");
-			totalPriceLabel.setBounds(247, 16, 102, 16);
+			totalPriceLabel.setBounds(247, 16, 173, 16);
 			contentPanel.add(totalPriceLabel);
 		}
 		{
@@ -187,6 +187,8 @@ public class OrderItemSelectionWindow extends JDialog {
 				submitOrderButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						statusLabel.setText("");
+						
 						Timestamp currentTimestamp = new Timestamp((Calendar.getInstance()).getTime().getTime());
 						
 						System.out.println(currentTimestamp.toString());
@@ -200,12 +202,12 @@ public class OrderItemSelectionWindow extends JDialog {
 							
 							int row = ps.executeUpdate();
 							
-							if(row>0){
+							if(row>0 && itemsTable.getRowCount()>0){
 								PopUp pp = new PopUp("order submitted succesfully");
 								
 								closeDialog();
 							}else{
-								statusLabel.setText ("order could not be submitted");
+								statusLabel.setText ("order could not be submitted. Make sure it's not empty.");
 							}
 							
 							
