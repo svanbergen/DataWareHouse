@@ -21,53 +21,45 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-
 import utility.TableFromResultSet;
 
 
-public class AddMenuItem {
+public class DeleteMenuItem {
 	private Connection con;
 	private JFrame addFrame;
-	private String businessID;
 	private String businessName;
+	private String businessID;
+	private String menuItemID;
+
+	private JTextField idField;
+	private JTextField bidField;
 	private JTable results;
 
 
-	private JTextField nameField;
-	private JTextField typeField;
-	private JTextField priceField;
-	private JTextField businessIdField;
-
 
 	// Constructor: builds the functionality window, handles the button press
-	public AddMenuItem(Connection con, String username){
+	public DeleteMenuItem(Connection con, String username){
 		this.con = con;
 		this.businessName = username;
 
 		// /initialize parts of frame
-		addFrame = new JFrame("Add Menu Item");
+		addFrame = new JFrame("Delete Menu Item");
 		// Labels
-		JLabel addLabel = new JLabel("Add New Menu Item");
-		JLabel nameLabel = new JLabel("Enter Menu Item name: ");
-		JLabel typeLabel = new JLabel("Enter Type/Category: ");
-		JLabel priceLabel = new JLabel("Enter Price: ");
-		JLabel businessIdLabel = new JLabel("Your Business ID: ");
+		JLabel addLabel = new JLabel("Delete Menu Item");
+		JLabel idLabel = new JLabel("Enter Menu Item ID: ");
+		JLabel bidLabel = new JLabel("Your Business ID: ");
 		
 		
 		// Text fields
 		// Note: setMinimumSize prevents the fields from resizing on update
 
-		nameField = new JTextField(10);
-		nameField.setMinimumSize(nameField.getPreferredSize());
-		typeField = new JTextField(10);
-		typeField.setMinimumSize(typeField.getPreferredSize());
-		priceField = new JTextField(10);
-		priceField.setMinimumSize(priceField.getPreferredSize());
-		businessIdField = new JTextField(10);
-		businessIdField.setMinimumSize(businessIdField.getPreferredSize());
-		
+		idField = new JTextField(10);
+		idField.setMinimumSize(idField.getPreferredSize());
+		bidField = new JTextField(10);
+		bidField.setMinimumSize(bidField.getPreferredSize());
+
 		// Button
-		JButton addButton = new JButton("Save");
+		JButton addButton = new JButton("Delete");
 
 
 		// Create and populate the panel using GridBag for layout
@@ -123,53 +115,30 @@ public class AddMenuItem {
 		nbhC.gridx = 1;
 		nbhC.insets = new Insets(10, 10, 5, 0);
 		nbhC.anchor = GridBagConstraints.WEST;
-		gb.setConstraints(nameLabel, nbhC);
-		contentPane.add(nameLabel);
+		gb.setConstraints(idLabel, nbhC);
+		contentPane.add(idLabel);
 
 		// name field
 		fieldC.gridy = 3;
 		fieldC.gridx = 1;
 		fieldC.insets = new Insets(5, 10, 10, 10);
-		gb.setConstraints(nameField, fieldC);
-		contentPane.add(nameField);
+		gb.setConstraints(idField, fieldC);
+		contentPane.add(idField);
 
 
 		// type label
 		labelC.gridy = 6;
 		labelC.gridx = 1;
-		gb.setConstraints(typeLabel, labelC);
-		contentPane.add(typeLabel);
+		gb.setConstraints(bidLabel, labelC);
+		contentPane.add(bidLabel);
 
 		// type field
 		fieldC.gridy = 7;
 		fieldC.gridx = 1;
-		gb.setConstraints(typeField, fieldC);
-		contentPane.add(typeField);
+		gb.setConstraints(bidField, fieldC);
+		contentPane.add(bidField);
 
-		// Price label 
-		labelC.gridy = 8;
-		labelC.gridx = 1;
-		gb.setConstraints(priceLabel, labelC);
-		contentPane.add(priceLabel);
-
-		// price field
-		fieldC.gridy = 9;
-		fieldC.gridx = 1;
-		gb.setConstraints(priceField, fieldC);
-		contentPane.add(priceField);
-		
-		// businessid label 
-		labelC.gridy = 10;
-		labelC.gridx = 1;
-		gb.setConstraints(businessIdLabel, labelC);
-		contentPane.add(businessIdLabel);
-
-		// businessid field
-		fieldC.gridy = 11;
-		fieldC.gridx = 1;
-		gb.setConstraints(businessIdField, fieldC);
-		contentPane.add(businessIdField);
-
+	
 
 		// Add button label 
 		buttonC.gridy = 18;
@@ -209,56 +178,48 @@ public class AddMenuItem {
 			public void actionPerformed(ActionEvent e) 
 			{
 				// Retrieve values from the fields
-				String name = nameField.getText();
-				String type = typeField.getText();
-				String price = priceField.getText();
 				
+				try {
+					if (idField.getText().equals("") || bidField.getText().equals("")) {
+						errorMessage.setText("Please complete all fields");
+						return;
+					}
+					else {
 
-				// Construct insertion 
-				String loginQuery = "insert into menuItem values (1, ?, ?, ?, ?)";
-
-				// Attempt insertion
-					try {			
-						checkID();
-					PreparedStatement stmt = con.prepareStatement(loginQuery);
-						float p = Float.parseFloat(price);
+				// Attempt deletion
+				try{
+					String id = idField.getText();
+					int i = Integer.parseInt(id);
 					
-						stmt.setFloat(1, p);
+					checkID();
+					checkMenuItemExists();
+					String Query2 = "delete from MenuItem where menuItemID = ?";
+					PreparedStatement stmt2 = con.prepareStatement(Query2); 
+				
+					stmt2.setInt(1, i);
 						
-
-						if(type.equals("")){
-							stmt.setNull(2, Types.VARCHAR);
-						}
-						else{
-							stmt.setString(2, type);
-						}
+					stmt2.executeQuery();
 						
-						stmt.setString(3, name);	
-					
-						int i = Integer.parseInt(businessID);
-						stmt.setInt(4, i);
-						stmt.executeQuery();
-						
-						PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
-						stmt2.setString(1,username);
-						ResultSet rs = stmt2.executeQuery();
-						ResultSetMetaData rsmd = rs.getMetaData();
-						TableFromResultSet.replaceTable(results, rs, rsmd);
-						
-
-					//addFrame.dispose();
+					PreparedStatement stmt3 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+					stmt3.setString(1,username);
+					ResultSet rs = stmt3.executeQuery();
+					ResultSetMetaData rsmd = rs.getMetaData();
+					TableFromResultSet.replaceTable(results, rs, rsmd);
 
 				}
-				catch (SQLException ex) {
+				catch (SQLException ex){
 					System.out.println("Message: " + ex.getMessage());
-					errorMessage.setText("DENIED: Invalid input");
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					errorMessage.setText("DENIED: " + e1.getMessage());
+					errorMessage.setText("Invalid input");
+				}
+					}
+				}
+				catch (Exception e2) {
+					// TODO: handle exception
+					errorMessage.setText("DENIED: " + e2.getMessage());
 					return;
-				}			
-			}
-		}; addButton.addActionListener(buttonListener);
+				}
+				}
+		};addButton.addActionListener(buttonListener);
 
 		// Resize window
 		addFrame.pack();
@@ -282,14 +243,42 @@ public class AddMenuItem {
 			System.out.println("Message: " + ex.getMessage());
 			System.exit(-1);
 		}
+				}
 
+
+	protected void checkMenuItemExists() throws Exception {
+		// TODO Auto-generated method stub
+	String Query1 = "select menuItemID from MenuItem";
+		try {
+			menuItemID = idField.getText();
+			businessID = bidField.getText();
+			
+			} catch (Exception e) {
+				
+				System.out.println("Invalid format for MenuItemID");
+				System.out.println("Message: " + e.getMessage());
+						
+			}
+		
+		PreparedStatement stmt = con.prepareStatement(Query1);
+		//check if menuitem exists
+		ResultSet rSet = stmt.executeQuery();
+
+		while (rSet.next()) {
+			if(rSet.getString("menuItemID").equals(menuItemID)) {
+				return;
+			}
+		}
+		throw new Exception("No menu items associated with ID entered");
+		
 	}
 
 
-	protected void checkID() throws Exception{
-		
+
+	protected void checkID() throws Exception {
+		// TODO Auto-generated method stub
 		try {
-			businessID = businessIdField.getText(); 
+			businessID = bidField.getText(); 
 			} catch (Exception e) {
 				
 				System.out.println("Invalid format for BusinessID");
@@ -320,8 +309,6 @@ public class AddMenuItem {
 			
 			throw new Exception("BusinessID does not match Owner");
 			
-		
+	}
 	}
 
-
-	}
