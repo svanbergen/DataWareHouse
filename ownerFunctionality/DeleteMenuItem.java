@@ -138,7 +138,7 @@ public class DeleteMenuItem {
 						int i = Integer.parseInt(id);
 						
 						stmt.setInt(1, i);
-				
+						stmt.executeQuery();
 					addFrame.dispose();
 
 				}
