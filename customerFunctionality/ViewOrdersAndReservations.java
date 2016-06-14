@@ -26,7 +26,8 @@ public class ViewOrdersAndReservations {
 		JButton refreshButton = new JButton("Refresh");
 
 		JPanel contentPane = new JPanel();
-		viewFrame.setContentPane(contentPane);
+		JScrollPane scrollContentPane = new JScrollPane(contentPane);
+		viewFrame.setContentPane(scrollContentPane);
 		GridBagLayout gb = new GridBagLayout();
 
 		contentPane.setLayout(gb);
@@ -44,7 +45,7 @@ public class ViewOrdersAndReservations {
 		GridBagConstraints tableC = new GridBagConstraints();
 		tableC.insets = new Insets(0, 0, 0, 0);
 		tableC.fill = GridBagConstraints.NONE;
-		tableC.gridy = 4;
+		tableC.gridy = 5;
 		tableC.gridx = 1;
 		tableC.ipadx = 500;
 		tableC.gridwidth = 3;
@@ -62,13 +63,13 @@ public class ViewOrdersAndReservations {
 		gb.setConstraints(refreshButton, buttonC);
 		contentPane.add(refreshButton);
 
-		buttonC.gridy = 3;
+		buttonC.gridy = 4;
 		gb.setConstraints(orderLabel, buttonC);
 		contentPane.add(orderLabel);
 
 		// Error message
 		JLabel errorMessage = new JLabel(" ");
-		titleC.gridy = 7;
+		titleC.gridy = 3;
 		titleC.gridx = 1;
 		errorMessage.setForeground (Color.red);
 		gb.setConstraints(errorMessage, titleC);
@@ -94,21 +95,21 @@ public class ViewOrdersAndReservations {
 			errorMessage.setText("An unexpected database error occurred");
 		}
 
-		buttonC.gridy = 5;
+		buttonC.gridy = 21;
 		gb.setConstraints(reservationLabel, buttonC);
 		contentPane.add(reservationLabel);
 
 		reservations = new JTable();
 
 		JScrollPane scrollPane2 = new JScrollPane();
-		scrollPane.setViewportView(orders);
+		scrollPane2.setViewportView(reservations);
 
-		tableC.gridy = 6;
+		tableC.gridy = 22;
 		gb.setConstraints(scrollPane2, tableC);
 		contentPane.add(scrollPane2);
 		try{
 
-			PreparedStatement stmt = con.prepareStatement("select * from reservations where customerUsername = ?");
+			PreparedStatement stmt = con.prepareStatement("select * from reservation where customerUsername = ?");
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -138,7 +139,7 @@ public class ViewOrdersAndReservations {
 					errorMessage.setText("An unexpected database error occurred");
 				}
 				try{
-					PreparedStatement stmt = con.prepareStatement("select * from reservations where customerUsername = ?");
+					PreparedStatement stmt = con.prepareStatement("select * from reservation where customerUsername = ?");
 					stmt.setString(1, username);
 					ResultSet rs = stmt.executeQuery();
 					ResultSetMetaData rsmd = rs.getMetaData();
