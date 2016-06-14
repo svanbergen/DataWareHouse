@@ -17,17 +17,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import jdk.internal.dynalink.beans.StaticClass;
+import utility.TableFromResultSet;
 
 
 public class AddMenuItem {
 	private Connection con;
-	private String username;
 	private JFrame addFrame;
 	private String businessID;
 	private String businessName;
+	private JTable results;
 
 
 	private JTextField nameField;
@@ -92,6 +95,17 @@ public class AddMenuItem {
 		fieldC.anchor = GridBagConstraints.WEST;
 		//fieldC.weightx=1.;
 		//fieldC.fill=GridBagConstraints.HORIZONTAL;
+		
+		
+		GridBagConstraints tableC = new GridBagConstraints();
+		tableC.insets = new Insets(0, 0, 0, 0);
+		tableC.fill = GridBagConstraints.NONE;
+		tableC.gridy = 1;
+		tableC.gridx = 3;
+		tableC.ipadx = 500;
+		tableC.gridwidth = 3;
+		tableC.gridheight = 15;
+
 
 		// Set layout and border
 		contentPane.setLayout(gb);
@@ -170,7 +184,25 @@ public class AddMenuItem {
 		errorMessage.setForeground (Color.red);
 		gb.setConstraints(errorMessage, titleC);
 		contentPane.add(errorMessage);
+		
+		results = new JTable();
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(results);
+		scrollPane.setMinimumSize(scrollPane.getPreferredSize());
 
+		gb.setConstraints(scrollPane, tableC);
+		contentPane.add(scrollPane);
+		try{
+			PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+			stmt.setString(1,username);
+			ResultSet rs = stmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			TableFromResultSet.replaceTable(results, rs, rsmd);
+		}
+		catch(SQLException ex){
+			System.out.println("Message: " + ex.getMessage());
+			errorMessage.setText("Unexpected database error");
+		}
 		// Anonymous class to listen to add business button
 		ActionListener buttonListener = new ActionListener()
 		{
@@ -202,11 +234,19 @@ public class AddMenuItem {
 						}
 						
 						stmt.setString(3, name);	
+					
 						int i = Integer.parseInt(businessID);
 						stmt.setInt(4, i);
 						stmt.executeQuery();
+						
+						PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+						stmt2.setString(1,username);
+						ResultSet rs = stmt2.executeQuery();
+						ResultSetMetaData rsmd = rs.getMetaData();
+						TableFromResultSet.replaceTable(results, rs, rsmd);
+						
 
-					addFrame.dispose();
+					//addFrame.dispose();
 
 				}
 				catch (SQLException ex) {
@@ -257,7 +297,7 @@ public class AddMenuItem {
 						
 			}
 			
-			System.out.print("BusinessID parsed is: " + businessID);
+			//System.out.print("BusinessID parsed is: " + businessID);
 			
 			PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
 			pstmd.setString(1, businessID);
@@ -280,8 +320,6 @@ public class AddMenuItem {
 			
 			throw new Exception("BusinessID does not match Owner");
 			
-		
-		
 		
 	}
 
