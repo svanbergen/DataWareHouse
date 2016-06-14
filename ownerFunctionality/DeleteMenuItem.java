@@ -21,9 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import org.omg.CORBA.portable.IDLEntity;
-
-import jdk.internal.dynalink.beans.StaticClass;
 import utility.TableFromResultSet;
 
 
