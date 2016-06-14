@@ -164,7 +164,7 @@ CREATE TABLE BigSpenders (
 CREATE OR REPLACE TRIGGER spender_trig
  AFTER UPDATE ON Orders
  FOR EACH ROW
- 		WHEN (new.price > 100)
+ 		WHEN (new.price > 100 and new.timeMade is not null)
 		BEGIN
 			INSERT INTO BigSpenders values(:new.customerUsername, :new.orderid, :new.price, :new.businessid);
 		EXCEPTION
@@ -355,6 +355,15 @@ insert into MenuItem
 	
 insert into MenuItem
 	values(3, 16.00, 'Entree', 'Beef Souvlaki', 3);
+
+insert into MenuItem
+	values(3, 30.00, 'Entree', 'Lobster', 3);
+
+	insert into MenuItem
+	values(3, 70.00, 'Dessert', 'Souffle', 3);
+
+	insert into MenuItem
+	values(2, 16.00, 'Drink', 'Coffee', 3);
 
 insert into MenuItem
 	values(4, 8.99, 'Appetizer', 'Seared Scallops', 2);
