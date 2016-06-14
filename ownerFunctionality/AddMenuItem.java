@@ -19,11 +19,15 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import jdk.internal.dynalink.beans.StaticClass;
+
 
 public class AddMenuItem {
 	private Connection con;
 	private String username;
 	private JFrame addFrame;
+	private String businessID;
+	private String businessName;
 
 
 	private JTextField nameField;
@@ -35,7 +39,7 @@ public class AddMenuItem {
 	// Constructor: builds the functionality window, handles the button press
 	public AddMenuItem(Connection con, String username){
 		this.con = con;
-		this.username = username;
+		this.businessName = username;
 
 		// /initialize parts of frame
 		addFrame = new JFrame("Add Menu Item");
@@ -153,7 +157,6 @@ public class AddMenuItem {
 		contentPane.add(businessIdField);
 
 
-
 		// Add button label 
 		buttonC.gridy = 18;
 		buttonC.gridx = 1;
@@ -177,13 +180,14 @@ public class AddMenuItem {
 				String name = nameField.getText();
 				String type = typeField.getText();
 				String price = priceField.getText();
-				String businessId = businessIdField.getText();
+				
 
 				// Construct insertion 
 				String loginQuery = "insert into menuItem values (1, ?, ?, ?, ?)";
 
 				// Attempt insertion
-				try{
+					try {			
+						checkID();
 					PreparedStatement stmt = con.prepareStatement(loginQuery);
 						float p = Float.parseFloat(price);
 					
@@ -198,23 +202,23 @@ public class AddMenuItem {
 						}
 						
 						stmt.setString(3, name);	
-						
-						stmt.setString(4, businessId);
+						int i = Integer.parseInt(businessID);
+						stmt.setInt(4, i);
 						stmt.executeQuery();
 
 					addFrame.dispose();
 
 				}
-				catch (SQLException ex)
-				{
+				catch (SQLException ex) {
 					System.out.println("Message: " + ex.getMessage());
-					errorMessage.setText("Invalid input");
-				}	
-
-
+					errorMessage.setText("DENIED: Invalid input");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					errorMessage.setText("DENIED: " + e1.getMessage());
+					return;
+				}			
 			}
-		};
-		addButton.addActionListener(buttonListener);
+		}; addButton.addActionListener(buttonListener);
 
 		// Resize window
 		addFrame.pack();
@@ -239,6 +243,46 @@ public class AddMenuItem {
 			System.exit(-1);
 		}
 
+	}
+
+
+	protected void checkID() throws Exception{
+		
+		try {
+			businessID = businessIdField.getText(); 
+			} catch (Exception e) {
+				
+				System.out.println("Invalid format for BusinessID");
+				System.out.println("Message: " + e.getMessage());
+						
+			}
+			
+			System.out.print("BusinessID parsed is: " + businessID);
+			
+			PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
+			pstmd.setString(1, businessID);
+			
+			
+			ResultSet rs = pstmd.executeQuery();
+			
+			// Check if there is an owner attached to the id
+			
+			// if there isn't any, return false
+			if (!rs.next()) {
+				throw new Exception("No business associated with ID entered");
+				
+			}
+			
+				
+			if (rs.getString("ownerUserName").equals(businessName)) {
+				return;
+			}
+			
+			throw new Exception("BusinessID does not match Owner");
+			
+		
+		
+		
 	}
 
 
