@@ -17,7 +17,6 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 //import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
 
 import ownerFunctionality.*;
-import ownerFunctionality.MenuItem;
 import utility.TableFromResultSet;
 
 public class OwnerMenu {
