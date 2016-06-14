@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.sql.*;
 import utility.TableFromResultSet;
 
+// Class to view orders and reservations
 public class ViewOrdersAndReservations {
 	Connection con;
 	String username;

@@ -6,6 +6,7 @@ import java.sql.*;
 
 import javax.swing.*;
 
+// Class to write a review about a business
 public class WriteReview {
 
 	String username;

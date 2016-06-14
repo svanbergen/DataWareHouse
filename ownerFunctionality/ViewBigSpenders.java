@@ -1,40 +1,30 @@
 package ownerFunctionality;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.awt.*;
+import java.sql.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to display "big spenders" - customers that have made orders for >100 dollars
 public class ViewBigSpenders {
-	
+
 	Connection con;
 	String username;
 	JFrame bigSpenderFrame;
-	JTable reviews;
+	JTable spenders;
 
 	public ViewBigSpenders(Connection con, String username){
 		this.con = con;
 		this.username = username;
 
+		// Create frame
 		bigSpenderFrame = new JFrame("Big Spenders at Your Businesses");
+		// Create label
 		JLabel spenderPage = new JLabel("Big Spenders at Your Businesses");
 
+		// Create content panel and define layout
 		JPanel contentPane = new JPanel();
 		bigSpenderFrame.setContentPane(contentPane);
 		GridBagLayout gb = new GridBagLayout();
@@ -42,6 +32,7 @@ public class ViewBigSpenders {
 		contentPane.setLayout(gb);
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+		// Constraint sets
 		GridBagConstraints buttonC = new GridBagConstraints();
 		buttonC.insets = new Insets(0, 0, 0, 10);
 		buttonC.ipadx = 50;
@@ -64,10 +55,11 @@ public class ViewBigSpenders {
 		gb.setConstraints(spenderPage, buttonC);
 		contentPane.add(spenderPage);
 
-		reviews = new JTable();
+		// Create table
+		spenders = new JTable();
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(reviews);
+		scrollPane.setViewportView(spenders);
 
 		gb.setConstraints(scrollPane, tableC);
 		contentPane.add(scrollPane);
@@ -77,7 +69,7 @@ public class ViewBigSpenders {
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
-			TableFromResultSet.replaceTable(reviews, rs, rsmd);
+			TableFromResultSet.replaceTable(spenders, rs, rsmd);
 		}
 		catch(SQLException ex){
 			System.out.println("Message: " + ex.getMessage());

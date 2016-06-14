@@ -2,54 +2,49 @@ package ownerFunctionality;
 
 import java.sql.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 import javax.swing.*;
 
-import utility.*;
-
-
+// Class to update a business
 public class UpdateBusiness {
-	
+
 	JFrame mainframe; 
-	
+
 	private Connection connection;
 	private String businessName;
 	private String businessID;
-	
+
 	private JTextField businessIDField;
 	private JTextField websiteField;
 	private JTextField typeField;
-	
+
 	private JTextField PhoneField1;
 	private JTextField PhoneField2;
 	private JTextField PhoneField3;
-	
+
 	// Everything else is a field except checkbox
 	private JCheckBox m,t,w,r,f,s,u;
-	
+
 	private JTextField startHourField;
 	private JTextField startMinField;
 	private JTextField finHourField;
 	private JTextField finMinField;
-	
+
 	private JTextField unitField;
 	private JTextField addressField;
 	private JTextField postalCodeField;
 	private JTextField cityField;
 	private JTextField provinceField;
-	
+
 	public UpdateBusiness(String username, Connection con) {
-		
+
 		// initialize global variables
 		this.connection = con;
 		this.businessName = username;
-		
+
 		mainframe = new JFrame("Update Your Business");
-		
+
 		// initialize Textfields
 		businessIDField = new JTextField(10);
 		businessIDField.setMinimumSize(businessIDField.getPreferredSize());
@@ -57,14 +52,14 @@ public class UpdateBusiness {
 		websiteField.setMinimumSize(websiteField.getPreferredSize());
 		typeField = new JTextField(10);
 		typeField.setMinimumSize(typeField.getPreferredSize());
-		
+
 		PhoneField1 = new JTextField(10);
 		PhoneField1.setMinimumSize(PhoneField1.getMaximumSize());
 		PhoneField2 = new JTextField(10);
 		PhoneField2.setMinimumSize(PhoneField2.getPreferredSize());
 		PhoneField3 = new JTextField(10);
 		PhoneField3.setMinimumSize(PhoneField3.getPreferredSize());
-		
+
 		startHourField = new JTextField(10);
 		startHourField.setMinimumSize(startHourField.getPreferredSize());
 		startMinField = new JTextField(10);
@@ -73,7 +68,7 @@ public class UpdateBusiness {
 		finHourField.setMinimumSize(finHourField.getPreferredSize());
 		finMinField = new JTextField(10);
 		finMinField.setMinimumSize(finMinField.getPreferredSize());
-		
+
 		unitField = new JTextField(10);
 		unitField.setMinimumSize(unitField.getPreferredSize());
 		addressField = new JTextField(10);
@@ -84,7 +79,7 @@ public class UpdateBusiness {
 		cityField.setMinimumSize(cityField.getPreferredSize());
 		provinceField = new JTextField(10);
 		provinceField.setMinimumSize(provinceField.getPreferredSize());
-		
+
 		// Check boxes
 		m = new JCheckBox();
 		t = new JCheckBox();
@@ -93,88 +88,84 @@ public class UpdateBusiness {
 		f = new JCheckBox();
 		s = new JCheckBox();
 		u = new JCheckBox();
-		
+
 		// Labels
 		JLabel titleLabel = new JLabel("Please enter new Business Information");
 		JLabel businessIDLabel = new JLabel("BusinessID: ");
 		JLabel websiteLabel = new JLabel("Website: ");
 		JLabel typeLabel = new JLabel("Type: ");
-		
+
 		JLabel phoneLabel = new JLabel("Phone Number: ");
-		
+
 		JLabel operationLabel = new JLabel("Days of Operation: ");
 		JLabel startLabel = new JLabel("Opens by: ");
 		JLabel finiLabel = new JLabel("Closes after: ");
 
 		JLabel locationLabel = new JLabel("Location");
-		
+
 		JLabel unitLabel = new JLabel("Unit: ");
 		JLabel addressLabel = new JLabel("Address: ");
 		JLabel cityLabel = new JLabel("City: ");
 		JLabel provLabel = new JLabel("Province: ");
 		JLabel postalLabel = new JLabel("Postal Code: ");
-		
+
 		// Button
 		JButton searchButton = new JButton("Search");
-		
+
 		// Panel
-		
 		JPanel contentpane = new JPanel();
 		contentpane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		
+
 		// only time Scroll Content Pane is used
 		JScrollPane scrollContentPane = new JScrollPane(contentpane);
 		mainframe.setContentPane(scrollContentPane);
-		
-		
+
 		// Constraints
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(5, 5, 5, 5);
-		//constraints.anchor = GridBagConstraints.WEST;
-		
+		constraints.anchor = GridBagConstraints.WEST;
+
 		// Set content pane
 		contentpane.setLayout(gb);
-		
+
 		// Placing Components
-		
-		
+
 		// Title Label
 		constraints.gridy = 1;
 		gb.setConstraints(titleLabel, constraints);
 		contentpane.add(titleLabel);
-		
+
 		// BusinessID Label
 		constraints.gridy = 2;
 		gb.setConstraints(businessIDLabel, constraints);
 		contentpane.add(businessIDLabel);
-		
+
 		// BusinessID field
 		constraints.gridy = 3;
 		gb.setConstraints(businessIDField, constraints);
 		contentpane.add(businessIDField);
-		
+
 		// Website Label
 		constraints.gridy = 4;
 		gb.setConstraints(websiteLabel, constraints);
 		contentpane.add(websiteLabel);
-		
+
 		// Website field
 		constraints.gridy = 5;
 		gb.setConstraints(websiteField, constraints);
 		contentpane.add(websiteField);
-		
+
 		// Type Label
 		constraints.gridy = 6;
 		gb.setConstraints(typeLabel, constraints);
 		contentpane.add(typeLabel);
-		
-		
+
 		// Type Field
 		constraints.gridy = 7;
 		gb.setConstraints(typeField, constraints);
 		contentpane.add(typeField);
-		
+
 		// Phone Label
 		constraints.gridy = 8;
 		gb.setConstraints(phoneLabel, constraints);
@@ -185,80 +176,80 @@ public class UpdateBusiness {
 		JPanel phonePanel = createPhonePanel();
 		gb.setConstraints(phonePanel, constraints);
 		contentpane.add(phonePanel);
-		
+
 		// Operation Label
 		constraints.gridy = 10;
 		gb.setConstraints(operationLabel, constraints);
 		contentpane.add(operationLabel);
-		
+
 		// Days of Operation checkboxes/panel
 		constraints.gridy = 11;
 		JPanel dayBoxPanel = createDayPanel();
 		gb.setConstraints(dayBoxPanel, constraints);
 		contentpane.add(dayBoxPanel);
-		
+
 		// Open By Label
 		constraints.gridy = 12;
 		gb.setConstraints(startLabel, constraints);
 		contentpane.add(startLabel);
-		
+
 		// Open time fields
 		JPanel openPanel = createOpeningPanel();
 		constraints.gridy = 13;
 		gb.setConstraints(openPanel, constraints);
 		contentpane.add(openPanel);
-		
+
 		// Close by Label
 		constraints.gridy = 14;
 		gb.setConstraints(finiLabel, constraints);
 		contentpane.add(finiLabel);
-		
+
 		// Close time fields
 		JPanel closePanel = createClosingPanel();
 		constraints.gridy = 15;
 		gb.setConstraints(closePanel, constraints);
 		contentpane.add(closePanel);
-		
+
 		// Location Label
 		constraints.gridy = 16;
 		gb.setConstraints(locationLabel, constraints);
 		contentpane.add(locationLabel);
-		
+
 		// Unit Label
 		constraints.gridy = 17;
 		gb.setConstraints(unitLabel, constraints);
 		contentpane.add(unitLabel);
-		
+
 		// Unit Field
 		constraints.gridy = 18;
 		gb.setConstraints(unitField, constraints);
 		contentpane.add(unitField);
-		
+
 		// Street Label
 		constraints.gridy = 19;
 		gb.setConstraints(addressLabel, constraints);
 		contentpane.add(addressLabel);
-		
+
 		// Street field
 		constraints.gridy = 20;
 		gb.setConstraints(addressField, constraints);
 		contentpane.add(addressField);
-		
+
 		// City Label
 		constraints.gridy = 21;
 		gb.setConstraints(cityLabel, constraints);
 		contentpane.add(cityLabel);
-		
+
 		// City fields
 		constraints.gridy = 22;
 		gb.setConstraints(cityField, constraints);
 		contentpane.add(cityField);
-		
+
 		// Prov Label
 		constraints.gridy = 23;
 		gb.setConstraints(provLabel, constraints);
 		contentpane.add(provLabel);
-		
+
 		// Prov field
 		constraints.gridy = 24;
 		gb.setConstraints(provinceField, constraints);
@@ -268,38 +259,32 @@ public class UpdateBusiness {
 		constraints.gridy = 25;
 		gb.setConstraints(postalLabel, constraints);
 		contentpane.add(postalLabel);
-		
+
 		// Postal Field
 		constraints.gridy = 26;
 		gb.setConstraints(postalCodeField, constraints);
 		contentpane.add(postalCodeField);
-		
-		
+
 		// Error Message
 		JLabel errorMessage = new JLabel(" ");
 		errorMessage.setForeground (Color.red);
 		constraints.gridy = 27;
 		gb.setConstraints(errorMessage, constraints);
 		contentpane.add(errorMessage);
-		
+
 		// Search Button
 		constraints.gridy = 29;
 		gb.setConstraints(searchButton, constraints);
 		contentpane.add(searchButton);
-		
+
 		// End of GUI
-		
+
 		// Action Listener for search button
-		
 		ActionListener searchListener = new ActionListener() {
-			
-			
+
 			public void actionPerformed(ActionEvent e) {
-				
+
 				// parse data
-				
-				
-				
 				try {
 					checkID();				
 				} catch (Exception ex) {
@@ -307,32 +292,32 @@ public class UpdateBusiness {
 					return;
 				}
 				// generate query
-				
-				
+
+
 				try {
-					
+
 					// Update statement head, update every field that is not empty by string append.
 					String statement = "update business set business.ownerUsername = " + "'" + businessName + "'";
-					
+
 					// Website
-					
+
 					String website = websiteField.getText();
-					
+
 					if (!(website.equals(""))) {
 						statement = statement.concat("business.website = " + "'" + website + "'" );
 					}
-					
+
 					String type = typeField.getText();
-					
+
 					if (!(type.equals(""))) {
 						statement = statement.concat(", business.type = " + "'" + type + "'");
 					}
-									
+
 					// Phone
 					String phone1 = PhoneField1.getText();
 					String phone2 = PhoneField2.getText();
 					String phone3 = PhoneField3.getText();
-					
+
 					// Check if Phone number is correct format or not
 					if(!(phone1.equals("") && phone2.equals("") && phone3.equals(""))){
 						String phone = phone1.concat("-").concat(phone2).concat("-").concat(phone3);
@@ -344,10 +329,10 @@ public class UpdateBusiness {
 							statement = statement.concat(", business.phonenum = " + "'" + phone + "'");
 						}
 					}
-					
+
 					// Days
 					String days = "";
-					
+
 					// Determine value of days
 					if(m.isSelected()){
 						days = days.concat("M");
@@ -373,13 +358,13 @@ public class UpdateBusiness {
 					if (!(days.equals(""))) {
 						statement = statement.concat(", business.dayOfOperation = " + "'" + days + "'");
 					}
-					
+
 					// Open / Close 
 					String startHour = startHourField.getText();
 					String startMin = startMinField.getText();
 					String finHour = finHourField.getText();
 					String finMin = finMinField.getText();
-					
+
 					if(!startHour.equals("") || !startMin.equals("")){
 						if(!(startHour.matches("[0-9]+") && startMin.matches("[0-9]+"))){
 							errorMessage.setText("Invalid time");
@@ -400,7 +385,7 @@ public class UpdateBusiness {
 							}
 						}
 					}
-					
+
 					if(!finHour.equals("") || !finMin.equals("")){
 						if(!(finHour.matches("[0-9]+") && finMin.matches("[0-9]+"))){
 							errorMessage.setText("Invalid time");
@@ -412,7 +397,7 @@ public class UpdateBusiness {
 							int finTime;
 							if(fH < 24 && fH >= 0 && fM >=0 && fM < 60){
 								finTime = fH*100 + fM;
-								
+
 								statement = statement.concat(", business.finishtime = " + finTime);
 							}
 							else{
@@ -421,16 +406,16 @@ public class UpdateBusiness {
 							}
 						}
 					}
-					
+
 					statement = statement.concat(" where business.ownerUsername = " + "'" + businessName + "'");
 					System.out.println(statement);
-					
+
 					// Make query for business
 					PreparedStatement preparedStatement = connection.prepareStatement(statement);
-					
+
 					int updateResult = preparedStatement.executeUpdate();
 					System.out.println("This many rows are updated: " + updateResult);
-					
+
 					// Unit - Null
 					// Street
 					// City
@@ -441,10 +426,10 @@ public class UpdateBusiness {
 				} catch (Exception exception) {
 					errorMessage.setText("Business Parsing probably went wrong");
 				}
-				
-				
+
+
 				try {
-					
+
 					String postalCode = postalCodeField.getText();
 					String city = cityField.getText();
 					String province = provinceField.getText();
@@ -523,9 +508,9 @@ public class UpdateBusiness {
 						else{
 							statement1 = statement1.concat("' and unitnum = '").concat(unit).concat("'");
 						}
-						
+
 						System.out.println(statement1);
-						
+
 						PreparedStatement getidstmt = con.prepareStatement(statement1);
 						ResultSet locid = getidstmt.executeQuery();
 						locid.next();
@@ -537,66 +522,44 @@ public class UpdateBusiness {
 						updateStmt.setString(1, businessID);
 						updateStmt.setInt(2,locationid);
 						updateStmt.executeUpdate();
-						
-						
-						
-						
-						
 					}
-					
-					
-					
-				} catch (SQLException e1) {
+				} 
+				catch (SQLException e1) {
 					errorMessage.setText(e1.getMessage());
-				} catch (Exception exception) {
+				} 
+				catch (Exception exception) {
 					errorMessage.setText("Location Parsing probably went wrong");
 				} 
-				
-				// update
-				
+
 				// show message
-				
-				
 				errorMessage.setText("Update Accepted");
-				
 			}
-		}; searchButton.addActionListener(searchListener);
-		
-		
-		
-		
-		
+		}; 
+		searchButton.addActionListener(searchListener);
+
 		// Window stuff
 		mainframe.pack();
 		mainframe.setVisible(true);
-		
-		
+
+
 	}
-	
+
 	private void checkID() throws Exception {
-		
-
-		
 		try {
-
 			businessID = businessIDField.getText(); 
 			if(businessID.equals("")) {
 				throw new Exception("Must enter BusinessID");
 			}
-			
-		} catch (Exception e) {
 
+		} 
+		catch (Exception e) {
 			System.out.println("BusinessID was not the correct format");
 			System.out.println("Message: " + e.getMessage());
-
 		}
-		
-		
 		//System.out.println("BusinessID parsed is: " + businessID);
 
 		PreparedStatement pstmd = connection.prepareStatement("select ownerUsername from business where business.businessid = ?");
 		pstmd.setString(1, businessID);
-
 
 		ResultSet rs = pstmd.executeQuery();
 
@@ -605,9 +568,7 @@ public class UpdateBusiness {
 		// if there isn't any, return false
 		if (!rs.next()) {
 			throw new Exception("No Business Matching ID");
-
 		}
-
 
 		if (rs.getString("ownerUserName").equals(businessName)) {
 			return;
@@ -618,6 +579,7 @@ public class UpdateBusiness {
 
 	}
 
+	// Method to create phone panel
 	JPanel createPhonePanel(){
 		JPanel phonePanel = new JPanel();
 
@@ -645,6 +607,7 @@ public class UpdateBusiness {
 		return phonePanel;
 	}
 
+	// Method to create day panel
 	JPanel createDayPanel(){
 		JPanel dayPanel = new JPanel();
 
@@ -710,6 +673,7 @@ public class UpdateBusiness {
 		return dayPanel;
 	}
 
+	// Method to create opening time panel
 	JPanel createOpeningPanel(){
 		JPanel openPanel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
@@ -740,6 +704,7 @@ public class UpdateBusiness {
 		return openPanel;
 	}
 
+	// Method to create closing time panel
 	JPanel createClosingPanel(){
 		JPanel closePanel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();

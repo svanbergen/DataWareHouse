@@ -6,32 +6,29 @@ import java.sql.*;
 
 import javax.swing.*;
 
+// Class to delete a business
 public class DeleteBusiness {
-	private Connection con;
-	private String username;
 	private JFrame delFrame;
 
 	private JTextField iDField;
 
 	// Constructor: builds the functionality window, handles the button press
 	public DeleteBusiness(Connection con, String username){
-		this.con = con;
-		this.username = username;
 
-		// Definie/initialize parts of frame
+		// Define/initialize parts of frame
 		delFrame = new JFrame("Delete Business");
 		// Labels
 		JLabel deleteLabel = new JLabel("Delete a Business");
 		JLabel warningLabel = new JLabel("WARNING: All information about a deleted business will be lost");
 		JLabel idLabel = new JLabel("Enter id: ");
-		
+
 		// Text fields
 		// Note: setMinimumSize prevents the fields from resizing on update
 		iDField = new JTextField(10);
 		iDField.setMinimumSize(iDField.getPreferredSize());
-		
+
 		JButton deleteButton = new JButton("Confirm Delete");
-		
+
 		// Create and populate the panel using GridBag for layout
 		JPanel contentPane = new JPanel();
 		delFrame.setContentPane(contentPane);
@@ -65,7 +62,7 @@ public class DeleteBusiness {
 		titleC.gridy = 1;
 		gb.setConstraints(deleteLabel, titleC);
 		contentPane.add(deleteLabel);
-		
+
 		titleC.gridy = 2;
 		gb.setConstraints(warningLabel, titleC);
 		contentPane.add(warningLabel);
@@ -92,11 +89,13 @@ public class DeleteBusiness {
 		gb.setConstraints(errorMessage, titleC);
 		contentPane.add(errorMessage);
 
+		// Button listener
 		ActionListener submitButtonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
 				try{
+					// Check that user owns business
 					String id = iDField.getText();
 					PreparedStatement check = con.prepareStatement("select ownerUsername from business where businessid = ?");
 					check.setInt(1, Integer.parseInt(id));
@@ -106,17 +105,18 @@ public class DeleteBusiness {
 						errorMessage.setText("You do not own this business");
 						return;
 					}
-					
+
+					// Delete business
 					check = con.prepareStatement("delete from business where businessid = ?");
 					check.setInt(1, Integer.parseInt(id));
 					checkRS = check.executeQuery();
-					
+
 					delFrame.dispose();
-					}
-					catch(SQLException ex){
-						System.out.println("Message: " + ex.getMessage());
-						errorMessage.setText("Unexpected database error");
-					}
+				}
+				catch(SQLException ex){
+					System.out.println("Message: " + ex.getMessage());
+					errorMessage.setText("Unexpected database error");
+				}
 			}
 		};
 		deleteButton.addActionListener(submitButtonListener);
@@ -143,6 +143,5 @@ public class DeleteBusiness {
 			System.out.println("Message: " + ex.getMessage());
 			System.exit(-1);
 		}
-
 	}
 }

@@ -8,6 +8,8 @@ import javax.swing.*;
 import ownerFunctionality.*;
 import utility.TableFromResultSet;
 
+// Class to provide owners access to all functionality
+// Also displays all businesses for an owner
 public class OwnerMenu {
 	Connection con;
 	String username;

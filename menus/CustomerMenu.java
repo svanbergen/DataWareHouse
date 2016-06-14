@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import customerFunctionality.*;
 
+// Class to provide customers access to all functionality
 public class CustomerMenu {
 	Connection con;
 	String username;

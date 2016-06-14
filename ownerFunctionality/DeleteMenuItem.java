@@ -1,29 +1,14 @@
 package ownerFunctionality;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.sql.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import utility.TableFromResultSet;
 
-
+// Class to delete a menu item
 public class DeleteMenuItem {
 	private Connection con;
 	private JFrame addFrame;
@@ -35,21 +20,19 @@ public class DeleteMenuItem {
 	private JTextField bidField;
 	private JTable results;
 
-
-
 	// Constructor: builds the functionality window, handles the button press
 	public DeleteMenuItem(Connection con, String username){
 		this.con = con;
 		this.businessName = username;
 
-		// /initialize parts of frame
+		// initialize parts of frame
 		addFrame = new JFrame("Delete Menu Item");
 		// Labels
 		JLabel addLabel = new JLabel("Delete Menu Item");
 		JLabel idLabel = new JLabel("Enter Menu Item ID: ");
 		JLabel bidLabel = new JLabel("Your Business ID: ");
-		
-		
+
+
 		// Text fields
 		// Note: setMinimumSize prevents the fields from resizing on update
 
@@ -60,7 +43,6 @@ public class DeleteMenuItem {
 
 		// Button
 		JButton addButton = new JButton("Delete");
-
 
 		// Create and populate the panel using GridBag for layout
 		JPanel contentPane = new JPanel();
@@ -87,8 +69,8 @@ public class DeleteMenuItem {
 		fieldC.anchor = GridBagConstraints.WEST;
 		//fieldC.weightx=1.;
 		//fieldC.fill=GridBagConstraints.HORIZONTAL;
-		
-		
+
+
 		GridBagConstraints tableC = new GridBagConstraints();
 		tableC.insets = new Insets(0, 0, 0, 0);
 		tableC.fill = GridBagConstraints.NONE;
@@ -138,8 +120,6 @@ public class DeleteMenuItem {
 		gb.setConstraints(bidField, fieldC);
 		contentPane.add(bidField);
 
-	
-
 		// Add button label 
 		buttonC.gridy = 18;
 		buttonC.gridx = 1;
@@ -153,7 +133,7 @@ public class DeleteMenuItem {
 		errorMessage.setForeground (Color.red);
 		gb.setConstraints(errorMessage, titleC);
 		contentPane.add(errorMessage);
-		
+
 		results = new JTable();
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(results);
@@ -162,7 +142,7 @@ public class DeleteMenuItem {
 		gb.setConstraints(scrollPane, tableC);
 		contentPane.add(scrollPane);
 		try{
-			PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+			PreparedStatement stmt = con.prepareStatement("select menuItem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 			stmt.setString(1,username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -172,13 +152,13 @@ public class DeleteMenuItem {
 			System.out.println("Message: " + ex.getMessage());
 			errorMessage.setText("Unexpected database error");
 		}
-		// Anonymous class to listen to add business button
+		// Anonymous class to listen to delete button
 		ActionListener buttonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
 				// Retrieve values from the fields
-				
+
 				try {
 					if (idField.getText().equals("") || bidField.getText().equals("")) {
 						errorMessage.setText("Please complete all fields");
@@ -186,39 +166,38 @@ public class DeleteMenuItem {
 					}
 					else {
 
-				// Attempt deletion
-				try{
-					String id = idField.getText();
-					int i = Integer.parseInt(id);
-					
-					checkID();
-					checkMenuItemExists();
-					String Query2 = "delete from MenuItem where menuItemID = ?";
-					PreparedStatement stmt2 = con.prepareStatement(Query2); 
-				
-					stmt2.setInt(1, i);
-						
-					stmt2.executeQuery();
-						
-					PreparedStatement stmt3 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
-					stmt3.setString(1,username);
-					ResultSet rs = stmt3.executeQuery();
-					ResultSetMetaData rsmd = rs.getMetaData();
-					TableFromResultSet.replaceTable(results, rs, rsmd);
+						// Attempt deletion
+						try{
+							String id = idField.getText();
+							int i = Integer.parseInt(id);
 
-				}
-				catch (SQLException ex){
-					System.out.println("Message: " + ex.getMessage());
-					errorMessage.setText("Invalid input");
-				}
+							checkID();
+							checkMenuItemExists();
+							String Query2 = "delete from MenuItem where menuItemID = ?";
+							PreparedStatement stmt2 = con.prepareStatement(Query2); 
+
+							stmt2.setInt(1, i);
+
+							stmt2.executeQuery();
+
+							PreparedStatement stmt3 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+							stmt3.setString(1,username);
+							ResultSet rs = stmt3.executeQuery();
+							ResultSetMetaData rsmd = rs.getMetaData();
+							TableFromResultSet.replaceTable(results, rs, rsmd);
+
+						}
+						catch (SQLException ex){
+							System.out.println("Message: " + ex.getMessage());
+							errorMessage.setText("Invalid input");
+						}
 					}
 				}
 				catch (Exception e2) {
-					// TODO: handle exception
 					errorMessage.setText("DENIED: " + e2.getMessage());
 					return;
 				}
-				}
+			}
 		};addButton.addActionListener(buttonListener);
 
 		// Resize window
@@ -243,23 +222,23 @@ public class DeleteMenuItem {
 			System.out.println("Message: " + ex.getMessage());
 			System.exit(-1);
 		}
-				}
+	}
 
 
+	// Method to check that item exists
 	protected void checkMenuItemExists() throws Exception {
-		// TODO Auto-generated method stub
-	String Query1 = "select menuItemID from MenuItem";
+		String Query1 = "select menuItemID from MenuItem";
 		try {
 			menuItemID = idField.getText();
 			businessID = bidField.getText();
-			
-			} catch (Exception e) {
-				
-				System.out.println("Invalid format for MenuItemID");
-				System.out.println("Message: " + e.getMessage());
-						
-			}
-		
+
+		} catch (Exception e) {
+
+			System.out.println("Invalid format for MenuItemID");
+			System.out.println("Message: " + e.getMessage());
+
+		}
+
 		PreparedStatement stmt = con.prepareStatement(Query1);
 		//check if menuitem exists
 		ResultSet rSet = stmt.executeQuery();
@@ -270,45 +249,43 @@ public class DeleteMenuItem {
 			}
 		}
 		throw new Exception("No menu items associated with ID entered");
-		
+
 	}
 
 
 
+	// Method to check that id is valid and matches the owner
 	protected void checkID() throws Exception {
-		// TODO Auto-generated method stub
 		try {
 			businessID = bidField.getText(); 
-			} catch (Exception e) {
-				
-				System.out.println("Invalid format for BusinessID");
-				System.out.println("Message: " + e.getMessage());
-						
-			}
-			
-			//System.out.print("BusinessID parsed is: " + businessID);
-			
-			PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
-			pstmd.setString(1, businessID);
-			
-			
-			ResultSet rs = pstmd.executeQuery();
-			
-			// Check if there is an owner attached to the id
-			
-			// if there isn't any, return false
-			if (!rs.next()) {
-				throw new Exception("No business associated with ID entered");
-				
-			}
-			
-				
-			if (rs.getString("ownerUserName").equals(businessName)) {
-				return;
-			}
-			
-			throw new Exception("BusinessID does not match Owner");
-			
+		} catch (Exception e) {
+
+			System.out.println("Invalid format for BusinessID");
+			System.out.println("Message: " + e.getMessage());
+
+		}
+
+		//System.out.print("BusinessID parsed is: " + businessID);
+
+		PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
+		pstmd.setString(1, businessID);
+
+
+		ResultSet rs = pstmd.executeQuery();
+
+		// Check if there is an owner attached to the id
+
+		// if there isn't any, return false
+		if (!rs.next()) {
+			throw new Exception("No business associated with ID entered");
+
+		}
+
+		if (rs.getString("ownerUserName").equals(businessName)) {
+			return;
+		}
+
+		throw new Exception("BusinessID does not match Owner");		
 	}
-	}
+}
 

@@ -7,19 +7,19 @@ import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-// Code to generate a JTable from a ResultSet
+// Class to generate a JTable from a ResultSet
 public class TableFromResultSet {
 	public static JTable convert(ResultSet rs, ResultSetMetaData rsmd){
 		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		Vector<String> names = new Vector<String>();
-		
+
 		try{
 			int numCols = rsmd.getColumnCount();
 			for (int i = 0; i < numCols; i++)
 			{ 
 				names.add(rsmd.getColumnName(i+1));
 			}
-			
+
 			while(rs.next())
 			{
 				Vector<String> d = new Vector<String>();
@@ -36,18 +36,18 @@ public class TableFromResultSet {
 		}
 		return new JTable(data,names);
 	}
-	
+
 	public static void replaceTable(JTable table, ResultSet rs, ResultSetMetaData rsmd){
 		Vector<Vector<String>> data = new Vector<Vector<String>>();
 		Vector<String> names = new Vector<String>();
-		
+
 		try{
 			int numCols = rsmd.getColumnCount();
 			for (int i = 0; i < numCols; i++)
 			{ 
 				names.add(rsmd.getColumnName(i+1));
 			}
-			
+
 			while(rs.next())
 			{
 				Vector<String> d = new Vector<String>();
@@ -62,7 +62,7 @@ public class TableFromResultSet {
 		{
 			System.out.println("Message: " + ex.getMessage());
 		}
-		
+
 		DefaultTableModel model = new DefaultTableModel(data,names);
 		table.setModel(model);
 		model.fireTableDataChanged();

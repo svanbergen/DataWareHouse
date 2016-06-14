@@ -20,6 +20,7 @@ import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to update customer information (phone number, location)
 public class UpdateCustomer {
 	Connection con;
 	private JFrame updateFrame;

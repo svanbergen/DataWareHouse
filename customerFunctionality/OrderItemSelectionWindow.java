@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import utility.PopUp;
 import utility.TableFromResultSet;
 
+// Class to add menu items to an order
 public class OrderItemSelectionWindow extends JDialog {
 
 	private static final long serialVersionUID = 1L;

@@ -7,6 +7,7 @@ import java.sql.*;
 import javax.swing.*;
 import utility.TableFromResultSet;
 
+// Class to find reviews written about a particular business
 public class FindReviews {
 
 	Connection con;

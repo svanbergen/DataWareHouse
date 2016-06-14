@@ -14,30 +14,27 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+// Class to create popup windows
 public class PopUp extends JDialog {
+
+	private static final long serialVersionUID = 1L;
 
 	private final JPanel contentPanel = new JPanel();
 
-	
 	JLabel statusLabel;
-	
-
 
 	/**
 	 * Create the dialog.
 	 */
 	public PopUp(String message) {
-		
+
 		try {
 			this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			this.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -74,13 +71,9 @@ public class PopUp extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
-		
-		
 		statusLabel.setText(message);
-
-		
 	}
-	
+
 	public void closeDialog(){
 		this.dispose();
 	}

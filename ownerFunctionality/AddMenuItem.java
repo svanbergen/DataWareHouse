@@ -1,30 +1,14 @@
 package ownerFunctionality;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.sql.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-
+import javax.swing.*;
 
 import utility.TableFromResultSet;
 
-
+// Class to an a new menu item to the database
 public class AddMenuItem {
 	private Connection con;
 	private JFrame addFrame;
@@ -32,12 +16,10 @@ public class AddMenuItem {
 	private String businessName;
 	private JTable results;
 
-
 	private JTextField nameField;
 	private JTextField typeField;
 	private JTextField priceField;
 	private JTextField businessIdField;
-
 
 	// Constructor: builds the functionality window, handles the button press
 	public AddMenuItem(Connection con, String username){
@@ -52,8 +34,8 @@ public class AddMenuItem {
 		JLabel typeLabel = new JLabel("Enter Type/Category: ");
 		JLabel priceLabel = new JLabel("Enter Price: ");
 		JLabel businessIdLabel = new JLabel("Your Business ID: ");
-		
-		
+
+
 		// Text fields
 		// Note: setMinimumSize prevents the fields from resizing on update
 
@@ -65,7 +47,7 @@ public class AddMenuItem {
 		priceField.setMinimumSize(priceField.getPreferredSize());
 		businessIdField = new JTextField(10);
 		businessIdField.setMinimumSize(businessIdField.getPreferredSize());
-		
+
 		// Button
 		JButton addButton = new JButton("Save");
 
@@ -95,8 +77,7 @@ public class AddMenuItem {
 		fieldC.anchor = GridBagConstraints.WEST;
 		//fieldC.weightx=1.;
 		//fieldC.fill=GridBagConstraints.HORIZONTAL;
-		
-		
+
 		GridBagConstraints tableC = new GridBagConstraints();
 		tableC.insets = new Insets(0, 0, 0, 0);
 		tableC.fill = GridBagConstraints.NONE;
@@ -105,7 +86,6 @@ public class AddMenuItem {
 		tableC.ipadx = 500;
 		tableC.gridwidth = 3;
 		tableC.gridheight = 15;
-
 
 		// Set layout and border
 		contentPane.setLayout(gb);
@@ -157,7 +137,7 @@ public class AddMenuItem {
 		fieldC.gridx = 1;
 		gb.setConstraints(priceField, fieldC);
 		contentPane.add(priceField);
-		
+
 		// businessid label 
 		labelC.gridy = 10;
 		labelC.gridx = 1;
@@ -184,7 +164,7 @@ public class AddMenuItem {
 		errorMessage.setForeground (Color.red);
 		gb.setConstraints(errorMessage, titleC);
 		contentPane.add(errorMessage);
-		
+
 		results = new JTable();
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(results);
@@ -212,40 +192,38 @@ public class AddMenuItem {
 				String name = nameField.getText();
 				String type = typeField.getText();
 				String price = priceField.getText();
-				
+
 
 				// Construct insertion 
 				String loginQuery = "insert into menuItem values (1, ?, ?, ?, ?)";
 
 				// Attempt insertion
-					try {			
-						checkID();
+				try {			
+					checkID();
 					PreparedStatement stmt = con.prepareStatement(loginQuery);
-						float p = Float.parseFloat(price);
-					
-						stmt.setFloat(1, p);
-						
+					float p = Float.parseFloat(price);
 
-						if(type.equals("")){
-							stmt.setNull(2, Types.VARCHAR);
-						}
-						else{
-							stmt.setString(2, type);
-						}
-						
-						stmt.setString(3, name);	
-					
-						int i = Integer.parseInt(businessID);
-						stmt.setInt(4, i);
-						stmt.executeQuery();
-						
-						PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
-						stmt2.setString(1,username);
-						ResultSet rs = stmt2.executeQuery();
-						ResultSetMetaData rsmd = rs.getMetaData();
-						TableFromResultSet.replaceTable(results, rs, rsmd);
-						
+					stmt.setFloat(1, p);
 
+
+					if(type.equals("")){
+						stmt.setNull(2, Types.VARCHAR);
+					}
+					else{
+						stmt.setString(2, type);
+					}
+
+					stmt.setString(3, name);	
+
+					int i = Integer.parseInt(businessID);
+					stmt.setInt(4, i);
+					stmt.executeQuery();
+
+					PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+					stmt2.setString(1,username);
+					ResultSet rs = stmt2.executeQuery();
+					ResultSetMetaData rsmd = rs.getMetaData();
+					TableFromResultSet.replaceTable(results, rs, rsmd);
 					//addFrame.dispose();
 
 				}
@@ -253,12 +231,12 @@ public class AddMenuItem {
 					System.out.println("Message: " + ex.getMessage());
 					errorMessage.setText("DENIED: Invalid input");
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					errorMessage.setText("DENIED: " + e1.getMessage());
 					return;
 				}			
 			}
-		}; addButton.addActionListener(buttonListener);
+		}; 
+		addButton.addActionListener(buttonListener);
 
 		// Resize window
 		addFrame.pack();
@@ -282,46 +260,40 @@ public class AddMenuItem {
 			System.out.println("Message: " + ex.getMessage());
 			System.exit(-1);
 		}
-
 	}
 
 
+	// Method to check ID
 	protected void checkID() throws Exception{
-		
 		try {
 			businessID = businessIdField.getText(); 
-			} catch (Exception e) {
-				
-				System.out.println("Invalid format for BusinessID");
-				System.out.println("Message: " + e.getMessage());
-						
-			}
-			
-			//System.out.print("BusinessID parsed is: " + businessID);
-			
-			PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
-			pstmd.setString(1, businessID);
-			
-			
-			ResultSet rs = pstmd.executeQuery();
-			
-			// Check if there is an owner attached to the id
-			
-			// if there isn't any, return false
-			if (!rs.next()) {
-				throw new Exception("No business associated with ID entered");
-				
-			}
-			
-				
-			if (rs.getString("ownerUserName").equals(businessName)) {
-				return;
-			}
-			
-			throw new Exception("BusinessID does not match Owner");
-			
-		
-	}
+		} catch (Exception e) {
+
+			System.out.println("Invalid format for BusinessID");
+			System.out.println("Message: " + e.getMessage());
+
+		}
+
+		//System.out.print("BusinessID parsed is: " + businessID);
+
+		PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
+		pstmd.setString(1, businessID);
 
 
+		ResultSet rs = pstmd.executeQuery();
+
+		// Check if there is an owner attached to the id
+
+		// if there isn't any, return false
+		if (!rs.next()) {
+			throw new Exception("No business associated with ID entered");
+
+		}
+
+		if (rs.getString("ownerUserName").equals(businessName)) {
+			return;
+		}
+
+		throw new Exception("BusinessID does not match Owner");
 	}
+}

@@ -5,6 +5,7 @@ import java.sql.*;
 
 import javax.swing.*;
 
+// Class for customer registration
 public class CustomerRegistration {
 
 	Connection con;
@@ -38,24 +39,24 @@ public class CustomerRegistration {
 		GridBagConstraints titleC = new GridBagConstraints();
 		titleC.gridwidth = GridBagConstraints.REMAINDER;
 		titleC.insets = new Insets(10, 10, 5, 0);
-		
+
 		GridBagConstraints labelC = new GridBagConstraints();
 		labelC.gridwidth = GridBagConstraints.RELATIVE;
 		labelC.insets = new Insets(10, 10, 5, 0);
-		
+
 		GridBagConstraints buttonC = new GridBagConstraints();
 		buttonC.gridwidth = GridBagConstraints.REMAINDER;
 		buttonC.insets = new Insets(5, 10, 10, 10);
 		buttonC.weightx=0;
 		buttonC.fill=GridBagConstraints.NONE;
 		buttonC.anchor = GridBagConstraints.CENTER;
-		
+
 		GridBagConstraints fieldC = new GridBagConstraints();
 		fieldC.gridwidth = GridBagConstraints.REMAINDER;
 		fieldC.insets = new Insets(10, 0, 5, 10);
 		fieldC.weightx=1.;
 		fieldC.fill=GridBagConstraints.HORIZONTAL;
-		
+
 		// Customer login label 
 		gb.setConstraints(oRegLabel, titleC);
 		contentPane.add(oRegLabel);
@@ -117,7 +118,7 @@ public class CustomerRegistration {
 						stmt.setString(2, password);//System.out.println(regQuery);
 						stmt.setNull(3, Types.VARCHAR);
 						rs = stmt.executeQuery();
-						
+
 						// FOR AWS DATABASE USE
 						/*
 						regQuery = "create user ";
@@ -130,7 +131,7 @@ public class CustomerRegistration {
 						regQuery = "grant create session to ";
 						regQuery = regQuery.concat(userName).concat("_customer");
 						statement.executeQuery(regQuery);
-						*/
+						 */
 						regFrame.dispose();
 					}        
 				}
@@ -179,8 +180,5 @@ public class CustomerRegistration {
 			System.out.println("Message: " + ex.getMessage());
 			System.exit(-1);
 		}
-
-
 	}
-
 }

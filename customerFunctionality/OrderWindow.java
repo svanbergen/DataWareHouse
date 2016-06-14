@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
+// Class to create an order
 public class OrderWindow extends JDialog {
 
 	private static final long serialVersionUID = 1L;

@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to search for businesses that serve specified sets of menu items
 public class BusinessSearchByMenuItem {
 	Connection con;
 	JFrame searchFrame;

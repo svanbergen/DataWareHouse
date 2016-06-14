@@ -25,7 +25,7 @@ import utility.*;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
-
+// Class to make or cancel a reservation
 public class ReservationMakingDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;

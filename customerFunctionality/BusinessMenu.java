@@ -11,6 +11,8 @@ import utility.TableFromResultSet;
 import java.awt.*;
 import java.awt.event.*;
 
+// Class to get the menu of a business
+// Also calculates statistics (aggregates) about the menu prices
 public class BusinessMenu extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel buttonPane;

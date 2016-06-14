@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to search for businesses matching specific attributes
 public class BusinessSearch {
 	Connection con;
 	JFrame searchFrame;

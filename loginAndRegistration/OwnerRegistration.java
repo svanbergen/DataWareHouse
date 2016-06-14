@@ -5,6 +5,7 @@ import java.sql.*;
 
 import javax.swing.*;
 
+// Class to register as an owner
 public class OwnerRegistration {
 
 	Connection con;
@@ -25,7 +26,6 @@ public class OwnerRegistration {
 		PasswordField = new JPasswordField(10);
 		PasswordField.setEchoChar('*');
 		JButton regButton = new JButton("Register as Owner");
-
 
 		// Create and populate the window
 		JPanel contentPane = new JPanel();
@@ -137,8 +137,6 @@ public class OwnerRegistration {
 					System.out.println("Message: " + ex.getMessage());
 					errorMessage.setText("Invalid input");
 				}	
-
-
 			}
 		};
 
@@ -177,8 +175,5 @@ public class OwnerRegistration {
 			System.out.println("Message: " + ex.getMessage());
 			System.exit(-1);
 		}
-
-
 	}
-
 }
