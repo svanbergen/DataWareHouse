@@ -9,7 +9,6 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
-import sun.security.pkcs.ParsingException;
 import utility.*;
 
 
@@ -535,8 +534,8 @@ public class UpdateBusiness {
 						deleteStmt.setString(1, businessID);
 						deleteStmt.executeUpdate();
 						PreparedStatement updateStmt = con.prepareStatement("insert into located values(?, ?)");
-						updateStmt.setString(2, businessID);
-						updateStmt.setInt(1,locationid);
+						updateStmt.setString(1, businessID);
+						updateStmt.setInt(2,locationid);
 						updateStmt.executeUpdate();
 						
 						

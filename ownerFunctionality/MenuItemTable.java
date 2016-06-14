@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.sun.istack.internal.FinalArrayList;
+
 
 public class MenuItemTable extends AbstractTableModel{
 	

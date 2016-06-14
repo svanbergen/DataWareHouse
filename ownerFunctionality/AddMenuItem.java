@@ -19,8 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import com.sun.javafx.image.impl.ByteIndexed.ToIntArgbAnyConverter;
-import com.sun.xml.internal.ws.handler.HandlerException;
 
 public class AddMenuItem {
 	private Connection con;
