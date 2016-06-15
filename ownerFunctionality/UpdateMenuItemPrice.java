@@ -1,14 +1,24 @@
 package ownerFunctionality;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
 
 import javax.swing.*;
 
 import utility.TableFromResultSet;
 
-// Class to change the price of a menu item
 public class UpdateMenuItemPrice {
 	private Connection con;
 	private JFrame updateFrame;
@@ -20,6 +30,7 @@ public class UpdateMenuItemPrice {
 	private String businessName;
 	private String businessID;
 	private JTextField bidField;
+	private String menuItemID;
 
 	public UpdateMenuItemPrice(Connection con, String username){
 		this.con = con;
@@ -32,6 +43,7 @@ public class UpdateMenuItemPrice {
 		JLabel idLabel = new JLabel("Enter Menu Item ID: ");
 		JLabel priceLabel = new JLabel("Enter New Price: ");
 		JLabel bidLabel = new JLabel("Your Business ID: ");
+
 
 		idField = new JTextField(10);
 		idField.setMinimumSize(idField.getPreferredSize());
@@ -109,7 +121,7 @@ public class UpdateMenuItemPrice {
 		fieldC.gridx = 1;
 		gb.setConstraints(priceField, fieldC);
 		contentPane.add(priceField);
-
+		
 		// businessid label 
 		labelC.gridy = 10;
 		labelC.gridx = 1;
@@ -155,36 +167,36 @@ public class UpdateMenuItemPrice {
 		catch(SQLException ex){
 			System.out.println("Message: " + ex.getMessage());
 			errorMessage.setText("Unexpected database error");
+			return;
 		}
 
-		// Anonymous class to listen to update button
+
+		// Anonymous class to listen to add business button
 		ActionListener buttonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
 				try {
-					if (idField.getText().equals("") || bidField.getText().equals("")) {
+					if (idField.getText().equals("") || bidField.getText().equals("") || priceField.getText().equals("")) {
 						errorMessage.setText("Please complete all fields");
 						return;
 					}
 
 					else{
+						
 						try {
-							// Check if missing
-							String id = idField.getText();
-							String price = priceField.getText();
-							if(id.equals("") || price.equals("")){
-								errorMessage.setText("Must enter values");
-								return;
-							}
-							else{
+							checkID();				
+							checkMenuItemExists();
+					
+							// Construct update
+							String loginQuery = "update menuItem set Price = ? where menuItemID = ?";
 
-								// Construct deletion
-								String loginQuery = "update menuItem set Price = ? where menuItemID = ?";
-
-								// Attempt deletion
-
+							// Attempt update
+				
 								PreparedStatement stmt = con.prepareStatement(loginQuery);
+								
+								String price = priceField.getText();
+								String id = idField.getText();
 
 								float p = Float.parseFloat(price);
 
@@ -195,27 +207,29 @@ public class UpdateMenuItemPrice {
 								stmt.setInt(2, i);
 
 								stmt.executeQuery();
+						
+						
+								PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+								stmt2.setString(1,username);
+								ResultSet rs = stmt2.executeQuery();
+								ResultSetMetaData rsmd = rs.getMetaData();
+								TableFromResultSet.replaceTable(results, rs, rsmd);
+								errorMessage.setText("");
+						
+				}
+							catch(SQLException ex){
+								System.out.println("Message: " + ex.getMessage());
+								errorMessage.setText("Invalid input");
+								return;
 							}
-
-							PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
-							stmt2.setString(1,username);
-							ResultSet rs = stmt2.executeQuery();
-							ResultSetMetaData rsmd = rs.getMetaData();
-							TableFromResultSet.replaceTable(results, rs, rsmd);
-
 						}
-						catch(SQLException ex){
-							System.out.println("Message: " + ex.getMessage());
-							errorMessage.setText("Invalid input");
-						}
+				}
+					catch(Exception e2) {
+						errorMessage.setText("DENIED: " + e2.getMessage());
+						return;
 					}
-				}
-				catch(Exception e2) {
-					errorMessage.setText("DENIED: " + e2.getMessage());
-					return;
-				}
-			}
-		};
+						}
+					};
 		updateButton.addActionListener(buttonListener);
 
 		// Resize window
@@ -229,39 +243,68 @@ public class UpdateMenuItemPrice {
 		// Set window visible
 		updateFrame.setVisible(true);
 	}
+	
+	protected void checkMenuItemExists() throws Exception {
+		// TODO Auto-generated method stub
+	String Query1 = "select menuItemID from MenuItem";
+		try {
+			menuItemID = idField.getText();
+			businessID = bidField.getText();
+			
+			} catch (Exception e) {
+				
+				System.out.println("Invalid format for MenuItemID");
+				System.out.println("Message: " + e.getMessage());
+						
+			}
+		
+		PreparedStatement stmt = con.prepareStatement(Query1);
+		//check if menuitem exists
+		ResultSet rSet = stmt.executeQuery();
 
-
-	// Method to check that id is valid
+		while (rSet.next()) {
+			if(rSet.getString("menuItemID").equals(menuItemID)) {
+				return;
+			}
+		}
+		throw new Exception("No menu items associated with ID entered");
+		
+	}
 	protected void checkID() throws Exception {
+		// TODO Auto-generated method stub
 		try {
 			businessID = bidField.getText(); 
-		} catch (Exception e) {
-
-			System.out.println("Invalid format for BusinessID");
-			System.out.println("Message: " + e.getMessage());
-
-		}
-
-		//System.out.print("BusinessID parsed is: " + businessID);
-
-		PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
-		pstmd.setString(1, businessID);
-
-
-		ResultSet rs = pstmd.executeQuery();
-
-		// Check if there is an owner attached to the id
-		// if there isn't any, return false
-		if (!rs.next()) {
-			throw new Exception("No business associated with ID entered");
-
-		}
-
-
-		if (rs.getString("ownerUserName").equals(businessName)) {
-			return;
-		}
-
-		throw new Exception("BusinessID does not match Owner");
+			} catch (Exception e) {
+				
+				System.out.println("Invalid format for BusinessID");
+				System.out.println("Message: " + e.getMessage());
+						
+			}
+			
+			//System.out.print("BusinessID parsed is: " + businessID);
+			
+			PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
+			pstmd.setString(1, businessID);
+			
+			
+			ResultSet rs = pstmd.executeQuery();
+			
+			// Check if there is an owner attached to the id
+			
+			// if there isn't any, return false
+			if (!rs.next()) {
+				throw new Exception("No business associated with ID entered");
+				
+			}
+			
+				
+			if (rs.getString("ownerUserName").equals(businessName)) {
+				return;
+			}
+			
+			throw new Exception("BusinessID does not match Owner");
+			
 	}
+
+
 }
