@@ -42,8 +42,10 @@ public class BusinessStatistics extends JDialog {
 		// Create GUI elements
 		customerTable = new JTable();
 		menuItemTable = new JTable();
-		setBounds(100, 100, 900, 500);
-		getContentPane().setLayout(new BorderLayout());
+		setBounds(100, 100, 900, 800);
+		BorderLayout borderLayout = new BorderLayout();
+		borderLayout.setVgap(2);
+		getContentPane().setLayout(borderLayout);
 		mainPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(mainPane, BorderLayout.CENTER);
 
@@ -61,13 +63,13 @@ public class BusinessStatistics extends JDialog {
 		lblLeastPopularMenu.setBounds(11, 77, 158, 16);
 
 		JScrollPane menuItemScrollPane = new JScrollPane();
-		menuItemScrollPane.setBounds(11, 149, 373, 256);
+		menuItemScrollPane.setBounds(11, 149, 373, 312);
 
 		JLabel lblAverageNumberOf = new JLabel("Average Number Of Orders By Customers:");
 		lblAverageNumberOf.setBounds(437, 55, 263, 16);
 
 		JScrollPane customersScrollPane = new JScrollPane();
-		customersScrollPane.setBounds(437, 149, 452, 256);
+		customersScrollPane.setBounds(437, 149, 452, 312);
 
 		JLabel lblMaximumNumberOf = new JLabel("Maximum Number Of Orders:");
 		lblMaximumNumberOf.setBounds(437, 77, 185, 16);
@@ -117,7 +119,7 @@ public class BusinessStatistics extends JDialog {
 
 		statusLabel = new JLabel("");
 		statusLabel.setForeground(Color.RED);
-		statusLabel.setBounds(11, 417, 878, 16);
+		statusLabel.setBounds(11, 528, 878, 16);
 		mainPane.add(statusLabel);
 
 		customersScrollPane.setViewportView(customerTable);
