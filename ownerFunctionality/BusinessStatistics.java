@@ -159,7 +159,9 @@ public class BusinessStatistics extends JDialog {
 						maxNumOrdersResultLabel.setText("");
 						aveNumOrdersResultLabel.setText("");
 						totalNumOrdersResultLabel.setText("");
-						
+						maxMenuItemResultLabel.setText("");
+						minMenuItemResultLabel.setText("");
+
 						
 						try{
 							businessId = Integer.parseInt(businessIdTextField.getText());
@@ -248,7 +250,7 @@ public class BusinessStatistics extends JDialog {
 						
 						
 						//populating the menuitem table
-						String totalOrdersForEachMenuItemQuery = "select M.menuItemID, M.Name, M.Price, COUNT(O.orderID) from MenuItem M,Orders O, Includes I where I.orderID=O.orderID AND M.MenuItemID=I.MenuItemID  AND O.BusinessID = ? GROUP BY M.menuItemID, M.Name, M.Price ";
+						String totalOrdersForEachMenuItemQuery = "select M.menuItemID, M.Name, M.Price, COUNT(O.orderID) from MenuItem M,Orders O, Includes I where I.orderID=O.orderID AND M.MenuItemID=I.MenuItemID  AND O.BusinessID = ? AND O.timeMade IS NOT NULL GROUP BY M.menuItemID, M.Name, M.Price ";
 						try{
 							PreparedStatement stmt = con.prepareStatement(totalOrdersForEachMenuItemQuery);
 							
@@ -275,12 +277,12 @@ public class BusinessStatistics extends JDialog {
 						
 						String menuItemMaxQuery ="select M.menuItemID, M.Name "
 								+ "from MenuItem M, Orders O, Includes I "
-								+ "Where M.menuItemID=I.menuItemID AND I.orderID=O.orderID AND O.businessID=? "
+								+ "Where M.menuItemID=I.menuItemID AND I.orderID=O.orderID AND O.timeMade IS NOT NULL AND O.businessID=? "
 								+ "GROUP BY M.menuItemID, M.name Having count(*) IN "
 								+ "(select Max(numOrders) "
 								+ "from (select M1.menuItemID, COUNT(O1.orderID) AS numOrders "
 								+ "from MenuItem M1,Orders O1, Includes I1 "
-								+ "where I1.orderID=O1.orderID AND M1.MenuItemID=I1.MenuItemID  AND O1.BusinessID = ? "
+								+ "where I1.orderID=O1.orderID AND M1.MenuItemID=I1.MenuItemID  AND O1.BusinessID = ? AND O1.timeMade IS NOT NULL "
 								+ "GROUP BY M1.menuItemID))";
 						try{
 							PreparedStatement stmt = con.prepareStatement(menuItemMaxQuery);
@@ -308,12 +310,12 @@ public class BusinessStatistics extends JDialog {
 						
 						String menuItemMinQuery = "select M.menuItemID, M.Name "
 								+ "from MenuItem M, Orders O, Includes I "
-								+ "Where M.menuItemID=I.menuItemID AND I.orderID=O.orderID AND O.businessID=? "
+								+ "Where M.menuItemID=I.menuItemID AND I.orderID=O.orderID AND O.timeMade IS NOT NULL AND O.businessID=? "
 								+ "GROUP BY M.menuItemID, M.name Having count(*) IN "
 								+ "(select Min(numOrders) "
 								+ "from (select M1.menuItemID, COUNT(O1.orderID) AS numOrders "
 								+ "from MenuItem M1,Orders O1, Includes I1 "
-								+ "where I1.orderID=O1.orderID AND M1.MenuItemID=I1.MenuItemID  AND O1.BusinessID = ? "
+								+ "where I1.orderID=O1.orderID AND M1.MenuItemID=I1.MenuItemID  AND O1.BusinessID = ? AND O1.timeMade IS NOT NULL "
 								+ "GROUP BY M1.menuItemID))";
 						try{
 							PreparedStatement stmt = con.prepareStatement(menuItemMinQuery);
