@@ -84,7 +84,7 @@ CREATE PUBLIC SYNONYM bigspenders for srv2691.bigspenders;
 
 drop user reggie;
 create user reggie identified by registration;
-grant create session to reggie;
+grant create session to reggie with admin option;
 grant insert on businessowner to reggie;
 grant insert on customer to reggie;
 grant customer_user to reggie with admin option;
