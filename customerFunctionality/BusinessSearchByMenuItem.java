@@ -218,10 +218,10 @@ public class BusinessSearchByMenuItem {
 					statement = statement.concat(denominator).concat(" minus ").concat(numerator).concat("))");
 
 					PreparedStatement stmt = con.prepareStatement(statement);
-					System.out.println(statement);
+					//System.out.println(statement);
 
 					ResultSet rs = stmt.executeQuery();
-					System.out.println(rs);
+					//System.out.println(rs);
 					ResultSetMetaData rsmd = rs.getMetaData();
 					TableFromResultSet.replaceTable(results, rs, rsmd);
 

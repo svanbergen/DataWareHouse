@@ -328,6 +328,7 @@ public class BusinessStatistics extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		this.pack();
 	}
 
 
