@@ -348,7 +348,7 @@ insert into Review
 values(120, 5, 'I cannot get enough of their fried chicken!', TO_DATE('2013/01/17','yyyy/mm/dd'), 5, 'foodiefoodie');
 
 insert into MenuItem
-	values(1, 16.00, 'Entree', 'Beef Souvlaki', 1);
+	values(1, 32.00, 'Entree', 'Beef Souvlaki', 1);
 	
 insert into MenuItem
 	values(2, 16.00, 'Drink', 'Coffee', 1);

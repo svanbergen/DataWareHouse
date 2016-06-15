@@ -1,24 +1,14 @@
 package ownerFunctionality;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
 
 import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to update a menu item price
 public class UpdateMenuItemPrice {
 	private Connection con;
 	private JFrame updateFrame;
@@ -158,7 +148,7 @@ public class UpdateMenuItemPrice {
 		contentPane.add(scrollPane);
 
 		try{
-			PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+			PreparedStatement stmt = con.prepareStatement("select menuitem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 			stmt.setString(1,username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -209,7 +199,7 @@ public class UpdateMenuItemPrice {
 								stmt.executeQuery();
 						
 						
-								PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+								PreparedStatement stmt2 = con.prepareStatement("select  menuitem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 								stmt2.setString(1,username);
 								ResultSet rs = stmt2.executeQuery();
 								ResultSetMetaData rsmd = rs.getMetaData();
@@ -245,7 +235,6 @@ public class UpdateMenuItemPrice {
 	}
 	
 	protected void checkMenuItemExists() throws Exception {
-		// TODO Auto-generated method stub
 	String Query1 = "select menuItemID from MenuItem";
 		try {
 			menuItemID = idField.getText();
@@ -271,7 +260,6 @@ public class UpdateMenuItemPrice {
 		
 	}
 	protected void checkID() throws Exception {
-		// TODO Auto-generated method stub
 		try {
 			businessID = bidField.getText(); 
 			} catch (Exception e) {

@@ -98,8 +98,8 @@ public class UpdateBusiness {
 		JLabel phoneLabel = new JLabel("Phone Number: ");
 
 		JLabel operationLabel = new JLabel("Days of Operation: ");
-		JLabel startLabel = new JLabel("Opens by: ");
-		JLabel finiLabel = new JLabel("Closes after: ");
+		JLabel startLabel = new JLabel("Opening Time: ");
+		JLabel finiLabel = new JLabel("Closing Time: ");
 
 		JLabel locationLabel = new JLabel("Location");
 
@@ -110,7 +110,7 @@ public class UpdateBusiness {
 		JLabel postalLabel = new JLabel("Postal Code: ");
 
 		// Button
-		JButton searchButton = new JButton("Search");
+		JButton searchButton = new JButton("Update");
 
 		// Panel
 		JPanel contentpane = new JPanel();

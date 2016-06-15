@@ -77,7 +77,7 @@ public class ViewMenuItem {
 			public void actionPerformed(ActionEvent e) 
 			{
 				try{
-					PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+					PreparedStatement stmt = con.prepareStatement("select menuitem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 					stmt.setString(1, username);
 					ResultSet rs = stmt.executeQuery();
 					ResultSetMetaData rsmd = rs.getMetaData();
@@ -92,7 +92,7 @@ public class ViewMenuItem {
 
 		try{
 
-			PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+			PreparedStatement stmt = con.prepareStatement("select menuitem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();

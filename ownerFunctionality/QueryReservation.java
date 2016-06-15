@@ -271,6 +271,8 @@ public class QueryReservation {
 		errorMessage.setForeground (Color.red);
 		GridBagConstraints ErrorConstraints = new GridBagConstraints();
 		ErrorConstraints.anchor = GridBagConstraints.CENTER;
+		ErrorConstraints.gridx = 1;
+		ErrorConstraints.gridwidth = 2;
 		ErrorConstraints.gridy = 14;
 		gb.setConstraints(errorMessage, ErrorConstraints);
 		contentpane.add(errorMessage);

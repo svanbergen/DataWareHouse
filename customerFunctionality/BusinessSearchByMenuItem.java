@@ -168,7 +168,7 @@ public class BusinessSearchByMenuItem {
 						errorMessage.setText("Must enter at least one item");
 						return;
 					}
-					String statement = "select * from business b natural join menuItem where";
+					String statement = "select * from business b natural join menuItem where (";
 
 					String names[] = nameField.getText().split(",");
 					String denominator = "(select distinct name from menuItem where";
@@ -181,7 +181,7 @@ public class BusinessSearchByMenuItem {
 						statement = statement.concat(" name = '").concat(names[i].trim()).concat("'");
 					}
 					denominator = denominator.concat(")");
-					statement = statement.concat(" and businessid in (select businessid from business b where not exists (");
+					statement = statement.concat(") and businessid in (select businessid from business b where not exists (");
 
 					String numerator = "(select name from menuItem join business b1 on b1.businessid = menuItem.businessid where b1.businessid = b.businessid";
 					String lp = lowerPrice.getText();
@@ -217,6 +217,7 @@ public class BusinessSearchByMenuItem {
 
 					statement = statement.concat(denominator).concat(" minus ").concat(numerator).concat("))");
 
+					System.out.println(statement);
 					PreparedStatement stmt = con.prepareStatement(statement);
 					//System.out.println(statement);
 

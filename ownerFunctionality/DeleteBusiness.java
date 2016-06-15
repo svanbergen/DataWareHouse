@@ -85,6 +85,7 @@ public class DeleteBusiness {
 		JLabel errorMessage = new JLabel(" ");
 		titleC.gridy = 6;
 		titleC.gridx = 1;
+		titleC.anchor = GridBagConstraints.WEST;
 		errorMessage.setForeground (Color.red);
 		gb.setConstraints(errorMessage, titleC);
 		contentPane.add(errorMessage);

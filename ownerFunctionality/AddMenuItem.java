@@ -161,6 +161,7 @@ public class AddMenuItem {
 		JLabel errorMessage = new JLabel(" ");
 		titleC.gridy = 19;
 		titleC.gridx = 1;
+		titleC.gridwidth = 2;
 		errorMessage.setForeground (Color.red);
 		gb.setConstraints(errorMessage, titleC);
 		contentPane.add(errorMessage);
@@ -173,7 +174,7 @@ public class AddMenuItem {
 		gb.setConstraints(scrollPane, tableC);
 		contentPane.add(scrollPane);
 		try{
-			PreparedStatement stmt = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+			PreparedStatement stmt = con.prepareStatement("select menuitem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 			stmt.setString(1,username);
 			ResultSet rs = stmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -219,7 +220,7 @@ public class AddMenuItem {
 					stmt.setInt(4, i);
 					stmt.executeQuery();
 
-					PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+					PreparedStatement stmt2 = con.prepareStatement("select menuitem.businessid, select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 					stmt2.setString(1,username);
 					ResultSet rs = stmt2.executeQuery();
 					ResultSetMetaData rsmd = rs.getMetaData();

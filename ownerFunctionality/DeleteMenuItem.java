@@ -180,7 +180,7 @@ public class DeleteMenuItem {
 
 							stmt2.executeQuery();
 
-							PreparedStatement stmt3 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+							PreparedStatement stmt3 = con.prepareStatement("select menuitem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 							stmt3.setString(1,username);
 							ResultSet rs = stmt3.executeQuery();
 							ResultSetMetaData rsmd = rs.getMetaData();
