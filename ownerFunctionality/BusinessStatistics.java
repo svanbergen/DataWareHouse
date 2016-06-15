@@ -135,7 +135,7 @@ public class BusinessStatistics extends JDialog {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 
 						//System.out.println("ok button pressed");
-
+						statusLabel.setText("");
 						minNumOfOrdersResultLabel.setText("");
 						maxNumOrdersResultLabel.setText("");
 						aveNumOrdersResultLabel.setText("");
@@ -335,7 +335,6 @@ public class BusinessStatistics extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		this.pack();
 	}
 
 
