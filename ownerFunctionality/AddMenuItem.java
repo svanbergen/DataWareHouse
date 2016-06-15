@@ -224,7 +224,7 @@ public class AddMenuItem {
 					ResultSet rs = stmt2.executeQuery();
 					ResultSetMetaData rsmd = rs.getMetaData();
 					TableFromResultSet.replaceTable(results, rs, rsmd);
-					//addFrame.dispose();
+					errorMessage.setText("");
 
 				}
 				catch (SQLException ex) {
