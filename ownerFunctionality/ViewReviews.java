@@ -1,30 +1,13 @@
 package ownerFunctionality;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.awt.*;
+import java.sql.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to view reviews for owner's business
 public class ViewReviews {
 	Connection con;
 	String username;
@@ -35,9 +18,13 @@ public class ViewReviews {
 		this.con = con;
 		this.username = username;
 
+		// Create frame
 		reviewFrame = new JFrame("Reviews of your Businesses");
+
+		// Create label
 		JLabel reviewPage = new JLabel("Reviews of your Businesses");
 
+		// Create content panel and define layout
 		JPanel contentPane = new JPanel();
 		reviewFrame.setContentPane(contentPane);
 		GridBagLayout gb = new GridBagLayout();
@@ -45,6 +32,7 @@ public class ViewReviews {
 		contentPane.setLayout(gb);
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+		// Constraint sets
 		GridBagConstraints buttonC = new GridBagConstraints();
 		buttonC.insets = new Insets(0, 0, 0, 10);
 		buttonC.ipadx = 50;
@@ -63,10 +51,12 @@ public class ViewReviews {
 		tableC.gridwidth = 3;
 		tableC.gridheight = 15;
 
+		// Populate layout
 		buttonC.gridy = 1;
 		gb.setConstraints(reviewPage, buttonC);
 		contentPane.add(reviewPage);
 
+		// Create table
 		reviews = new JTable();
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -86,7 +76,6 @@ public class ViewReviews {
 			System.out.println("Message: " + ex.getMessage());
 		}
 
-
 		// Resize window
 		reviewFrame.pack();
 
@@ -97,7 +86,6 @@ public class ViewReviews {
 
 		// Set window visible
 		reviewFrame.setVisible(true);
-
 
 		// Attempt to load the Oracle JDBC driver
 		try 

@@ -8,6 +8,8 @@ import javax.swing.*;
 import ownerFunctionality.*;
 import utility.TableFromResultSet;
 
+// Class to provide owners access to all functionality
+// Also displays all businesses for an owner
 public class OwnerMenu {
 	Connection con;
 	String username;
@@ -27,6 +29,7 @@ public class OwnerMenu {
 		JLabel sn = new JLabel("Current User : " + username);
 		JButton refreshButton = new JButton("Refresh Businesses");
 		JButton addBusinessButton = new JButton("Add Business");
+		JButton deleteBusinessButton = new JButton("Delete Business");
 		JButton updateBusinessButton = new JButton("Update Business");
 		JButton viewReviewbutton = new JButton("View Reviews");
 		JButton writeReplyButton = new JButton("Reply to Review");
@@ -62,7 +65,7 @@ public class OwnerMenu {
 		tableC.gridy = 2;
 		tableC.gridx = 3;
 		tableC.ipadx = 400;
-		tableC.gridheight = 15;
+		tableC.gridheight = 16;
 
 		// Add buttons
 		buttonC.gridy = 1;
@@ -124,6 +127,10 @@ public class OwnerMenu {
 		buttonC.gridy = 15;
 		gb.setConstraints(updateMenuItemButton, buttonC);
 		contentPane.add(updateMenuItemButton);
+		
+		buttonC.gridy = 16;
+		gb.setConstraints(deleteBusinessButton, buttonC);
+		contentPane.add(deleteBusinessButton);
 
 		// Add business table
 
@@ -164,7 +171,16 @@ public class OwnerMenu {
 			}
 		};
 		refreshButton.addActionListener(refreshButtonListener);
-
+		
+		ActionListener deleteBusinessButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				new DeleteBusiness(con,username);
+			}
+		};
+		deleteBusinessButton.addActionListener(deleteBusinessButtonListener);
+		
 		ActionListener bigSpenderButtonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -245,13 +261,11 @@ public class OwnerMenu {
 			}
 		});
 
-
-
 		ActionListener businessStatButtonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				BusinessStatistics bs = new BusinessStatistics(con, username);
+				new BusinessStatistics(con, username);
 			}
 		};
 		businessStatButton.addActionListener(businessStatButtonListener);

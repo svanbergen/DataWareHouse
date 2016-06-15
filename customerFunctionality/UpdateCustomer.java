@@ -20,6 +20,7 @@ import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to update customer information (phone number, location)
 public class UpdateCustomer {
 	Connection con;
 	private JFrame updateFrame;
@@ -249,10 +250,11 @@ public class UpdateCustomer {
 			public void actionPerformed(ActionEvent e) 
 			{
 				try{
-					// Retrieve values from the fields
+					// Update phone number
 					String phone1 = PhoneField1.getText();
 					String phone2 = PhoneField2.getText();
 					String phone3 = PhoneField3.getText();
+					// Checks on format
 					if(!(phone1.equals("") && phone2.equals("") && phone3.equals(""))){
 						String phone = phone1.concat("-").concat(phone2).concat("-").concat(phone3);
 						if(!phone.matches("[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]")){

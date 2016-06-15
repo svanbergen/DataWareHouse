@@ -43,37 +43,37 @@ public class AppLogin {
 		oPasswordField.setEchoChar('*');
 		JButton oLoginButton = new JButton("Login as Owner");
 		JButton oRegButton = new JButton("Register as Owner");
-		
+
 		// Create and populate the window
 
 		JPanel contentPane = new JPanel();
 		loginFrame.setContentPane(contentPane);
 		GridBagLayout gb = new GridBagLayout();
-		
+
 		GridBagConstraints titleC = new GridBagConstraints();
 		titleC.gridwidth = GridBagConstraints.REMAINDER;
 		titleC.insets = new Insets(10, 10, 5, 0);
-		
+
 		GridBagConstraints labelC = new GridBagConstraints();
 		labelC.gridwidth = GridBagConstraints.RELATIVE;
 		labelC.insets = new Insets(10, 10, 5, 0);
-		
+
 		GridBagConstraints buttonC = new GridBagConstraints();
 		buttonC.gridwidth = GridBagConstraints.REMAINDER;
 		buttonC.insets = new Insets(5, 10, 10, 10);
 		buttonC.weightx=0;
 		buttonC.fill=GridBagConstraints.NONE;
 		buttonC.anchor = GridBagConstraints.CENTER;
-		
+
 		GridBagConstraints fieldC = new GridBagConstraints();
 		fieldC.gridwidth = GridBagConstraints.REMAINDER;
 		fieldC.insets = new Insets(10, 0, 5, 10);
 		fieldC.weightx=1.;
 		fieldC.fill=GridBagConstraints.HORIZONTAL;
-		
+
 		contentPane.setLayout(gb);
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    
+
 		// Customer login label 
 		gb.setConstraints(cLoginLabel, titleC);
 		contentPane.add(cLoginLabel);
@@ -97,7 +97,7 @@ public class AppLogin {
 		// Customer login button
 		gb.setConstraints(cLoginButton, buttonC);
 		contentPane.add(cLoginButton);
-		
+
 		// Customer reg button
 		gb.setConstraints(cRegButton, buttonC);
 		contentPane.add(cRegButton);
@@ -125,11 +125,11 @@ public class AppLogin {
 		// Owner login button
 		gb.setConstraints(oLoginButton, buttonC);
 		contentPane.add(oLoginButton);
-		
+
 		// Owner reg button
 		gb.setConstraints(oRegButton, buttonC);
 		contentPane.add(oRegButton);
-		
+
 		// Error message
 		JLabel errorMessage = new JLabel("");
 		errorMessage.setForeground (Color.red);
@@ -143,11 +143,11 @@ public class AppLogin {
 			{
 				String userName = cUsernameField.getText();
 				String password = String.valueOf(cPasswordField.getPassword());
-				
+
 				// Construct query to search for specified user
 				String loginQuery = "select customerUsername, password from customer where customerUsername = '";
 				loginQuery = loginQuery.concat(userName.concat("'"));
-				
+
 				// Attempt query of customer table
 				try{
 					Statement stmt = con.createStatement();
@@ -171,11 +171,11 @@ public class AppLogin {
 								errorMessage.setText("Invalid input");
 								return;
 							}
-							
+
 							con.close();
 							con = con1;
-							*/
-							CustomerMenu cm = new CustomerMenu(con,userName);
+							 */
+							new CustomerMenu(con,userName);
 						}
 						else{
 							cPasswordField.setText("");
@@ -238,11 +238,11 @@ public class AppLogin {
 								errorMessage.setText("Invalid input");
 								return;
 							}
-							
+
 							con.close();
 							con = con1;
-							*/
-							OwnerMenu om = new OwnerMenu(con, userName);
+							 */
+							new OwnerMenu(con, userName);
 						}
 						else{
 							oPasswordField.setText("");
@@ -264,33 +264,33 @@ public class AppLogin {
 
 			}
 		};
-		
+
 		oPasswordField.addActionListener(ownerListener);
 		oLoginButton.addActionListener(ownerListener);
-		
+
 		// Anonymous class to listen to customer registration button
 		ActionListener customerRegListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				CustomerRegistration cR = new CustomerRegistration(con);
+				new CustomerRegistration(con);
 			}
 		};
 		// Register customer reg button with event handler
 		cRegButton.addActionListener(customerRegListener);
 
-		
+
 		// Anonymous class to listen to owner registration button
 		ActionListener ownerRegListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				OwnerRegistration oR = new OwnerRegistration(con);
+				new OwnerRegistration(con);
 			}
 		};
 		// Register owner reg button with event handler
 		oRegButton.addActionListener(ownerRegListener);
-		
+
 		// On window close
 		loginFrame.addWindowListener(new WindowAdapter() 
 		{

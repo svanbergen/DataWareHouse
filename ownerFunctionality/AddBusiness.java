@@ -1,27 +1,13 @@
 package ownerFunctionality;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.sql.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+// Class to add a new business to the database
 public class AddBusiness {
-	private Connection con;
-	private String username;
 	private JFrame addFrame;
 
 	private JTextField PhoneField1;
@@ -43,10 +29,8 @@ public class AddBusiness {
 
 	// Constructor: builds the functionality window, handles the button press
 	public AddBusiness(Connection con, String username){
-		this.con = con;
-		this.username = username;
 
-		// Definie/initialize parts of frame
+		// Define/initialize parts of frame
 		addFrame = new JFrame("Owner Registration");
 		// Labels
 		JLabel addBLabel = new JLabel("Add New Business");
@@ -58,7 +42,7 @@ public class AddBusiness {
 		JLabel opLabel = new JLabel("Specify days of operation: ");
 		JLabel startLabel = new JLabel("Specify opening time: ");
 		JLabel finiLabel = new JLabel("Specify closing time: ");
-		
+
 		// Text fields
 		// Note: setMinimumSize prevents the fields from resizing on update
 		PhoneField1 = new JTextField(3);
@@ -81,7 +65,7 @@ public class AddBusiness {
 		finHourField.setMinimumSize(finHourField.getPreferredSize());
 		finMinField = new JTextField(10);
 		finMinField.setMinimumSize(finMinField.getPreferredSize());
-		
+
 		// Check boxes
 		resBox = new JCheckBox();
 		m = new JCheckBox();
@@ -94,7 +78,6 @@ public class AddBusiness {
 
 		// Button
 		JButton addButton = new JButton("Add Business");
-
 
 		// Create and populate the panel using GridBag for layout
 		JPanel contentPane = new JPanel();
@@ -314,7 +297,7 @@ public class AddBusiness {
 				if(s.isSelected()){
 					days = days.concat("U");
 				}
-				
+
 				// Check non-null days
 				if(days.equals("")){
 					errorMessage.setText("Must enter days of operation");
@@ -335,7 +318,7 @@ public class AddBusiness {
 				int fM = Integer.parseInt(finMinField.getText());
 				int startTime;
 				int finTime;
-				
+
 				if(sH < 24 && sH >= 0 && sM >=0 && sM < 60){
 					startTime = sH*100 + sM;
 				}
@@ -528,14 +511,14 @@ public class AddBusiness {
 		GridBagLayout gb = new GridBagLayout();
 		openPanel.setLayout(gb);
 		openPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		
+
 		GridBagConstraints of = new GridBagConstraints();
 		of.anchor = GridBagConstraints.WEST;
 		of.weightx=1.;
 		of.fill=GridBagConstraints.HORIZONTAL;
 		of.gridy = 1;
 		of.gridx = 1;
-		
+
 		JLabel oH = new JLabel(" H: ");
 		gb.setConstraints(oH, of);
 		openPanel.add(oH);
@@ -559,14 +542,14 @@ public class AddBusiness {
 		GridBagLayout gb = new GridBagLayout();
 		closePanel.setLayout(gb);
 		closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		
+
 		GridBagConstraints cf = new GridBagConstraints();
 		cf.anchor = GridBagConstraints.WEST;
 		cf.weightx=1.;
 		cf.fill=GridBagConstraints.HORIZONTAL;
 		cf.gridx = 1;
 		cf.gridy = 12;
-		
+
 		JLabel cH = new JLabel(" H: ");
 		gb.setConstraints(cH, cf);
 		closePanel.add(cH);

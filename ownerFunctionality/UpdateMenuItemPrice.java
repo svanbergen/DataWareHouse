@@ -1,24 +1,14 @@
 package ownerFunctionality;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
 
 import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to change the price of a menu item
 public class UpdateMenuItemPrice {
 	private Connection con;
 	private JFrame updateFrame;
@@ -42,7 +32,6 @@ public class UpdateMenuItemPrice {
 		JLabel idLabel = new JLabel("Enter Menu Item ID: ");
 		JLabel priceLabel = new JLabel("Enter New Price: ");
 		JLabel bidLabel = new JLabel("Your Business ID: ");
-
 
 		idField = new JTextField(10);
 		idField.setMinimumSize(idField.getPreferredSize());
@@ -120,7 +109,7 @@ public class UpdateMenuItemPrice {
 		fieldC.gridx = 1;
 		gb.setConstraints(priceField, fieldC);
 		contentPane.add(priceField);
-		
+
 		// businessid label 
 		labelC.gridy = 10;
 		labelC.gridx = 1;
@@ -168,8 +157,7 @@ public class UpdateMenuItemPrice {
 			errorMessage.setText("Unexpected database error");
 		}
 
-
-		// Anonymous class to listen to add business button
+		// Anonymous class to listen to update button
 		ActionListener buttonListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -181,21 +169,21 @@ public class UpdateMenuItemPrice {
 					}
 
 					else{
-				try {
-						// Check if missing
-						String id = idField.getText();
-						String price = priceField.getText();
-						if(id.equals("") || price.equals("")){
-							errorMessage.setText("Must enter values");
-							return;
-						}
-						else{
-					
-							// Construct deletion
-							String loginQuery = "update menuItem set Price = ? where menuItemID = ?";
+						try {
+							// Check if missing
+							String id = idField.getText();
+							String price = priceField.getText();
+							if(id.equals("") || price.equals("")){
+								errorMessage.setText("Must enter values");
+								return;
+							}
+							else{
 
-							// Attempt deletion
-				
+								// Construct deletion
+								String loginQuery = "update menuItem set Price = ? where menuItemID = ?";
+
+								// Attempt deletion
+
 								PreparedStatement stmt = con.prepareStatement(loginQuery);
 
 								float p = Float.parseFloat(price);
@@ -207,32 +195,27 @@ public class UpdateMenuItemPrice {
 								stmt.setInt(2, i);
 
 								stmt.executeQuery();
-						}
-						
-								PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
-								stmt2.setString(1,username);
-								ResultSet rs = stmt2.executeQuery();
-								ResultSetMetaData rsmd = rs.getMetaData();
-								TableFromResultSet.replaceTable(results, rs, rsmd);
-						
-				}
-							catch(SQLException ex){
-								System.out.println("Message: " + ex.getMessage());
-								errorMessage.setText("Invalid input");
 							}
+
+							PreparedStatement stmt2 = con.prepareStatement("select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+							stmt2.setString(1,username);
+							ResultSet rs = stmt2.executeQuery();
+							ResultSetMetaData rsmd = rs.getMetaData();
+							TableFromResultSet.replaceTable(results, rs, rsmd);
+
 						}
-				}
-					catch(Exception e2) {
-						errorMessage.setText("DENIED: " + e2.getMessage());
-						return;
+						catch(SQLException ex){
+							System.out.println("Message: " + ex.getMessage());
+							errorMessage.setText("Invalid input");
+						}
 					}
-						}
-					};
-				
-			
-			
-
-
+				}
+				catch(Exception e2) {
+					errorMessage.setText("DENIED: " + e2.getMessage());
+					return;
+				}
+			}
+		};
 		updateButton.addActionListener(buttonListener);
 
 		// Resize window
@@ -246,43 +229,39 @@ public class UpdateMenuItemPrice {
 		// Set window visible
 		updateFrame.setVisible(true);
 	}
-	
 
+
+	// Method to check that id is valid
 	protected void checkID() throws Exception {
-		// TODO Auto-generated method stub
 		try {
 			businessID = bidField.getText(); 
-			} catch (Exception e) {
-				
-				System.out.println("Invalid format for BusinessID");
-				System.out.println("Message: " + e.getMessage());
-						
-			}
-			
-			//System.out.print("BusinessID parsed is: " + businessID);
-			
-			PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
-			pstmd.setString(1, businessID);
-			
-			
-			ResultSet rs = pstmd.executeQuery();
-			
-			// Check if there is an owner attached to the id
-			
-			// if there isn't any, return false
-			if (!rs.next()) {
-				throw new Exception("No business associated with ID entered");
-				
-			}
-			
-				
-			if (rs.getString("ownerUserName").equals(businessName)) {
-				return;
-			}
-			
-			throw new Exception("BusinessID does not match Owner");
-			
+		} catch (Exception e) {
+
+			System.out.println("Invalid format for BusinessID");
+			System.out.println("Message: " + e.getMessage());
+
+		}
+
+		//System.out.print("BusinessID parsed is: " + businessID);
+
+		PreparedStatement pstmd = con.prepareStatement("select ownerUsername from business where business.businessid = ?");
+		pstmd.setString(1, businessID);
+
+
+		ResultSet rs = pstmd.executeQuery();
+
+		// Check if there is an owner attached to the id
+		// if there isn't any, return false
+		if (!rs.next()) {
+			throw new Exception("No business associated with ID entered");
+
+		}
+
+
+		if (rs.getString("ownerUserName").equals(businessName)) {
+			return;
+		}
+
+		throw new Exception("BusinessID does not match Owner");
 	}
-
-
 }

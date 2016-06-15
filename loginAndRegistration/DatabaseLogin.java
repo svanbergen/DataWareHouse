@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
+// Class to connect to database on program startup
 public class DatabaseLogin implements ActionListener{
 	/* Code based on the branch.java program provided in the CPSC304 JDBC tutorial 1 */
 
@@ -116,16 +117,16 @@ public class DatabaseLogin implements ActionListener{
 		// FOR AWS DATABASE USE
 		/*
 		String connectURL = "jdbc:oracle:thin:@dwh-micro1.clrwdshwtrbl.us-west-1.rds.amazonaws.com:1521:DWH";
-		*/
+		 */
 		String connectURL = "jdbc:oracle:thin:@localhost:1522:ug";
 		try 
 		{
 			// FOR AWS DATABASE USE
 			/*
 			con = DriverManager.getConnection(connectURL,"reggie","registration");
-			*/
+			 */
 			con = DriverManager.getConnection(connectURL,username,password);
-			
+
 			System.out.println("\nConnected to Oracle!");
 			return true;
 		}
@@ -136,7 +137,6 @@ public class DatabaseLogin implements ActionListener{
 		}
 	}
 
-
 	// Database login window event handler
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -144,16 +144,15 @@ public class DatabaseLogin implements ActionListener{
 		{
 			// If details are valid remove database login window and go to application login window
 			loginFrame.dispose();
-			AppLogin apl = new AppLogin(con);
+			new AppLogin(con);
 		}
 		else
 		{
 			passwordField.setText("");
-		}             
-
+		}    
 	}
 
 	public static void main(String[] args) {
-		DatabaseLogin dbl = new DatabaseLogin();
+		new DatabaseLogin();
 	}
 }

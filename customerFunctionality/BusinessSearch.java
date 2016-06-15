@@ -1,41 +1,19 @@
 package customerFunctionality;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.Vector;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import utility.TableFromResultSet;
 
+// Class to search for businesses matching specific attributes
 public class BusinessSearch {
 	Connection con;
 	JFrame searchFrame;
 	JTable results;
-	
+
 	private JTextField typeField;
 	private JTextField nbhField;
 
@@ -48,641 +26,644 @@ public class BusinessSearch {
 	private JTextField startMinField;
 	private JTextField finHourField;
 	private JTextField finMinField;
-	
+
 	private JTextField addressField;
 	private JTextField postalCodeField;
 	private JTextField cityField;
 	private JTextField provinceField;
-	
+
 	private JTextField usernameField;
-	
+
 	public BusinessSearch(Connection con){
 		this.con = con;
 		String res[] = {"Yes", "No", "Don't Care"};
-		
+
 		// Define/initialize parts of frame
 		searchFrame = new JFrame("Business Search");
-				// Labels
-				JLabel titleLabel = new JLabel("Search for Businesses by Attributes");
-				JLabel ownerLabel = new JLabel("Business owner: ");
-				JLabel typeLabel = new JLabel("Type of business: ");
-				JLabel nbhLabel = new JLabel("Neighbourhood: ");
-				JLabel resLabel = new JLabel("Reservations available? ");
-				JLabel opLabel = new JLabel("Days of operation: ");
-				JLabel startLabel = new JLabel("Opens by: ");
-				JLabel finiLabel = new JLabel("Closes after: ");
-				
-				JLabel locationLabel = new JLabel("Enter location:");
-				JLabel addressLabel = new JLabel("Street address: ");
-				JLabel cityLabel = new JLabel("City: ");
-				JLabel provinceLabel = new JLabel("Province: ");
-				JLabel postalCodeLabel = new JLabel("Postal code: ");
-				JLabel searchLabel = new JLabel("Enter values to search by:");
-				JLabel selectLabel = new JLabel("Select attributes to display:");
-				JPanel selectPanel = new JPanel();
-				
-				
-				ownerbox = new JCheckBox();
-				typebox = new JCheckBox();
-				nbhbox = new JCheckBox();
-				resbox = new JCheckBox();
-				opbox = new JCheckBox();
-				startbox = new JCheckBox();
-				finbox = new JCheckBox();
-				addbox = new JCheckBox();
-				citybox = new JCheckBox();
-				provbox = new JCheckBox();
-				postbox = new JCheckBox();
-				
-				// Text fields
-				// Note: setMinimumSize prevents the fields from resizing on update
-				typeField = new JTextField(10);
-				typeField.setMinimumSize(typeField.getPreferredSize());
-				nbhField = new JTextField(10);
-				nbhField.setMinimumSize(nbhField.getPreferredSize());
-				startHourField = new JTextField(10);
-				startHourField.setMinimumSize(startHourField.getPreferredSize());
-				startMinField = new JTextField(10);
-				startMinField.setMinimumSize(startMinField.getPreferredSize());
-				finHourField = new JTextField(10);
-				finHourField.setMinimumSize(finHourField.getPreferredSize());
-				finMinField = new JTextField(10);
-				finMinField.setMinimumSize(finMinField.getPreferredSize());
-				
-				addressField = new JTextField(10);
-				addressField.setMinimumSize(addressField.getPreferredSize());
-				postalCodeField = new JTextField(10);
-				postalCodeField.setMinimumSize(postalCodeField.getPreferredSize());
-				cityField = new JTextField(10);
-				cityField.setMinimumSize(cityField.getPreferredSize());
-				provinceField = new JTextField(10);
-				provinceField.setMinimumSize(provinceField.getPreferredSize());
-				usernameField = new JTextField(10);
-				usernameField.setMinimumSize(usernameField.getPreferredSize());
-				
+		// Labels
+		JLabel titleLabel = new JLabel("Search for Businesses by Attributes");
+		JLabel ownerLabel = new JLabel("Business owner: ");
+		JLabel typeLabel = new JLabel("Type of business: ");
+		JLabel nbhLabel = new JLabel("Neighbourhood: ");
+		JLabel resLabel = new JLabel("Reservations available? ");
+		JLabel opLabel = new JLabel("Days of operation: ");
+		JLabel startLabel = new JLabel("Opens by: ");
+		JLabel finiLabel = new JLabel("Closes after: ");
+		JLabel locationLabel = new JLabel("Enter location:");
+		JLabel addressLabel = new JLabel("Street address: ");
+		JLabel cityLabel = new JLabel("City: ");
+		JLabel provinceLabel = new JLabel("Province: ");
+		JLabel postalCodeLabel = new JLabel("Postal code: ");
+		JLabel searchLabel = new JLabel("Enter values to search by:");
+		JLabel selectLabel = new JLabel("Select attributes to display:");
+		
+		// Panel for selection boxes
+		JPanel selectPanel = new JPanel();
 
-				resBox = new JComboBox<String>(res);
-				
-				// Check boxes
-				m = new JCheckBox();
-				t = new JCheckBox();
-				w = new JCheckBox();
-				r = new JCheckBox();
-				f = new JCheckBox();
-				s = new JCheckBox();
-				u = new JCheckBox();
+		// Selection boxes
+		ownerbox = new JCheckBox();
+		typebox = new JCheckBox();
+		nbhbox = new JCheckBox();
+		resbox = new JCheckBox();
+		opbox = new JCheckBox();
+		startbox = new JCheckBox();
+		finbox = new JCheckBox();
+		addbox = new JCheckBox();
+		citybox = new JCheckBox();
+		provbox = new JCheckBox();
+		postbox = new JCheckBox();
 
-				// Button
-				JButton searchButton = new JButton("Search");
+		// Text fields
+		// Note: setMinimumSize prevents the fields from resizing on update
+		typeField = new JTextField(10);
+		typeField.setMinimumSize(typeField.getPreferredSize());
+		nbhField = new JTextField(10);
+		nbhField.setMinimumSize(nbhField.getPreferredSize());
+		startHourField = new JTextField(10);
+		startHourField.setMinimumSize(startHourField.getPreferredSize());
+		startMinField = new JTextField(10);
+		startMinField.setMinimumSize(startMinField.getPreferredSize());
+		finHourField = new JTextField(10);
+		finHourField.setMinimumSize(finHourField.getPreferredSize());
+		finMinField = new JTextField(10);
+		finMinField.setMinimumSize(finMinField.getPreferredSize());
+		addressField = new JTextField(10);
+		addressField.setMinimumSize(addressField.getPreferredSize());
+		postalCodeField = new JTextField(10);
+		postalCodeField.setMinimumSize(postalCodeField.getPreferredSize());
+		cityField = new JTextField(10);
+		cityField.setMinimumSize(cityField.getPreferredSize());
+		provinceField = new JTextField(10);
+		provinceField.setMinimumSize(provinceField.getPreferredSize());
+		usernameField = new JTextField(10);
+		usernameField.setMinimumSize(usernameField.getPreferredSize());
 
+		// Reservation combobox
+		resBox = new JComboBox<String>(res);
 
-				// Create and populate the panel using GridBag for layout
-				JPanel contentPane = new JPanel();
-				JScrollPane scrollContentPane = new JScrollPane(contentPane);
-				searchFrame.setContentPane(scrollContentPane);
-				GridBagLayout gb = new GridBagLayout();
+		// Day check boxes
+		m = new JCheckBox();
+		t = new JCheckBox();
+		w = new JCheckBox();
+		r = new JCheckBox();
+		f = new JCheckBox();
+		s = new JCheckBox();
+		u = new JCheckBox();
 
-				// Preset constraint sets
-				GridBagConstraints titleC = new GridBagConstraints();
-				titleC.insets = new Insets(10, 10, 5, 0);
-				titleC.anchor = GridBagConstraints.WEST;
+		// Button
+		JButton searchButton = new JButton("Search");
 
-				GridBagConstraints labelC = new GridBagConstraints();
-				labelC.insets = new Insets(10, 10, 5, 0);
-				labelC.anchor = GridBagConstraints.WEST;
+		// Create and populate the panel using GridBag for layout
+		JPanel contentPane = new JPanel();
+		JScrollPane scrollContentPane = new JScrollPane(contentPane);
+		searchFrame.setContentPane(scrollContentPane);
+		GridBagLayout gb = new GridBagLayout();
 
-				GridBagConstraints buttonC = new GridBagConstraints();
-				buttonC.insets = new Insets(5, 10, 10, 10);
-				buttonC.weightx=0;
-				buttonC.fill=GridBagConstraints.NONE;
-				buttonC.anchor = GridBagConstraints.WEST;
+		// Preset constraint sets
+		GridBagConstraints titleC = new GridBagConstraints();
+		titleC.insets = new Insets(10, 10, 5, 0);
+		titleC.anchor = GridBagConstraints.WEST;
 
-				GridBagConstraints fieldC = new GridBagConstraints();
-				fieldC.insets = new Insets(10, 0, 5, 10);
-				fieldC.anchor = GridBagConstraints.WEST;
-				//fieldC.weightx=1.;
-				//fieldC.fill=GridBagConstraints.HORIZONTAL;
-				
-				GridBagConstraints tableC = new GridBagConstraints();
-				tableC.insets = new Insets(0, 0, 0, 0);
-				tableC.fill = GridBagConstraints.NONE;
-				tableC.gridy = 1;
-				tableC.gridx = 3;
-				tableC.ipadx = 500;
-				tableC.gridwidth = 3;
-				tableC.gridheight = 15;
+		GridBagConstraints labelC = new GridBagConstraints();
+		labelC.insets = new Insets(10, 10, 5, 0);
+		labelC.anchor = GridBagConstraints.WEST;
 
-				// Set layout and border
-				contentPane.setLayout(gb);
-				contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		GridBagConstraints buttonC = new GridBagConstraints();
+		buttonC.insets = new Insets(5, 10, 10, 10);
+		buttonC.weightx=0;
+		buttonC.fill=GridBagConstraints.NONE;
+		buttonC.anchor = GridBagConstraints.WEST;
 
-				// Add title label 
-				titleC.gridy = 1;
-				titleC.gridx = 1;
-				gb.setConstraints(titleLabel, titleC);
-				contentPane.add(titleLabel);
-				
-				// Selection label
-				labelC.gridy = 2;
-				labelC.gridx = 1;
-				gb.setConstraints(selectLabel, labelC);
-				contentPane.add(selectLabel);
-				
-				GridBagConstraints sc = new GridBagConstraints();
-				sc.anchor = GridBagConstraints.WEST;
-				sc.gridy = 3;
-				sc.gridx = 1;
-				sc.insets = new Insets(5, 10, 10, 10);
-				selectPanel = createSelectPanel();
-				gb.setConstraints(selectPanel, sc);
-				contentPane.add(selectPanel);
-				
-				// Search label
-				labelC.gridy = 4;
-				labelC.gridx = 1;
-				gb.setConstraints(searchLabel, labelC);
-				contentPane.add(searchLabel);
-				
-				// owner label
-				labelC.gridy = 5;
-				labelC.gridx = 1;
-				gb.setConstraints(ownerLabel, labelC);
-				contentPane.add(ownerLabel);
-				
-				// owner username field
-				fieldC.gridy = 6;
-				fieldC.gridx = 1;
-				fieldC.insets = new Insets(5, 10, 10, 10);
-				gb.setConstraints(usernameField, fieldC);
-				contentPane.add(usernameField);
+		GridBagConstraints fieldC = new GridBagConstraints();
+		fieldC.insets = new Insets(10, 0, 5, 10);
+		fieldC.anchor = GridBagConstraints.WEST;
+		//fieldC.weightx=1.;
+		//fieldC.fill=GridBagConstraints.HORIZONTAL;
 
-				// nbh label
-				GridBagConstraints nbhC = new GridBagConstraints();
-				nbhC.gridy = 7;
-				nbhC.gridx = 1;
-				nbhC.insets = new Insets(10, 10, 5, 0);
-				nbhC.anchor = GridBagConstraints.WEST;
-				gb.setConstraints(nbhLabel, nbhC);
-				contentPane.add(nbhLabel);
+		GridBagConstraints tableC = new GridBagConstraints();
+		tableC.insets = new Insets(0, 0, 0, 0);
+		tableC.fill = GridBagConstraints.NONE;
+		tableC.gridy = 1;
+		tableC.gridx = 3;
+		tableC.ipadx = 500;
+		tableC.gridwidth = 3;
+		tableC.gridheight = 15;
 
-				// Neighbourhood field
-				fieldC.gridy = 8;
-				fieldC.gridx = 1;
-				gb.setConstraints(nbhField, fieldC);
-				contentPane.add(nbhField);
-				
-				// Type label 
-				labelC.gridy = 9;
-				labelC.gridx = 1;
-				gb.setConstraints(typeLabel, labelC);
-				contentPane.add(typeLabel);
+		// Set layout and border
+		contentPane.setLayout(gb);
+		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-				// Type field
-				fieldC.gridy = 10;
-				fieldC.gridx = 1;
-				gb.setConstraints(typeField, fieldC);
-				contentPane.add(typeField);
+		// Add title label 
+		titleC.gridy = 1;
+		titleC.gridx = 1;
+		gb.setConstraints(titleLabel, titleC);
+		contentPane.add(titleLabel);
 
-				// Reservation label
-				labelC.gridy = 11;
-				labelC.gridx = 1;
-				gb.setConstraints(resLabel, labelC);
-				contentPane.add(resLabel);
+		// Selection label
+		labelC.gridy = 2;
+		labelC.gridx = 1;
+		gb.setConstraints(selectLabel, labelC);
+		contentPane.add(selectLabel);
 
-				// Reservation box
-				GridBagConstraints resBoxC = new GridBagConstraints();
-				resBoxC.anchor = GridBagConstraints.WEST;
-				resBoxC.gridy = 12;
-				resBoxC.gridx = 1;
-				resBoxC.gridwidth = GridBagConstraints.REMAINDER;
-				resBoxC.insets = new Insets(10, 10, 5, 0);
-				gb.setConstraints(resBox, resBoxC);
-				contentPane.add(resBox);
+		GridBagConstraints sc = new GridBagConstraints();
+		sc.anchor = GridBagConstraints.WEST;
+		sc.gridy = 3;
+		sc.gridx = 1;
+		sc.insets = new Insets(5, 10, 10, 10);
+		selectPanel = createSelectPanel();
+		gb.setConstraints(selectPanel, sc);
+		contentPane.add(selectPanel);
 
-				// Days of operation label 
-				titleC.gridy = 13;
-				titleC.gridx = 1;
-				gb.setConstraints(opLabel, titleC);
-				contentPane.add(opLabel);
+		// Search label
+		labelC.gridy = 4;
+		labelC.gridx = 1;
+		gb.setConstraints(searchLabel, labelC);
+		contentPane.add(searchLabel);
 
-				// Day boxes
-				GridBagConstraints l = new GridBagConstraints();
-				l.anchor = GridBagConstraints.WEST;
-				l.gridy = 14;
-				l.gridx = 1;
-				l.insets = new Insets(5, 10, 10, 10);
-				JPanel dayBoxPanel = createDayPanel();
-				gb.setConstraints(dayBoxPanel, l);
-				contentPane.add(dayBoxPanel);
+		// owner label
+		labelC.gridy = 5;
+		labelC.gridx = 1;
+		gb.setConstraints(ownerLabel, labelC);
+		contentPane.add(ownerLabel);
 
-				// Opening time label 
-				titleC.gridy = 15;
-				gb.setConstraints(startLabel, titleC);
-				contentPane.add(startLabel);
+		// owner username field
+		fieldC.gridy = 6;
+		fieldC.gridx = 1;
+		fieldC.insets = new Insets(5, 10, 10, 10);
+		gb.setConstraints(usernameField, fieldC);
+		contentPane.add(usernameField);
 
-				// Opening time fields
-				GridBagConstraints of = new GridBagConstraints();
-				of.anchor = GridBagConstraints.WEST;
-				of.gridy = 16;
-				of.gridx = 1;
-				of.insets = new Insets(5, 10, 10, 10);
-				JPanel openPanel = createOpeningPanel();
-				gb.setConstraints(openPanel, of);
-				contentPane.add(openPanel);
+		// nbh label
+		GridBagConstraints nbhC = new GridBagConstraints();
+		nbhC.gridy = 7;
+		nbhC.gridx = 1;
+		nbhC.insets = new Insets(10, 10, 5, 0);
+		nbhC.anchor = GridBagConstraints.WEST;
+		gb.setConstraints(nbhLabel, nbhC);
+		contentPane.add(nbhLabel);
 
-				// Closing time label 
-				titleC.gridy = 17;
-				gb.setConstraints(finiLabel, titleC);
-				contentPane.add(finiLabel);
+		// Neighbourhood field
+		fieldC.gridy = 8;
+		fieldC.gridx = 1;
+		gb.setConstraints(nbhField, fieldC);
+		contentPane.add(nbhField);
 
-				// Closing time fields
-				GridBagConstraints cf = new GridBagConstraints();
-				cf.anchor = GridBagConstraints.WEST;
-				cf.gridx = 1;
-				cf.gridy = 18;
-				cf.insets = new Insets(5, 10, 10, 10);
-				JPanel closePanel = createClosingPanel();
-				gb.setConstraints(closePanel, cf);
-				contentPane.add(closePanel);
-				
-				
-				// Location title
-				titleC.gridy = 19;
-				gb.setConstraints(locationLabel, titleC);
-				contentPane.add(locationLabel);
-				
-				// Address label
-				titleC.gridy = 20;
-				gb.setConstraints(addressLabel, titleC);
-				contentPane.add(addressLabel);
-				
-				// Address field
-				fieldC.gridy = 21;
-				fieldC.gridx = 1;
-				gb.setConstraints(addressField, fieldC);
-				contentPane.add(addressField);
-				
-				// City label
-				titleC.gridy = 22;
-				gb.setConstraints(cityLabel, titleC);
-				contentPane.add(cityLabel);
-				
-				// City field
-				fieldC.gridy = 23;
-				fieldC.gridx = 1;
-				gb.setConstraints(cityField, fieldC);
-				contentPane.add(cityField);
-				
-				// Province title
-				titleC.gridy = 24;
-				gb.setConstraints(provinceLabel, titleC);
-				contentPane.add(provinceLabel);
-				
-				// Province field
-				fieldC.gridy = 25;
-				fieldC.gridx = 1;
-				gb.setConstraints(provinceField, fieldC);
-				contentPane.add(provinceField);
-				
-				// Postalcode title
-				titleC.gridy = 26;
-				gb.setConstraints(postalCodeLabel, titleC);
-				contentPane.add(postalCodeLabel);
-				
-				// Postalcode field
-				fieldC.gridy = 27;
-				fieldC.gridx = 1;
-				gb.setConstraints(postalCodeField, fieldC);
-				contentPane.add(postalCodeField);
+		// Type label 
+		labelC.gridy = 9;
+		labelC.gridx = 1;
+		gb.setConstraints(typeLabel, labelC);
+		contentPane.add(typeLabel);
 
-				// Add button label 
-				buttonC.gridy = 28;
-				buttonC.gridx = 1;
-				gb.setConstraints(searchButton, buttonC);
-				contentPane.add(searchButton);
+		// Type field
+		fieldC.gridy = 10;
+		fieldC.gridx = 1;
+		gb.setConstraints(typeField, fieldC);
+		contentPane.add(typeField);
 
-				// Error message
-				JLabel errorMessage = new JLabel(" ");
-				titleC.gridy = 29;
-				titleC.gridx = 1;
-				errorMessage.setForeground (Color.red);
-				gb.setConstraints(errorMessage, titleC);
-				contentPane.add(errorMessage);
-				
-				results = new JTable();
-				
-				JScrollPane scrollPane = new JScrollPane();
-				scrollPane.setViewportView(results);
-				
-				gb.setConstraints(scrollPane, tableC);
-				contentPane.add(scrollPane);
-				
-				ActionListener searchButtonListener = new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
-						try{
-							//private JCheckBox ownerbox, typebox, nbhbox, resbox, opbox, startbox, finbox, addbox, citybox, provbox, postbox;
-							String statement = "select BusinessID";
-							if(ownerbox.isSelected()){
-								statement = statement.concat(", ownerUsername");
-							}
-							if(typebox.isSelected()){
-								statement = statement.concat(", type");
-							}
-							if(nbhbox.isSelected()){
-								statement = statement.concat(", neighborhood");
-							}
-							if(resbox.isSelected()){
-								statement = statement.concat(", reservationflag");
-							}
-							if(opbox.isSelected()){
-								statement = statement.concat(", dayofoperation");
-							}
-							if(startbox.isSelected()){
-								statement = statement.concat(", starttime");
-							}
-							if(finbox.isSelected()){
-								statement = statement.concat(", finishtime");
-							}
-							if(addbox.isSelected()){
-								statement = statement.concat(", streetadd");
-							}
-							if(citybox.isSelected()){
-								statement = statement.concat(", city");
-							}
-							if(provbox.isSelected()){
-								statement = statement.concat(", province");
-							}
-							if(postbox.isSelected()){
-								statement = statement.concat(", postalcode");
-							}
-							
-							
-							boolean first = true;
-							statement = statement.concat(" from business natural left outer join located natural left outer join location natural left outer join postalcode");
-							
-							// Check type;
-							String type = typeField.getText();
-							if(!type.equals("")){
-								statement = statement.concat(" where");
-								statement = statement.concat(" type = '");
-								statement = statement.concat(type);
-								statement = statement.concat("'");
-								first = false;
-							}
-							String username = usernameField.getText();
-							if(!username.equals("")){
-								if(!first){
-									statement = statement.concat(" and");
-								}
-								else{
-									statement = statement.concat(" where");
-									first = false; 
-								}
+		// Reservation label
+		labelC.gridy = 11;
+		labelC.gridx = 1;
+		gb.setConstraints(resLabel, labelC);
+		contentPane.add(resLabel);
 
-								statement = statement.concat(" ownerUsername = '");
-								statement = statement.concat(username);
-								statement = statement.concat("'");
-							}
-							String res = (String) resBox.getSelectedItem();
-							// Determine value of res
-							System.out.println("Yes");
-							if(res.equals("Yes")){
-								res = "Y";
-							}
-							else if(res.equals("No")){
-								res = "N";
-							}
-							
-							if(res.equals("Y") || res.equals("N")){
-								if(!first){
-									statement = statement.concat(" and");
-								}
-								else{
-									statement = statement.concat(" where");
-									first = false;
-								}
+		// Reservation box
+		GridBagConstraints resBoxC = new GridBagConstraints();
+		resBoxC.anchor = GridBagConstraints.WEST;
+		resBoxC.gridy = 12;
+		resBoxC.gridx = 1;
+		resBoxC.gridwidth = GridBagConstraints.REMAINDER;
+		resBoxC.insets = new Insets(10, 10, 5, 0);
+		gb.setConstraints(resBox, resBoxC);
+		contentPane.add(resBox);
 
-								statement = statement.concat(" reservationflag = '");
-								statement = statement.concat(res);
-								statement = statement.concat("'");
-							}
-							String days = "";
-							
-							// Determine value of days
-							if(m.isSelected()){
-								days = days.concat("M");
-							}
-							if(t.isSelected()){
-								days = days.concat("T");
-							}
-							if(w.isSelected()){
-								days = days.concat("W");
-							}
-							if(r.isSelected()){
-								days = days.concat("R");
-							}
-							if(f.isSelected()){
-								days = days.concat("F");
-							}
-							if(s.isSelected()){
-								days = days.concat("S");
-							}
-							if(s.isSelected()){
-								days = days.concat("U");
-							}
-							if(!days.equals("")){
-								if(!first){
-									
-									statement = statement.concat(" and");
-								}
-								else{
-									first = false;
-									statement = statement.concat(" where");
-								}
+		// Days of operation label 
+		titleC.gridy = 13;
+		titleC.gridx = 1;
+		gb.setConstraints(opLabel, titleC);
+		contentPane.add(opLabel);
 
-								statement = statement.concat(" dayofOperation = '");
-								statement = statement.concat(res);
-								statement = statement.concat("'");
-							}
+		// Day boxes
+		GridBagConstraints l = new GridBagConstraints();
+		l.anchor = GridBagConstraints.WEST;
+		l.gridy = 14;
+		l.gridx = 1;
+		l.insets = new Insets(5, 10, 10, 10);
+		JPanel dayBoxPanel = createDayPanel();
+		gb.setConstraints(dayBoxPanel, l);
+		contentPane.add(dayBoxPanel);
 
-							String nbh = nbhField.getText();
-							if(!nbh.equals("")){
-								if(!first){
-									statement = statement.concat(" and");
-								}
-								else{
-									first = false;
-									statement = statement.concat(" where");
-								}
+		// Opening time label 
+		titleC.gridy = 15;
+		gb.setConstraints(startLabel, titleC);
+		contentPane.add(startLabel);
 
-								statement = statement.concat(" Neighborhood = '");
-								statement = statement.concat(nbh);
-								statement = statement.concat("'");
-							}
-							
-							String startHour = startHourField.getText();
-							String startMin = startMinField.getText();
-							String finHour = finHourField.getText();
-							String finMin = finMinField.getText();
-							
-							if(!startHour.equals("") || !startMin.equals("")){
-								if(!(startHour.matches("[0-9]+") && startMin.matches("[0-9]+"))){
-									errorMessage.setText("Invalid time");
-									return;
-								}
-								else{
-									int sH = Integer.parseInt(startHour);
-									int sM = Integer.parseInt(startMin);
-									int startTime;
-									if(sH < 24 && sH >= 0 && sM >=0 && sM < 60){
-										startTime = sH*100 + sM;
-										if(!first){
-											statement = statement.concat(" and");
-										}
-										else{
-											first = false;
-											statement = statement.concat(" where");
-										}
+		// Opening time fields
+		GridBagConstraints of = new GridBagConstraints();
+		of.anchor = GridBagConstraints.WEST;
+		of.gridy = 16;
+		of.gridx = 1;
+		of.insets = new Insets(5, 10, 10, 10);
+		JPanel openPanel = createOpeningPanel();
+		gb.setConstraints(openPanel, of);
+		contentPane.add(openPanel);
 
-										statement = statement.concat(" startTime <= ");
-										statement = statement.concat(Integer.toString(startTime));
-									}
-									else{
-										errorMessage.setText("Invalid opening time");
-										return;
-									}
-								}
-							}
-							
-							if(!finHour.equals("") || !finMin.equals("")){
-								if(!(finHour.matches("[0-9]+") && finMin.matches("[0-9]+"))){
-									errorMessage.setText("Invalid time");
-									return;
-								}
-								else{
-									int fH = Integer.parseInt(finHour);
-									int fM = Integer.parseInt(finMin);
-									int finTime;
-									if(fH < 24 && fH >= 0 && fM >=0 && fM < 60){
-										finTime = fH*100 + fM;
-										if(!first){
-											statement = statement.concat(" and");
-										}
-										else{
-											first = false;
-											statement = statement.concat(" where");
-										}
+		// Closing time label 
+		titleC.gridy = 17;
+		gb.setConstraints(finiLabel, titleC);
+		contentPane.add(finiLabel);
 
-										statement = statement.concat(" finishTime > ");
-										statement = statement.concat(Integer.toString(finTime));
-									}
-									else{
-										errorMessage.setText("Invalid closing time");
-										return;
-									}
-								}
-							}
-							
-							String address = addressField.getText();
-							String city = cityField.getText();
-							String province = provinceField.getText();
-							String postalCode = postalCodeField.getText();
-							
-							if(!address.equals("")){
-								if(!first){
-									statement = statement.concat(" and");
-								}
-								else{
-									first = false;
-									statement = statement.concat(" where");
-								}
+		// Closing time fields
+		GridBagConstraints cf = new GridBagConstraints();
+		cf.anchor = GridBagConstraints.WEST;
+		cf.gridx = 1;
+		cf.gridy = 18;
+		cf.insets = new Insets(5, 10, 10, 10);
+		JPanel closePanel = createClosingPanel();
+		gb.setConstraints(closePanel, cf);
+		contentPane.add(closePanel);
 
-								statement = statement.concat(" streetAdd = '");
-								statement = statement.concat(address);
-								statement = statement.concat("'");
-							}
-							if(!city.equals("")){
-								if(!first){
-									statement = statement.concat(" and");
-								}
-								else{
-									first = false;
-									statement = statement.concat(" where");
-								}
+		// Location title
+		titleC.gridy = 19;
+		gb.setConstraints(locationLabel, titleC);
+		contentPane.add(locationLabel);
 
-								statement = statement.concat(" city = '");
-								statement = statement.concat(city);
-								statement = statement.concat("'");
-							}
-							if(!province.equals("")){
-								if(!first){
-									statement = statement.concat(" and");
-								}
-								else{
-									first = false;
-									statement = statement.concat(" where");
-								}
+		// Address label
+		titleC.gridy = 20;
+		gb.setConstraints(addressLabel, titleC);
+		contentPane.add(addressLabel);
 
-								statement = statement.concat(" province = '");
-								statement = statement.concat(province);
-								statement = statement.concat("'");
-							}
-							if(!postalCode.equals("")){
-								if(!first){
-									statement = statement.concat(" and");
-								}
-								else{
-									first = false;
-									statement = statement.concat(" where");
-								}
+		// Address field
+		fieldC.gridy = 21;
+		fieldC.gridx = 1;
+		gb.setConstraints(addressField, fieldC);
+		contentPane.add(addressField);
 
-								statement = statement.concat(" postalCode = '");
-								statement = statement.concat(postalCode);
-								statement = statement.concat("'");
-							}
-							
-							PreparedStatement stmt = con.prepareStatement(statement);
-							System.out.println(statement);
-							
-							ResultSet rs = stmt.executeQuery();
-							ResultSetMetaData rsmd = rs.getMetaData();
-							TableFromResultSet.replaceTable(results, rs, rsmd);
-							}
-							catch(SQLException ex){
-								System.out.println("Message: " + ex.getMessage());
-							}
+		// City label
+		titleC.gridy = 22;
+		gb.setConstraints(cityLabel, titleC);
+		contentPane.add(cityLabel);
+
+		// City field
+		fieldC.gridy = 23;
+		fieldC.gridx = 1;
+		gb.setConstraints(cityField, fieldC);
+		contentPane.add(cityField);
+
+		// Province title
+		titleC.gridy = 24;
+		gb.setConstraints(provinceLabel, titleC);
+		contentPane.add(provinceLabel);
+
+		// Province field
+		fieldC.gridy = 25;
+		fieldC.gridx = 1;
+		gb.setConstraints(provinceField, fieldC);
+		contentPane.add(provinceField);
+
+		// Postalcode title
+		titleC.gridy = 26;
+		gb.setConstraints(postalCodeLabel, titleC);
+		contentPane.add(postalCodeLabel);
+
+		// Postalcode field
+		fieldC.gridy = 27;
+		fieldC.gridx = 1;
+		gb.setConstraints(postalCodeField, fieldC);
+		contentPane.add(postalCodeField);
+
+		// Add button label 
+		buttonC.gridy = 28;
+		buttonC.gridx = 1;
+		gb.setConstraints(searchButton, buttonC);
+		contentPane.add(searchButton);
+
+		// Error message
+		JLabel errorMessage = new JLabel(" ");
+		titleC.gridy = 29;
+		titleC.gridx = 1;
+		errorMessage.setForeground (Color.red);
+		gb.setConstraints(errorMessage, titleC);
+		contentPane.add(errorMessage);
+
+		// Create result table
+		results = new JTable();
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(results);
+
+		gb.setConstraints(scrollPane, tableC);
+		contentPane.add(scrollPane);
+
+		// Listener to perform search
+		ActionListener searchButtonListener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				try{
+					// Generate selection part of statement
+					String statement = "select BusinessID";
+					if(ownerbox.isSelected()){
+						statement = statement.concat(", ownerUsername");
 					}
-				};
-				searchButton.addActionListener(searchButtonListener);
+					if(typebox.isSelected()){
+						statement = statement.concat(", type");
+					}
+					if(nbhbox.isSelected()){
+						statement = statement.concat(", neighborhood");
+					}
+					if(resbox.isSelected()){
+						statement = statement.concat(", reservationflag");
+					}
+					if(opbox.isSelected()){
+						statement = statement.concat(", dayofoperation");
+					}
+					if(startbox.isSelected()){
+						statement = statement.concat(", starttime");
+					}
+					if(finbox.isSelected()){
+						statement = statement.concat(", finishtime");
+					}
+					if(addbox.isSelected()){
+						statement = statement.concat(", streetadd");
+					}
+					if(citybox.isSelected()){
+						statement = statement.concat(", city");
+					}
+					if(provbox.isSelected()){
+						statement = statement.concat(", province");
+					}
+					if(postbox.isSelected()){
+						statement = statement.concat(", postalcode");
+					}
 
-		
-		// Resize window
-				searchFrame.pack();
+					// Generate where statement
+					boolean first = true;
+					statement = statement.concat(" from business natural left outer join located natural left outer join location natural left outer join postalcode");
 
-				// Centre window
-				Dimension d = searchFrame.getToolkit().getScreenSize();
-				Rectangle r = searchFrame.getBounds();
-				searchFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+					// Check type
+					String type = typeField.getText();
+					if(!type.equals("")){
+						statement = statement.concat(" where");
+						statement = statement.concat(" type = '");
+						statement = statement.concat(type);
+						statement = statement.concat("'");
+						first = false;
+					}
+					
+					// Check username
+					String username = usernameField.getText();
+					if(!username.equals("")){
+						if(!first){
+							statement = statement.concat(" and");
+						}
+						else{
+							statement = statement.concat(" where");
+							first = false; 
+						}
 
-				// Set window visible
-				searchFrame.setVisible(true);
+						statement = statement.concat(" ownerUsername = '");
+						statement = statement.concat(username);
+						statement = statement.concat("'");
+					}
+					
+					String res = (String) resBox.getSelectedItem();
+					// Determine value of res
+					if(res.equals("Yes")){
+						res = "Y";
+					}
+					else if(res.equals("No")){
+						res = "N";
+					}
+					if(res.equals("Y") || res.equals("N")){
+						if(!first){
+							statement = statement.concat(" and");
+						}
+						else{
+							statement = statement.concat(" where");
+							first = false;
+						}
 
+						statement = statement.concat(" reservationflag = '");
+						statement = statement.concat(res);
+						statement = statement.concat("'");
+					}
+					
+					// Determine value of days
+					String days = "";
+					
+					if(m.isSelected()){
+						days = days.concat("M");
+					}
+					if(t.isSelected()){
+						days = days.concat("T");
+					}
+					if(w.isSelected()){
+						days = days.concat("W");
+					}
+					if(r.isSelected()){
+						days = days.concat("R");
+					}
+					if(f.isSelected()){
+						days = days.concat("F");
+					}
+					if(s.isSelected()){
+						days = days.concat("S");
+					}
+					if(s.isSelected()){
+						days = days.concat("U");
+					}
+					if(!days.equals("")){
+						if(!first){
 
-				// Attempt to load the Oracle JDBC driver
-				try 
-				{
-					DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+							statement = statement.concat(" and");
+						}
+						else{
+							first = false;
+							statement = statement.concat(" where");
+						}
+
+						statement = statement.concat(" dayofOperation = '");
+						statement = statement.concat(res);
+						statement = statement.concat("'");
+					}
+
+					// Check neighborhood
+					String nbh = nbhField.getText();
+					if(!nbh.equals("")){
+						if(!first){
+							statement = statement.concat(" and");
+						}
+						else{
+							first = false;
+							statement = statement.concat(" where");
+						}
+
+						statement = statement.concat(" Neighborhood = '");
+						statement = statement.concat(nbh);
+						statement = statement.concat("'");
+					}
+
+					// Check times
+					String startHour = startHourField.getText();
+					String startMin = startMinField.getText();
+					String finHour = finHourField.getText();
+					String finMin = finMinField.getText();
+
+					if(!startHour.equals("") || !startMin.equals("")){
+						if(!(startHour.matches("[0-9]+") && startMin.matches("[0-9]+"))){
+							errorMessage.setText("Invalid time");
+							return;
+						}
+						else{
+							int sH = Integer.parseInt(startHour);
+							int sM = Integer.parseInt(startMin);
+							int startTime;
+							if(sH < 24 && sH >= 0 && sM >=0 && sM < 60){
+								startTime = sH*100 + sM;
+								if(!first){
+									statement = statement.concat(" and");
+								}
+								else{
+									first = false;
+									statement = statement.concat(" where");
+								}
+
+								statement = statement.concat(" startTime <= ");
+								statement = statement.concat(Integer.toString(startTime));
+							}
+							else{
+								errorMessage.setText("Invalid opening time");
+								return;
+							}
+						}
+					}
+
+					if(!finHour.equals("") || !finMin.equals("")){
+						if(!(finHour.matches("[0-9]+") && finMin.matches("[0-9]+"))){
+							errorMessage.setText("Invalid time");
+							return;
+						}
+						else{
+							int fH = Integer.parseInt(finHour);
+							int fM = Integer.parseInt(finMin);
+							int finTime;
+							if(fH < 24 && fH >= 0 && fM >=0 && fM < 60){
+								finTime = fH*100 + fM;
+								if(!first){
+									statement = statement.concat(" and");
+								}
+								else{
+									first = false;
+									statement = statement.concat(" where");
+								}
+
+								statement = statement.concat(" finishTime > ");
+								statement = statement.concat(Integer.toString(finTime));
+							}
+							else{
+								errorMessage.setText("Invalid closing time");
+								return;
+							}
+						}
+					}
+
+					// Check location
+					String address = addressField.getText();
+					String city = cityField.getText();
+					String province = provinceField.getText();
+					String postalCode = postalCodeField.getText();
+					
+					if(!address.equals("")){
+						if(!first){
+							statement = statement.concat(" and");
+						}
+						else{
+							first = false;
+							statement = statement.concat(" where");
+						}
+
+						statement = statement.concat(" streetAdd = '");
+						statement = statement.concat(address);
+						statement = statement.concat("'");
+					}
+					if(!city.equals("")){
+						if(!first){
+							statement = statement.concat(" and");
+						}
+						else{
+							first = false;
+							statement = statement.concat(" where");
+						}
+
+						statement = statement.concat(" city = '");
+						statement = statement.concat(city);
+						statement = statement.concat("'");
+					}
+					if(!province.equals("")){
+						if(!first){
+							statement = statement.concat(" and");
+						}
+						else{
+							first = false;
+							statement = statement.concat(" where");
+						}
+
+						statement = statement.concat(" province = '");
+						statement = statement.concat(province);
+						statement = statement.concat("'");
+					}
+					if(!postalCode.equals("")){
+						if(!first){
+							statement = statement.concat(" and");
+						}
+						else{
+							first = false;
+							statement = statement.concat(" where");
+						}
+
+						statement = statement.concat(" postalCode = '");
+						statement = statement.concat(postalCode);
+						statement = statement.concat("'");
+					}
+
+					// Complete statement
+					PreparedStatement stmt = con.prepareStatement(statement);
+					ResultSet rs = stmt.executeQuery();
+					ResultSetMetaData rsmd = rs.getMetaData();
+					TableFromResultSet.replaceTable(results, rs, rsmd);
 				}
-				catch (SQLException ex)
-				{
+				catch(SQLException ex){
 					System.out.println("Message: " + ex.getMessage());
-					System.exit(-1);
+					errorMessage.setText("An unexpected error occurred");
 				}
-		
+			}
+		};
+		searchButton.addActionListener(searchButtonListener);
+
+
+		// Resize window
+		searchFrame.pack();
+
+		// Centre window
+		Dimension d = searchFrame.getToolkit().getScreenSize();
+		Rectangle r = searchFrame.getBounds();
+		searchFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+
+		// Set window visible
+		searchFrame.setVisible(true);
+
+		// Attempt to load the Oracle JDBC driver
+		try 
+		{
+			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+			System.exit(-1);
+		}
 	}
-	
+
 	// Method to create day selection panel
 	JPanel createDayPanel(){
 		JPanel dayPanel = new JPanel();
@@ -748,8 +729,8 @@ public class BusinessSearch {
 
 		return dayPanel;
 	}
-	
-	
+
+
 	// Method to create attribute selection panel
 	JPanel createSelectPanel(){
 		JPanel selectPanel = new JPanel();
@@ -859,14 +840,14 @@ public class BusinessSearch {
 		GridBagLayout gb = new GridBagLayout();
 		openPanel.setLayout(gb);
 		openPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		
+
 		GridBagConstraints of = new GridBagConstraints();
 		of.anchor = GridBagConstraints.WEST;
 		of.weightx=1.;
 		of.fill=GridBagConstraints.HORIZONTAL;
 		of.gridy = 1;
 		of.gridx = 1;
-		
+
 		JLabel oH = new JLabel(" H: ");
 		gb.setConstraints(oH, of);
 		openPanel.add(oH);
@@ -890,14 +871,14 @@ public class BusinessSearch {
 		GridBagLayout gb = new GridBagLayout();
 		closePanel.setLayout(gb);
 		closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		
+
 		GridBagConstraints cf = new GridBagConstraints();
 		cf.anchor = GridBagConstraints.WEST;
 		cf.weightx=1.;
 		cf.fill=GridBagConstraints.HORIZONTAL;
 		cf.gridx = 1;
 		cf.gridy = 12;
-		
+
 		JLabel cH = new JLabel(" H: ");
 		gb.setConstraints(cH, cf);
 		closePanel.add(cH);
