@@ -1,13 +1,15 @@
 package loginAndRegistration;
 import javax.swing.*;
 
-import java.awt.*;
+//import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
 // Class to connect to database on program startup
 public class DatabaseLogin implements ActionListener{
-	/* Code based on the branch.java program provided in the CPSC304 JDBC tutorial 1 */
+	/* Code based on the branch.java program provided in the CPSC304 JDBC tutorial 1 
+	 * Much of the code has been commented out as we switched to connecting directly to
+	 * an AWS database */
 
 	private Connection con;
 
@@ -17,7 +19,7 @@ public class DatabaseLogin implements ActionListener{
 
 	public DatabaseLogin(){
 		// Create frame, labels, etc. for connection login window
-		loginFrame = new JFrame("Oracle Connection Login");
+		/*loginFrame = new JFrame("Oracle Connection Login");
 
 		JLabel usernameLabel = new JLabel("Enter Oracle username: ");
 		JLabel passwordLabel = new JLabel("Enter Oracle password: ");
@@ -98,6 +100,7 @@ public class DatabaseLogin implements ActionListener{
 		usernameField.requestFocus();
 
 		// Attempt to load the Oracle JDBC driver
+		*/
 		try 
 		{
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
@@ -107,6 +110,8 @@ public class DatabaseLogin implements ActionListener{
 			System.out.println("Message: " + ex.getMessage());
 			System.exit(-1);
 		}
+		connect("","");
+		new AppLogin(con);
 	}
 
 
@@ -115,18 +120,20 @@ public class DatabaseLogin implements ActionListener{
 	private boolean connect(String username, String password)
 	{
 		// FOR AWS DATABASE USE
-		/*
 		String connectURL = "jdbc:oracle:thin:@dwh-micro1.clrwdshwtrbl.us-west-1.rds.amazonaws.com:1521:DWH";
-		 */
+		 
+		// For CS Database User
+		/*
 		String connectURL = "jdbc:oracle:thin:@localhost:1522:ug";
+		*/
 		try 
 		{
 			// FOR AWS DATABASE USE
-			/*
 			con = DriverManager.getConnection(connectURL,"reggie","registration");
-			 */
+			// For CS Database User
+			/*
 			con = DriverManager.getConnection(connectURL,username,password);
-
+			*/
 			System.out.println("\nConnected to Oracle!");
 			return true;
 		}

@@ -120,7 +120,6 @@ public class CustomerRegistration {
 						rs = stmt.executeQuery();
 
 						// FOR AWS DATABASE USE
-						/*
 						regQuery = "create user ";
 						regQuery = regQuery.concat(userName).concat("_customer identified by ").concat(password);
 						Statement statement = con.createStatement();
@@ -131,7 +130,6 @@ public class CustomerRegistration {
 						regQuery = "grant create session to ";
 						regQuery = regQuery.concat(userName).concat("_customer");
 						statement.executeQuery(regQuery);
-						 */
 						regFrame.dispose();
 					}        
 				}

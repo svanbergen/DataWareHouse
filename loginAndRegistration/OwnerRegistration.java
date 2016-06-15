@@ -117,7 +117,6 @@ public class OwnerRegistration {
 						stmt.setString(2, password);
 						rs = stmt.executeQuery();
 						// FOR AWS DATABASE USE
-						/*
 						regQuery = "create user ";
 						regQuery = regQuery.concat(userName).concat("_owner identified by ").concat(password);
 						Statement statement = con.createStatement();
@@ -128,7 +127,6 @@ public class OwnerRegistration {
 						regQuery = "grant create session to ";
 						regQuery = regQuery.concat(userName).concat("_owner");
 						statement.executeQuery(regQuery);
-						*/
 						regFrame.dispose();
 					}        
 				}

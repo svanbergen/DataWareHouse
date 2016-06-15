@@ -159,7 +159,6 @@ public class AppLogin {
 						// If details are valid remove database login window and go to customer menu window
 						if(dBPassword.equals(password)){
 							// FOR AWS DATABASE USE
-							/*
 							Connection con1;
 							try{
 								con1 = DriverManager.getConnection(connectURL,userName+"_customer",password);
@@ -172,10 +171,7 @@ public class AppLogin {
 								return;
 							}
 
-							con.close();
-							con = con1;
-							 */
-							new CustomerMenu(con,userName);
+							new CustomerMenu(con1,userName);
 						}
 						else{
 							cPasswordField.setText("");
@@ -226,7 +222,6 @@ public class AppLogin {
 						// If details are valid remove database login window and go to customer menu window
 						if(dBPassword.equals(password)){
 							// FOR AWS DATABASE USE
-							/*
 							Connection con1;
 							try{
 								con1 = DriverManager.getConnection(connectURL,userName+"_owner",password);
@@ -238,11 +233,7 @@ public class AppLogin {
 								errorMessage.setText("Invalid input");
 								return;
 							}
-
-							con.close();
-							con = con1;
-							 */
-							new OwnerMenu(con, userName);
+							new OwnerMenu(con1, userName);
 						}
 						else{
 							oPasswordField.setText("");

@@ -297,6 +297,14 @@ public class OwnerMenu {
 		{
 			public void windowClosing(WindowEvent e) 
 			{ 
+				try 
+				{
+					con.close();
+				} 
+				catch (SQLException e1) 
+				{
+					System.out.print("Error occurred when closing connection.");
+				}
 				//System.exit(0); 
 			}
 		});

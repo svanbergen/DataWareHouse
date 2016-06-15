@@ -469,7 +469,7 @@ public class BusinessSearch {
 					if(s.isSelected()){
 						days = days.concat("S");
 					}
-					if(s.isSelected()){
+					if(u.isSelected()){
 						days = days.concat("U");
 					}
 					if(!days.equals("")){
@@ -483,7 +483,7 @@ public class BusinessSearch {
 						}
 
 						statement = statement.concat(" dayofOperation = '");
-						statement = statement.concat(res);
+						statement = statement.concat(days);
 						statement = statement.concat("'");
 					}
 
