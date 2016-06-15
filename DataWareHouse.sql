@@ -164,8 +164,9 @@ CREATE TABLE BigSpenders (
 CREATE OR REPLACE TRIGGER spender_trig
  AFTER UPDATE ON Orders
  FOR EACH ROW
- 		WHEN (new.price > 100 and new.timeMade is not null)
+ 		WHEN (new.price > 100)
 		BEGIN
+			DELETE FROM BigSpenders where customerUsername = :new.customerUsername and orderid = :new.orderid;
 			INSERT INTO BigSpenders values(:new.customerUsername, :new.orderid, :new.price, :new.businessid);
 		EXCEPTION
   			WHEN DUP_VAL_ON_INDEX
