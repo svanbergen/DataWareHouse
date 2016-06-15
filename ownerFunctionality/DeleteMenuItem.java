@@ -185,6 +185,7 @@ public class DeleteMenuItem {
 							ResultSet rs = stmt3.executeQuery();
 							ResultSetMetaData rsmd = rs.getMetaData();
 							TableFromResultSet.replaceTable(results, rs, rsmd);
+							errorMessage.setText("");
 
 						}
 						catch (SQLException ex){
