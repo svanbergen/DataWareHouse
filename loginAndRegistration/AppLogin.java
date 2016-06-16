@@ -170,7 +170,9 @@ public class AppLogin {
 								errorMessage.setText("Invalid input");
 								return;
 							}
-
+							//
+							// For CS Database Use
+							// con1 = con;
 							new CustomerMenu(con1,userName);
 						}
 						else{
@@ -233,6 +235,9 @@ public class AppLogin {
 								errorMessage.setText("Invalid input");
 								return;
 							}
+							//
+							// For CS Database Use
+							// con1 = con;
 							new OwnerMenu(con1, userName);
 						}
 						else{

@@ -127,6 +127,7 @@ public class OwnerRegistration {
 						regQuery = "grant create session to ";
 						regQuery = regQuery.concat(userName).concat("_owner");
 						statement.executeQuery(regQuery);
+						//
 						regFrame.dispose();
 					}        
 				}

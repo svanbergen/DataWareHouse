@@ -18,6 +18,7 @@ public class DatabaseLogin implements ActionListener{
 	private JFrame loginFrame;
 
 	public DatabaseLogin(){
+		// Necessary only for CS connection
 		// Create frame, labels, etc. for connection login window
 		/*loginFrame = new JFrame("Oracle Connection Login");
 
@@ -122,7 +123,7 @@ public class DatabaseLogin implements ActionListener{
 		// FOR AWS DATABASE USE
 		String connectURL = "jdbc:oracle:thin:@dwh-micro1.clrwdshwtrbl.us-west-1.rds.amazonaws.com:1521:DWH";
 		 
-		// For CS Database User
+		// For CS Database Use
 		/*
 		String connectURL = "jdbc:oracle:thin:@localhost:1522:ug";
 		*/
@@ -130,7 +131,7 @@ public class DatabaseLogin implements ActionListener{
 		{
 			// FOR AWS DATABASE USE
 			con = DriverManager.getConnection(connectURL,"reggie","registration");
-			// For CS Database User
+			// For CS Database Use
 			/*
 			con = DriverManager.getConnection(connectURL,username,password);
 			*/

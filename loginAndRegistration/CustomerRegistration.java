@@ -130,6 +130,7 @@ public class CustomerRegistration {
 						regQuery = "grant create session to ";
 						regQuery = regQuery.concat(userName).concat("_customer");
 						statement.executeQuery(regQuery);
+						//
 						regFrame.dispose();
 					}        
 				}
