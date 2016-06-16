@@ -157,6 +157,7 @@ CREATE TABLE BigSpenders (
 	businessid int,
 	Foreign Key(customerUsername) references Customer,
 	Foreign Key(OrderID) references Orders,
+	Foreign Key(businessid) references Business on delete set null,
 	Primary Key(customerUsername,OrderID),
 	check (Price > 100)
 );
@@ -184,7 +185,7 @@ CREATE TABLE Includes (
 	menuItemID int,
 	Primary Key (orderID, menuItemID),
 	Foreign Key(orderID) references Orders,
-	Foreign Key(menuItemID) references MenuItem 
+	Foreign Key(menuItemID) references MenuItem on delete cascade
 	);
 
 grant select on includes to public;
@@ -245,8 +246,8 @@ CREATE TABLE Located (
 	BusinessID int,
 	locationID int,
 	Primary Key(BusinessID, locationID),
-	Foreign Key(BusinessID) references Business,
-	Foreign Key(locationID) references location);
+	Foreign Key(BusinessID) references Business on delete cascade,
+	Foreign Key(locationID) references location on delete cascade);
 
 
 grant select on located to public;
@@ -267,7 +268,7 @@ CREATE TABLE Reservation (
 	businessID int,
 	Primary Key(dates, customerUsername, businessID),
 	Foreign Key(CustomerUsername) references Customer,
-	Foreign Key(BusinessID) references Business );
+	Foreign Key(BusinessID) references Business on delete cascade);
 
 grant select on reservation to public;
 
@@ -277,7 +278,7 @@ CREATE TABLE Reply (
 	ReplyDate date,
 	replyContent varchar(200) not null,
 	Primary Key (reviewID, OwnerUsername),
-	Foreign Key(reviewID) references Review,
+	Foreign Key(reviewID) references Review on delete cascade,
 	Foreign Key(OwnerUsername) references BusinessOwner );
 
 

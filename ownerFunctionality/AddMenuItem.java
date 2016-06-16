@@ -220,7 +220,7 @@ public class AddMenuItem {
 					stmt.setInt(4, i);
 					stmt.executeQuery();
 
-					PreparedStatement stmt2 = con.prepareStatement("select menuitem.businessid, select menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
+					PreparedStatement stmt2 = con.prepareStatement("select menuitem.businessid, menuItem.menuitemid, menuitem.name, menuitem.itemtype, menuitem.price from menuitem, business where business.BusinessID = menuitem.businessid and business.ownerUsername = ?");
 					stmt2.setString(1,username);
 					ResultSet rs = stmt2.executeQuery();
 					ResultSetMetaData rsmd = rs.getMetaData();

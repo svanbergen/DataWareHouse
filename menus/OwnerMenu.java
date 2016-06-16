@@ -159,7 +159,7 @@ public class OwnerMenu {
 			public void actionPerformed(ActionEvent e) 
 			{
 				try{
-					PreparedStatement stmt = con.prepareStatement("select * from business where ownerUsername = ?");
+					PreparedStatement stmt = con.prepareStatement("select * from business natural left outer join located natural left outer join location natural left outer join postalcode where ownerUsername = ?");
 					stmt.setString(1, username);
 					ResultSet rs = stmt.executeQuery();
 					ResultSetMetaData rsmd = rs.getMetaData();
